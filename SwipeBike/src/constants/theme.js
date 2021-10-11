@@ -1,42 +1,79 @@
-import { Dimensions } from "react-native";
-const { width, height } = Dimensions.get("window");
+import {Dimensions, PixelRatio} from 'react-native';
+const {width, height} = Dimensions.get('window');
+const widthBaseScale = width / 411;
+const heightBaseScale = height / 731;
+function normalize(size, based = 'width') {
+  const newSize =
+    based === 'height' ? size * heightBaseScale : size * widthBaseScale;
+  return Math.round(PixelRatio.roundToNearestPixel(newSize));
+}
+//for width  pixel
+const widthPixel = size => {
+  return normalize(size, 'width');
+};
+//for height  pixel
+const heightPixel = size => {
+  return normalize(size, 'height');
+};
+//for font  pixel
+const fontPixel = size => {
+  return heightPixel(size);
+};
+//for Margin and Padding vertical pixel
+const pixelSizeVertical = size => {
+  return heightPixel(size);
+};
+//for Margin and Padding horizontal pixel
+const pixelSizeHorizontal = size => {
+  return widthPixel(size);
+};
+export const PIXEL = {
+  widthPixel,
+  heightPixel,
+  fontPixel,
+  pixelSizeVertical,
+  pixelSizeHorizontal,
+};
 
 export const COLORS = {
   // base colors
-  primary: "#FC6D3F", // orange
-  secondary: "#CDCDD2", // gray
-
+  primary: '#FC6D3F', // green
+  primaryLighter1: '#BDF6A6',
+  primaryLighter2: '#EEFCE8',
+  primaryDarker1: '#417D28',
   // colors
-  black: "#1E1F20",
-  white: "#FFFFFF",
+  black: '#1E1F20',
+  white: '#FFFFFF',
 
-  lightGray: "#F5F5F6",
-  lightGray2: "#F6F6F7",
-  lightGray3: "#EFEFF1",
-  lightGray4: "#F8F8F9",
-  transparent: "transparent",
-  darkgray: "#898C95",
+  lightGray0: '#C1C1C1',
+  lightGray1: '#8A8181',
+
+  transparent: 'transparent',
+  darkgray: '#898C95',
 };
 
 export const SIZES = {
   // global sizes
-  base: 8,
-  font: 14,
-  radius: 50,
-  padding: 10,
-  padding2: 12,
+  radius: 40,
+  paddingHorizontal5: PIXEL.pixelSizeHorizontal(5),
+  paddingHorizontal10: PIXEL.pixelSizeHorizontal(10),
+  paddingHorizontal20: PIXEL.pixelSizeHorizontal(20),
+  marginHorizontal5: PIXEL.pixelSizeHorizontal(5),
+  marginHorizontal10: PIXEL.pixelSizeHorizontal(10),
+  marginHorizontal20: PIXEL.pixelSizeHorizontal(20),
+
+  paddingVertical5: PIXEL.pixelSizeVertical(5),
+  paddingVertical10: PIXEL.pixelSizeVertical(10),
+  paddingVertical20: PIXEL.pixelSizeVertical(20),
+  marginVertical5: PIXEL.pixelSizeVertical(5),
+  marginVertical10: PIXEL.pixelSizeVertical(10),
+  marginVertical20: PIXEL.pixelSizeVertical(20),
 
   // font sizes
-  largeTitle: 50,
-  h1: 50,
-  h2: 40,
-  h3: 30,
-  h4: 20,
-  body1: 30,
-  body2: 20,
-  body3: 16,
-  body4: 14,
-  body5: 12,
+  title: PIXEL.fontPixel(24),
+  h1: PIXEL.fontPixel(18),
+  h2: PIXEL.fontPixel(14),
+  h3: PIXEL.fontPixel(12),
 
   // app dimensions
   width,
@@ -44,42 +81,43 @@ export const SIZES = {
 };
 
 export const FONTS = {
-  largeTitle: {
-    fontFamily: "Roboto-regular",
-    fontSize: SIZES.largeTitle,
-    lineHeight: 55,
+  title: {
+    fontFamily: 'Roboto-Bold',
+    fontSize: SIZES.title,
+    lineHeight: PIXEL.pixelSizeVertical(30),
   },
-  h1: { fontFamily: "Roboto-Black", fontSize: SIZES.h1, lineHeight: 56 },
-  h2: { fontFamily: "Roboto-Bold", fontSize: SIZES.h2, lineHeight: 40 },
-  h3: { fontFamily: "Roboto-Bold", fontSize: SIZES.h3, lineHeight: 32 },
-  h4: { fontFamily: "Roboto-Bold", fontSize: SIZES.h4, lineHeight: 22 },
-  body1: {
-    fontFamily: "Roboto-Regular",
-    fontSize: SIZES.body1,
-    lineHeight: 36,
+  h1: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: SIZES.h1,
+    lineHeight: PIXEL.pixelSizeVertical(20),
   },
-  body2: {
-    fontFamily: "Roboto-Regular",
-    fontSize: SIZES.body2,
-    lineHeight: 30,
+  h2: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: SIZES.h2,
+    lineHeight: PIXEL.pixelSizeVertical(16),
   },
-  body3: {
-    fontFamily: "Roboto-Regular",
-    fontSize: SIZES.body3,
-    lineHeight: 22,
+  h3: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: SIZES.h3,
+    lineHeight: PIXEL.pixelSizeVertical(14),
   },
-  body4: {
-    fontFamily: "Roboto-Regular",
-    fontSize: SIZES.body4,
-    lineHeight: 22,
+  h1Bold: {
+    fontFamily: 'Roboto-Black',
+    fontSize: SIZES.h1,
+    lineHeight: PIXEL.pixelSizeVertical(20),
   },
-  body5: {
-    fontFamily: "Roboto-Regular",
-    fontSize: SIZES.body5,
-    lineHeight: 22,
+  h2Bold: {
+    fontFamily: 'Roboto-Black',
+    fontSize: SIZES.h2,
+    lineHeight: PIXEL.pixelSizeVertical(16),
+  },
+  h3Bold: {
+    fontFamily: 'Roboto-Black',
+    fontSize: SIZES.h3,
+    lineHeight: PIXEL.pixelSizeVertical(14),
   },
 };
 
-const appTheme = { COLORS, SIZES, FONTS };
+const appTheme = {COLORS, SIZES, FONTS, PIXEL};
 
 export default appTheme;
