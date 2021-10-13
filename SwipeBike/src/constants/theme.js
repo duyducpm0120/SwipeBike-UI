@@ -1,3 +1,4 @@
+//Handle Device Scale
 import {Dimensions, PixelRatio} from 'react-native';
 const {width, height} = Dimensions.get('window');
 const widthBaseScale = width / 411;
@@ -35,6 +36,7 @@ export const PIXEL = {
   pixelSizeHorizontal,
 };
 
+//Colors
 export const COLORS = {
   // base colors
   primary: '#FC6D3F', // green
@@ -52,6 +54,7 @@ export const COLORS = {
   darkgray: '#898C95',
 };
 
+//Sizes
 export const SIZES = {
   // global sizes
   radius: 40,
@@ -80,6 +83,7 @@ export const SIZES = {
   height,
 };
 
+//Fonts
 export const FONTS = {
   title: {
     fontFamily: 'Roboto-Bold',

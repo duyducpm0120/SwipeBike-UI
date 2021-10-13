@@ -5,26 +5,25 @@
  * @format
  * @flow strict-local
  */
-
+import 'react-native-gesture-handler';
 import React from 'react';
 import {Image, Text, StyleSheet, View, Dimensions, Button} from 'react-native';
-import {icons, images, SIZES, FONTS, COLORS} from './src/constants';
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+import {icons, images, SIZES, FONTS, COLORS, PIXEL} from './src/constants';
+import {NavigationContainer} from '@react-navigation/native';
 
 const App = () => {
   return (
-    <View style={styles.container}>
-      <Text style={FONTS.title}>Chuyen di</Text>
-      <Button
-        title="AAAs"
-        onClick={console.log(windowWidth, windowHeight)}></Button>
-      <Image
-        source={icons.cameraBold}
-        tintColor="red"
-        style={{width: 50, height: 50}}></Image>
-      <Image source={images.cuteDriver}></Image>
-    </View>
+    <NavigationContainer>
+      <View style={styles.container}>
+        <Text style={FONTS.title}>Chuyen di</Text>
+        <Button title="AAA"></Button>
+        <Image
+          source={icons.cameraBold}
+          tintColor="red"
+          style={{width: 50, height: 50}}></Image>
+        <Image source={images.cuteDriver}></Image>
+      </View>
+    </NavigationContainer>
   );
 };
 
