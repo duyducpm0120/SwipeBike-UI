@@ -116,7 +116,10 @@ export default function Login(props) {
           width: '100%',
           marginVertical: PIXEL.pixelSizeVertical(10),
         }}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.navigate('ForgotPassword');
+          }}>
           <Text
             style={{
               ...FONTS.h3,

@@ -11,7 +11,7 @@ import {Image, Text, StyleSheet, View, Dimensions, Button} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 
-import {Splash, SignUp, Login} from './src/screens';
+import {Splash, SignUp, Login, ForgotPassword} from './src/screens';
 import {COLORS} from './src/constants';
 const Stack = createStackNavigator();
 const App = () => {
@@ -25,6 +25,7 @@ const App = () => {
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       </Stack.Navigator>
     </NavigationContainer>
   );
