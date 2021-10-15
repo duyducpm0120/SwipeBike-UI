@@ -75,14 +75,38 @@ export default function UpdateProfile(props) {
             marginVertical: PIXEL.pixelSizeVertical(10),
           }}>
           <Image
-            source={ICONS.email}
+            source={ICONS.profile}
             style={{
               width: PIXEL.pixelSizeHorizontal(24),
               height: PIXEL.pixelSizeHorizontal(24),
               tintColor: COLORS.lightGray1,
             }}></Image>
           <TextInput
-            placeholder="Email"
+            placeholder="Tên đại diện"
+            style={{
+              ...FONTS.h3,
+              marginLeft: PIXEL.pixelSizeHorizontal(15),
+              width: PIXEL.pixelSizeHorizontal(270),
+            }}></TextInput>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            borderRadius: 10,
+            width: '100%',
+            marginVertical: PIXEL.pixelSizeVertical(10),
+          }}>
+          <Image
+            source={ICONS.gender}
+            style={{
+              width: PIXEL.pixelSizeHorizontal(24),
+              height: PIXEL.pixelSizeHorizontal(24),
+              tintColor: COLORS.lightGray1,
+            }}></Image>
+          <TextInput
+            placeholder="Tên đại diện"
             style={{
               ...FONTS.h3,
               marginLeft: PIXEL.pixelSizeHorizontal(15),
