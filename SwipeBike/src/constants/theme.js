@@ -39,7 +39,7 @@ export const PIXEL = {
 //Colors
 export const COLORS = {
   // base colors
-  primary: '#FC6D3F', // green
+  primary: '#68BD45', // green
   primaryLighter1: '#BDF6A6',
   primaryLighter2: '#EEFCE8',
   primaryDarker1: '#417D28',

@@ -26,7 +26,11 @@ export default function Waiting() {
     });
     const color = autoX.interpolate({
       inputRange: [index - 1, index, index + 1],
-      outputRange: ['#FFFFFF', '#68BD45', '#FFFFFF'],
+      outputRange: [
+        COLORS.backGroundColor,
+        COLORS.primary,
+        COLORS.backGroundColor,
+      ],
       extrapolate: 'clamp',
     });
     return (
