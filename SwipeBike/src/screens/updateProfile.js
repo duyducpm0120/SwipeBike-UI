@@ -2,8 +2,17 @@ import React, {useState} from 'react';
 import {View, Text, Image, TextInput, TouchableOpacity} from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 import {BackgroundButton, RoundedImage} from '../components';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 export default function UpdateProfile(props) {
+  //Gender Dropdown Field
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    {label: 'Nam', value: 'male'},
+    {label: 'Nữ', value: 'female'},
+  ]);
+  //
   const [info, setInfo] = useState({});
   const [profileImage, setProfileImage] = useState(null);
   function renderHeader() {
@@ -105,13 +114,55 @@ export default function UpdateProfile(props) {
               height: PIXEL.pixelSizeHorizontal(24),
               tintColor: COLORS.lightGray1,
             }}></Image>
-          <TextInput
-            placeholder="Tên đại diện"
-            style={{
-              ...FONTS.h3,
+          <DropDownPicker
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            disableBorderRadius={true}
+            containerStyle={{
               marginLeft: PIXEL.pixelSizeHorizontal(15),
-              width: PIXEL.pixelSizeHorizontal(270),
-            }}></TextInput>
+              width: PIXEL.pixelSizeHorizontal(150),
+            }}
+            placeholder="Chọn giới tính"
+            textStyle={{...FONTS.h3}}
+            style={{backgroundColor: COLORS.backGroundColor}}
+          />
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            borderRadius: 10,
+            width: '100%',
+            marginVertical: PIXEL.pixelSizeVertical(10),
+          }}>
+          <Image
+            source={ICONS.birthday}
+            style={{
+              width: PIXEL.pixelSizeHorizontal(24),
+              height: PIXEL.pixelSizeHorizontal(24),
+              tintColor: COLORS.lightGray1,
+            }}></Image>
+          <DropDownPicker
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            disableBorderRadius={true}
+            containerStyle={{
+              marginLeft: PIXEL.pixelSizeHorizontal(15),
+              width: PIXEL.pixelSizeHorizontal(150),
+            }}
+            placeholder="Chọn giới tính"
+            textStyle={{...FONTS.h3}}
+            style={{backgroundColor: COLORS.backGroundColor}}
+          />
         </View>
       </View>
     );
