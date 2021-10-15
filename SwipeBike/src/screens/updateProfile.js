@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
 import {View, Text, Image, TextInput, TouchableOpacity} from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
-import {BackgroundButton} from '../components';
+import {BackgroundButton, RoundedImage} from '../components';
 
-export default function ForgotPassword(props) {
+export default function UpdateProfile(props) {
+  const [info, setInfo] = useState({});
+  const [profileImage, setProfileImage] = useState(null);
   function renderHeader() {
     return (
       <View
@@ -11,9 +13,46 @@ export default function ForgotPassword(props) {
           justifyContent: 'center',
           alignItems: 'center',
           marginBottom: 20,
-          marginTop: PIXEL.pixelSizeVertical(150),
         }}>
-        <Text style={FONTS.title}>Quên mật khẩu</Text>
+        <Text style={FONTS.title}>Cập nhật hồ sơ</Text>
+        <Text style={FONTS.h3}>
+          Hồ sơ sẽ hiển thị trên trang cá nhân của bạn
+        </Text>
+      </View>
+    );
+  }
+  function renderImagePicker() {
+    return (
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+        }}>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <RoundedImage
+            image={IMAGES.updateImage}
+            width={PIXEL.pixelSizeHorizontal(100)}
+            height={PIXEL.pixelSizeHorizontal(100)}></RoundedImage>
+          <TouchableOpacity
+            style={{
+              marginTop: 5,
+            }}
+            onPress={() => {}}>
+            <Text
+              style={{
+                ...FONTS.h3,
+                color: COLORS.primary,
+                textDecorationLine: 'underline',
+              }}>
+              Thay đổi ảnh đại diện
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -57,6 +96,7 @@ export default function ForgotPassword(props) {
   return (
     <View style={STYLES.container}>
       {renderHeader()}
+      {renderImagePicker()}
       {renderTextField()}
       <TouchableOpacity
         style={{

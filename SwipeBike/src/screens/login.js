@@ -25,7 +25,6 @@ export default function Login(props) {
           marginBottom: 20,
           marginTop: PIXEL.pixelSizeVertical(150),
         }}>
-        <Text style={FONTS.h1}>Chào mừng bạn trở lại,</Text>
         <Text style={FONTS.title}>Đăng nhập</Text>
       </View>
     );
@@ -166,7 +165,9 @@ export default function Login(props) {
           position: 'absolute',
           marginTop: PIXEL.pixelSizeVertical(615),
         }}
-        onPress={() => {}}>
+        onPress={() => {
+          props.navigation.navigate('UpdateProfile');
+        }}>
         <BackgroundButton text="Đăng nhập"></BackgroundButton>
       </TouchableOpacity>
     </View>
