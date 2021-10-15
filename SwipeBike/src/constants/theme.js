@@ -52,6 +52,8 @@ export const COLORS = {
 
   transparent: 'transparent',
   darkgray: '#898C95',
+
+  backGroundColor: '#F5F5F5',
 };
 
 //Sizes

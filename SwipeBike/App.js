@@ -8,25 +8,30 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import {Image, Text, StyleSheet, View, Dimensions, Button} from 'react-native';
-import {icons, images, SIZES, FONTS, COLORS, PIXEL} from './src/constants';
+import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
-import {Waiting} from './src/components';
 
+import {Splash} from './src/screens';
+const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <View style={styles.container}>
-        <Text style={FONTS.title}>Chuyen di</Text>
-        <Waiting></Waiting>
-      </View>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+        initialRouteName={'Splash'}>
+        <Stack.Screen name="Splash" component={Splash} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginLeft: 30,
-    marginTop: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '',
   },
 });
 

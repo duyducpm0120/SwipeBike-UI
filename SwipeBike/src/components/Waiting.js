@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, SafeAreaView, Animated, Easing, Image} from 'react-native';
 import {useEffect, useRef} from 'react';
-import {images, PIXEL} from '../constants';
+import {IMAGES, PIXEL, COLORS} from '../constants';
 
 export default function Waiting() {
   const list = [0, 1, 2, 3, 4];
@@ -31,6 +31,7 @@ export default function Waiting() {
     });
     return (
       <Animated.View
+        key={index}
         style={{
           width: 15,
           height: 15,
@@ -47,7 +48,7 @@ export default function Waiting() {
         alignItems: 'center',
         flexDirection: 'column',
         width: '50%',
-        backgroundColor: 'white',
+        backgroundColor: COLORS.backGroundColor,
         padding: 20,
         borderRadius: 20,
       }}>
@@ -57,7 +58,7 @@ export default function Waiting() {
           alignItems: 'center',
         }}>
         <Image
-          source={images.swipeBike}
+          source={IMAGES.swipeBike}
           style={{
             width: PIXEL.pixelSizeHorizontal(160),
             height: PIXEL.pixelSizeVertical(90),
