@@ -16,6 +16,7 @@ export const dot = require('../assets/icons/Light/dot.png');
 export const male = require('../assets/icons/Light/male.png');
 export const female = require('../assets/icons/Light/female.png');
 export const gender = require('../assets/icons/Light/gender.png');
+export const edit = require('../assets/icons/Light/edit.png');
 
 export default {
   cameraBold,
@@ -36,4 +37,5 @@ export default {
   male,
   female,
   gender,
+  edit,
 };

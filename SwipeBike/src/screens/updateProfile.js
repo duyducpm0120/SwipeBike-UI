@@ -3,6 +3,7 @@ import {View, Text, Image, TextInput, TouchableOpacity} from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 import {BackgroundButton, RoundedImage} from '../components';
 import DropDownPicker from 'react-native-dropdown-picker';
+import DatePicker from 'react-native-date-picker';
 
 export default function UpdateProfile(props) {
   //Gender Dropdown Field
@@ -12,6 +13,11 @@ export default function UpdateProfile(props) {
     {label: 'Nam', value: 'male'},
     {label: 'Nữ', value: 'female'},
   ]);
+
+  //DatePicker Field
+  const [date, setDate] = useState(new Date());
+  const [openDatePicker, setOpenDatePicker] = useState(false);
+
   //
   const [info, setInfo] = useState({});
   const [profileImage, setProfileImage] = useState(null);
@@ -124,7 +130,7 @@ export default function UpdateProfile(props) {
             disableBorderRadius={true}
             containerStyle={{
               marginLeft: PIXEL.pixelSizeHorizontal(15),
-              width: PIXEL.pixelSizeHorizontal(150),
+              width: PIXEL.pixelSizeHorizontal(270),
             }}
             placeholder="Chọn giới tính"
             textStyle={{...FONTS.h3}}
@@ -147,21 +153,36 @@ export default function UpdateProfile(props) {
               height: PIXEL.pixelSizeHorizontal(24),
               tintColor: COLORS.lightGray1,
             }}></Image>
-          <DropDownPicker
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-            disableBorderRadius={true}
-            containerStyle={{
+          <Text
+            style={{
+              ...FONTS.h3,
               marginLeft: PIXEL.pixelSizeHorizontal(15),
-              width: PIXEL.pixelSizeHorizontal(150),
+              width: PIXEL.pixelSizeHorizontal(240),
+              paddingLeft: 5,
+            }}>
+            {date.toDateString()}
+          </Text>
+          <TouchableOpacity onPress={() => setOpenDatePicker(true)}>
+            <Image
+              source={ICONS.edit}
+              style={{
+                width: PIXEL.pixelSizeHorizontal(24),
+                height: PIXEL.pixelSizeHorizontal(24),
+                tintColor: COLORS.lightGray1,
+              }}></Image>
+          </TouchableOpacity>
+          <DatePicker
+            modal
+            mode={'date'}
+            open={openDatePicker}
+            date={date}
+            onConfirm={date => {
+              setOpenDatePicker(false);
+              setDate(date);
             }}
-            placeholder="Chọn giới tính"
-            textStyle={{...FONTS.h3}}
-            style={{backgroundColor: COLORS.backGroundColor}}
+            onCancel={() => {
+              setOpenDatePicker(false);
+            }}
           />
         </View>
       </View>
