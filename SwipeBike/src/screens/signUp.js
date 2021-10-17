@@ -1,18 +1,36 @@
 import React, {useState} from 'react';
-import {View, Text, Image, TextInput, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 import {BackgroundButton} from '../components';
+import {signUpApi, loginApi} from '../api/auth';
 
 export default function SignUp(props) {
   const [showPassword, setShowPassword] = useState(false);
-  const [info, setInfo] = useState({});
-  function CheckPassword(inputtxt) {
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
+  function ValidateEmail(email) {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      return true;
+    }
+    return false;
+  }
+  //To check a password between 7 to 16 characters which contain only characters,
+  //numeric digits, underscore and first character must be a letter
+  function ValidatePassword(password) {
     var passw = /^[A-Za-z]\w{7,14}$/;
-    if (inputtxt.value.match(passw)) {
-      alert('Correct, try another...');
+    if (password.match(passw)) {
+      //alert('Correct, try another...');
       return true;
     } else {
-      alert('Wrong...!');
+      //alert('Wrong...!');
       return false;
     }
   }
@@ -61,6 +79,9 @@ export default function SignUp(props) {
               ...FONTS.h3,
               marginLeft: PIXEL.pixelSizeHorizontal(15),
               width: PIXEL.pixelSizeHorizontal(270),
+            }}
+            onChangeText={email => {
+              setUserEmail(email);
             }}></TextInput>
         </View>
         <View
@@ -87,7 +108,8 @@ export default function SignUp(props) {
               width: PIXEL.pixelSizeHorizontal(270),
             }}
             secureTextEntry={showPassword ? false : true}
-            maxLength={14}></TextInput>
+            maxLength={14}
+            onChangeText={password => setUserPassword(password)}></TextInput>
           <TouchableOpacity
             style={{
               justifyContent: 'center',
@@ -127,7 +149,10 @@ export default function SignUp(props) {
               width: PIXEL.pixelSizeHorizontal(270),
             }}
             secureTextEntry={showPassword ? false : true}
-            maxLength={14}></TextInput>
+            maxLength={14}
+            onChangeText={pass => {
+              setRepeatPassword(pass);
+            }}></TextInput>
         </View>
       </View>
     );
@@ -181,9 +206,39 @@ export default function SignUp(props) {
       <TouchableOpacity
         style={{
           position: 'absolute',
-          marginTop: PIXEL.pixelSizeVertical(615),
+          marginTop: PIXEL.pixelSizeVertical(630),
         }}
-        onPress={() => {}}>
+        onPress={() => {
+          if (!ValidateEmail(userEmail)) {
+            console.log('invalid email');
+            Alert.alert('Email không hợp lệ', '', [
+              {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ]);
+            return;
+          }
+          if (!ValidatePassword(userPassword)) {
+            console.log('invalid password');
+            //Mật khẩu có 7 đến 16 ký tự chỉ chứa các ký tự, chữ số, dấu gạch dưới và ký tự đầu tiên phải là một chữ cái
+            Alert.alert(
+              'Mật khẩu không hợp lệ',
+              'Mật khẩu có 7 đến 16 ký tự chỉ chứa các ký tự, chữ số, dấu gạch dưới và ký tự đầu tiên phải là một chữ cái',
+              [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+            );
+            return;
+          }
+          if (userPassword != repeatPassword) {
+            console.log('invalid repeat password');
+            Alert.alert('Nhập lại mật khẩu không khớp', '', [
+              {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ]);
+            return;
+          }
+          signUpApi(userEmail, userPassword)
+            .catch(err => console.log(err))
+            .then(result => {
+              console.log(result.data);
+            });
+        }}>
         <BackgroundButton text="Đăng ký"></BackgroundButton>
       </TouchableOpacity>
     </View>

@@ -4,6 +4,12 @@ import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 import {BackgroundButton} from '../components';
 
 export default function ForgotPassword(props) {
+  function ValidateEmail(email) {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      return true;
+    }
+    return false;
+  }
   function renderHeader() {
     return (
       <View
@@ -61,7 +67,7 @@ export default function ForgotPassword(props) {
       <TouchableOpacity
         style={{
           position: 'absolute',
-          marginTop: PIXEL.pixelSizeVertical(615),
+          marginTop: PIXEL.pixelSizeVertical(630),
         }}
         onPress={() => {}}>
         <BackgroundButton text="Gửi xác nhận"></BackgroundButton>
