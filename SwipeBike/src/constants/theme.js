@@ -53,6 +53,7 @@ export const COLORS = {
 
   transparent: 'transparent',
 
+  // backGroundColor: '#F5F5F5',
   backGroundColor: '#F5F5F5',
 };
 

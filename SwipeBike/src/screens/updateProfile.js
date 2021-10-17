@@ -1,18 +1,41 @@
 import React, {useState} from 'react';
-import {View, Text, Image, TextInput, TouchableOpacity} from 'react-native';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 import {BackgroundButton, RoundedImage} from '../components';
-import DropDownPicker from 'react-native-dropdown-picker';
 import DatePicker from 'react-native-date-picker';
+import {TextInput, configureFonts, DropDown} from 'react-native-paper';
+
+const fontConfig = {
+  default: {
+    regular: {
+      fontFamily: 'Roboto-Regular',
+      fontSize: PIXEL.fontPixel(16),
+    },
+  },
+};
 
 export default function UpdateProfile(props) {
-  //Gender Dropdown Field
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: 'Nam', value: 'male'},
-    {label: 'Nữ', value: 'female'},
-  ]);
+  //User info
+  const [name, setName] = useState();
+  const [sex, setSex] = useState('');
+
+  //Dropdown field
+  const [showDropDown, setShowDropDown] = useState(false);
+
+  const genderList = [
+    {
+      label: 'Nam',
+      value: 'male',
+    },
+    {
+      label: 'Nữ',
+      value: 'female',
+    },
+    {
+      label: 'Khác',
+      value: 'others',
+    },
+  ];
 
   //DatePicker Field
   const [date, setDate] = useState(new Date());
@@ -83,26 +106,27 @@ export default function UpdateProfile(props) {
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            borderRadius: 10,
+            justifyContent: 'center',
+            alignItems: 'flex-start',
             width: '100%',
             marginVertical: PIXEL.pixelSizeVertical(10),
           }}>
-          <Image
-            source={ICONS.profile}
-            style={{
-              width: PIXEL.pixelSizeHorizontal(24),
-              height: PIXEL.pixelSizeHorizontal(24),
-              tintColor: COLORS.lightGray1,
-            }}></Image>
           <TextInput
-            placeholder="Tên đại diện"
+            label="Tên đại diện"
+            mode="outlined"
+            value={name}
+            theme={{
+              colors: {
+                primary: COLORS.primary,
+              },
+            }}
             style={{
-              ...FONTS.h3,
-              marginLeft: PIXEL.pixelSizeHorizontal(15),
-              width: PIXEL.pixelSizeHorizontal(270),
-            }}></TextInput>
+              width: '100%',
+              height: PIXEL.pixelSizeVertical(50),
+              fontSize: PIXEL.fontPixel(18),
+              paddingHorizontal: 0,
+            }}
+            onChangeText={name => setName(name)}></TextInput>
         </View>
         <View
           style={{
@@ -113,29 +137,17 @@ export default function UpdateProfile(props) {
             width: '100%',
             marginVertical: PIXEL.pixelSizeVertical(10),
           }}>
-          <Image
-            source={ICONS.gender}
-            style={{
-              width: PIXEL.pixelSizeHorizontal(24),
-              height: PIXEL.pixelSizeHorizontal(24),
-              tintColor: COLORS.lightGray1,
-            }}></Image>
-          <DropDownPicker
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-            disableBorderRadius={true}
-            containerStyle={{
-              marginLeft: PIXEL.pixelSizeHorizontal(15),
-              width: PIXEL.pixelSizeHorizontal(270),
-            }}
-            placeholder="Chọn giới tính"
-            textStyle={{...FONTS.h3}}
-            style={{backgroundColor: COLORS.backGroundColor}}
-          />
+          {/* <DropDown
+            label={'Giới tính'}
+            mode={'outlined'}
+            visible={showDropDown}
+            showDropDown={() => setShowDropDown(true)}
+            onDismiss={() => setShowDropDown(false)}
+            value={sex}
+            setValue={setSex}
+            list={genderList}
+          /> */}
+          {/* Dropdown field */}
         </View>
         <View
           style={{
@@ -143,8 +155,11 @@ export default function UpdateProfile(props) {
             justifyContent: 'flex-start',
             alignItems: 'center',
             borderRadius: 10,
+            backgroundColor: COLORS.primaryLighter1,
             width: '100%',
+            height: PIXEL.pixelSizeVertical(50),
             marginVertical: PIXEL.pixelSizeVertical(10),
+            paddingHorizontal: PIXEL.pixelSizeHorizontal(5),
           }}>
           <Image
             source={ICONS.birthday}
@@ -200,7 +215,7 @@ export default function UpdateProfile(props) {
           marginTop: PIXEL.pixelSizeVertical(615),
         }}
         onPress={() => {}}>
-        <BackgroundButton text="Gửi xác nhận"></BackgroundButton>
+        <BackgroundButton text="Xong"></BackgroundButton>
       </TouchableOpacity>
     </View>
   );
