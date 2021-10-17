@@ -3,7 +3,9 @@ import {View, Text, Image, TouchableOpacity} from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 import {BackgroundButton, RoundedImage} from '../components';
 import DatePicker from 'react-native-date-picker';
-import {TextInput, configureFonts, DropDown} from 'react-native-paper';
+import {TextInput, configureFonts, Provider, List} from 'react-native-paper';
+import DropDown from 'react-native-paper-dropdown';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const fontConfig = {
   default: {
@@ -37,13 +39,15 @@ export default function UpdateProfile(props) {
     },
   ];
 
+  //Expander field
+  const [expanded, setExpanded] = React.useState(true);
+
+  const handlePress = () => setExpanded(!expanded);
+
   //DatePicker Field
   const [date, setDate] = useState(new Date());
   const [openDatePicker, setOpenDatePicker] = useState(false);
 
-  //
-  const [info, setInfo] = useState({});
-  const [profileImage, setProfileImage] = useState(null);
   function renderHeader() {
     return (
       <View
@@ -128,6 +132,7 @@ export default function UpdateProfile(props) {
             }}
             onChangeText={name => setName(name)}></TextInput>
         </View>
+
         <View
           style={{
             flexDirection: 'row',
@@ -137,17 +142,24 @@ export default function UpdateProfile(props) {
             width: '100%',
             marginVertical: PIXEL.pixelSizeVertical(10),
           }}>
-          {/* <DropDown
-            label={'Giới tính'}
-            mode={'outlined'}
-            visible={showDropDown}
-            showDropDown={() => setShowDropDown(true)}
-            onDismiss={() => setShowDropDown(false)}
-            value={sex}
-            setValue={setSex}
-            list={genderList}
-          /> */}
           {/* Dropdown field */}
+          <List.Section title="Accordions" style={{width: '100%'}}>
+            <List.Accordion
+              title="Uncontrolled Accordion"
+              left={props => <List.Icon {...props} icon="folder" />}>
+              <List.Item title="First item" />
+              <List.Item title="Second item" />
+            </List.Accordion>
+
+            <List.Accordion
+              title="Controlled Accordion"
+              left={props => <List.Icon {...props} icon="folder" />}
+              expanded={expanded}
+              onPress={handlePress}>
+              <List.Item title="First item" />
+              <List.Item title="Second item" />
+            </List.Accordion>
+          </List.Section>
         </View>
         <View
           style={{
@@ -205,18 +217,20 @@ export default function UpdateProfile(props) {
   }
 
   return (
-    <View style={STYLES.container}>
-      {renderHeader()}
-      {renderImagePicker()}
-      {renderTextField()}
-      <TouchableOpacity
-        style={{
-          position: 'absolute',
-          marginTop: PIXEL.pixelSizeVertical(615),
-        }}
-        onPress={() => {}}>
-        <BackgroundButton text="Xong"></BackgroundButton>
-      </TouchableOpacity>
-    </View>
+    <Provider>
+      <SafeAreaView style={STYLES.container}>
+        {renderHeader()}
+        {renderImagePicker()}
+        {renderTextField()}
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            marginTop: PIXEL.pixelSizeVertical(615),
+          }}
+          onPress={() => {}}>
+          <BackgroundButton text="Xong"></BackgroundButton>
+        </TouchableOpacity>
+      </SafeAreaView>
+    </Provider>
   );
 }
