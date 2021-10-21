@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 import {BackgroundButton} from '../components';
-import {signUpApi, loginApi} from '../api';
+import {signUpApi, loginApi} from '../api/auth';
 
 export default function SignUp(props) {
   const [showPassword, setShowPassword] = useState(false);
@@ -209,7 +209,6 @@ export default function SignUp(props) {
           marginTop: PIXEL.pixelSizeVertical(630),
         }}
         onPress={() => {
-          //validate inputs
           if (!ValidateEmail(userEmail)) {
             console.log('invalid email');
             Alert.alert('Email không hợp lệ', '', [
@@ -234,7 +233,6 @@ export default function SignUp(props) {
             ]);
             return;
           }
-          //signUp
           signUpApi(userEmail, userPassword)
             .catch(err => console.log(err))
             .then(result => {
