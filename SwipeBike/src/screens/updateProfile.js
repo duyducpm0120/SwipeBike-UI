@@ -97,7 +97,8 @@ export default function UpdateProfile(props) {
         includeBase64: true,
       },
       response => {
-        console.log('Image picker call back successfully');
+        //close bottomsheet
+        bottomSheetRef.current.snapTo(1);
         if (response.didCancel) {
           console.log('User canceled image picker');
         } else if (response.errorMessage) {
@@ -111,8 +112,6 @@ export default function UpdateProfile(props) {
           };
           setImageUri(source);
           console.log(source);
-          //close bottomsheet
-          bottomSheetRef.current.snapTo(1);
         }
       },
     );
@@ -128,7 +127,8 @@ export default function UpdateProfile(props) {
         includeBase64: true,
       },
       response => {
-        console.log('Image picker call back successfully');
+        //close bottomsheet
+        bottomSheetRef.current.snapTo(1);
         if (response.didCancel) {
           console.log('User canceled image picker');
         } else if (response.errorMessage) {
@@ -143,7 +143,6 @@ export default function UpdateProfile(props) {
           setImageUri(source);
           console.log(source);
           //close bottomsheet
-          bottomSheetRef.current.snapTo(1);
         }
       },
     );
