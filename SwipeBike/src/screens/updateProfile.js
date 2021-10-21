@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {View, Text, Image, TouchableOpacity, Button} from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 import {BackgroundButton, RoundedImage} from '../components';
 import DatePicker from 'react-native-date-picker';
@@ -14,6 +14,8 @@ import DropDown from 'react-native-paper-dropdown';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ScrollView} from 'react-native-gesture-handler';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import Animated from 'react-native-reanimated';
+import BottomSheet from 'reanimated-bottom-sheet';
 
 const fontConfig = {
   default: {
@@ -38,6 +40,115 @@ export default function UpdateProfile(props) {
   //DatePicker Field
   const [openDatePicker, setOpenDatePicker] = useState(false);
 
+  //vars for altering bottomsheet
+  const bottomSheetRef = React.createRef();
+  const fall = new Animated.Value(1);
+
+  //Create components inner bottomsheet
+  const renderInner = () => (
+    <View
+      style={{
+        backgroundColor: COLORS.backGroundColor,
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+      }}>
+      <TouchableOpacity
+        style={{marginVertical: 10}}
+        onPress={() => {
+          openCamera();
+        }}>
+        <BackgroundButton text="Chụp ảnh"></BackgroundButton>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{marginVertical: 10}}
+        onPress={() => {
+          openImagePicker();
+        }}>
+        <BackgroundButton text="Chọn từ thư viện"></BackgroundButton>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          marginVertical: 10,
+          borderRadius: 10,
+          backgroundColor: COLORS.darkgray,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: PIXEL.pixelSizeHorizontal(315),
+          height: PIXEL.pixelSizeVertical(60),
+        }}
+        onPress={() => {
+          bottomSheetRef.current.snapTo(1);
+        }}>
+        <Text style={FONTS.h2Bold}>Hủy</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  //Open Phone Library
+  const openImagePicker = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        maxWidth: PIXEL.pixelSizeHorizontal(100),
+        maxHeight: PIXEL.pixelSizeHorizontal(100),
+        includeBase64: true,
+      },
+      response => {
+        console.log('Image picker call back successfully');
+        if (response.didCancel) {
+          console.log('User canceled image picker');
+        } else if (response.errorMessage) {
+          console.log('Image picker error', response.errorMessage);
+        } else if (response.errorCode) {
+          console.log('Error code ', response.errorCode);
+        } else {
+          const source = {
+            uri: 'data:image/jpeg;base64,' + response.assets[0].base64,
+            //uri: response.assets[0].uri,
+          };
+          setImageUri(source);
+          console.log(source);
+          //close bottomsheet
+          bottomSheetRef.current.snapTo(1);
+        }
+      },
+    );
+  };
+
+  //Open Camera
+  const openCamera = () => {
+    launchCamera(
+      {
+        mediaType: 'photo',
+        maxWidth: PIXEL.pixelSizeHorizontal(100),
+        maxHeight: PIXEL.pixelSizeHorizontal(100),
+        includeBase64: true,
+      },
+      response => {
+        console.log('Image picker call back successfully');
+        if (response.didCancel) {
+          console.log('User canceled image picker');
+        } else if (response.errorMessage) {
+          console.log('Image picker error', response.errorMessage);
+        } else if (response.errorCode) {
+          console.log('Error code ', response.errorCode);
+        } else {
+          const source = {
+            uri: 'data:image/jpeg;base64,' + response.assets[0].base64,
+            //uri: response.assets[0].uri,
+          };
+          setImageUri(source);
+          console.log(source);
+          //close bottomsheet
+          bottomSheetRef.current.snapTo(1);
+        }
+      },
+    );
+  };
+
   function renderHeader() {
     return (
       <View
@@ -54,64 +165,6 @@ export default function UpdateProfile(props) {
     );
   }
   function renderImagePicker() {
-    //Imagepicker field
-    const openImagePicker = () => {
-      launchImageLibrary(
-        {
-          mediaType: 'photo',
-          maxWidth: PIXEL.pixelSizeHorizontal(100),
-          maxHeight: PIXEL.pixelSizeHorizontal(100),
-          includeBase64: true,
-        },
-        response => {
-          console.log('Image picker call back successfully');
-          if (response.didCancel) {
-            console.log('User canceled image picker');
-          } else if (response.errorMessage) {
-            console.log('Image picker error', response.errorMessage);
-          } else if (response.errorCode) {
-            console.log('Error code ', response.errorCode);
-          } else {
-            const source = {
-              uri: 'data:image/jpeg;base64,' + response.assets[0].base64,
-              //uri: response.assets[0].uri,
-            };
-            setImageUri(source);
-            console.log(source);
-          }
-        },
-      );
-    };
-
-    //Open Camera
-    const openCamera = () => {
-      launchCamera(
-        {
-          mediaType: 'photo',
-          maxWidth: PIXEL.pixelSizeHorizontal(100),
-          maxHeight: PIXEL.pixelSizeHorizontal(100),
-          includeBase64: true,
-        },
-        response => {
-          console.log('Image picker call back successfully');
-          if (response.didCancel) {
-            console.log('User canceled image picker');
-          } else if (response.errorMessage) {
-            console.log('Image picker error', response.errorMessage);
-          } else if (response.errorCode) {
-            console.log('Error code ', response.errorCode);
-          } else {
-            const source = {
-              uri: 'data:image/jpeg;base64,' + response.assets[0].base64,
-              //uri: response.assets[0].uri,
-            };
-            setImageUri(source);
-            console.log(source);
-          }
-        },
-      );
-    };
-
     return (
       <View
         style={{
@@ -133,7 +186,7 @@ export default function UpdateProfile(props) {
               marginTop: 5,
             }}
             onPress={() => {
-              openImagePicker();
+              bottomSheetRef.current.snapTo(0);
             }}>
             <Text
               style={{
@@ -333,7 +386,7 @@ export default function UpdateProfile(props) {
           <View
             style={{
               width: '100%',
-              height: PIXEL.pixelSizeVertical(200),
+              height: PIXEL.pixelSizeVertical(100),
             }}></View>
         </ScrollView>
       </View>
@@ -341,18 +394,39 @@ export default function UpdateProfile(props) {
   }
 
   return (
-    <SafeAreaView style={STYLES.container}>
-      {renderHeader()}
-      {renderImagePicker()}
-      {renderTextField()}
-      <TouchableOpacity
+    <View
+      style={{
+        flex: 1,
+        width: '100%',
+        height: '100%',
+      }}>
+      <Animated.View
         style={{
-          position: 'absolute',
-          marginTop: PIXEL.pixelSizeVertical(630),
-        }}
-        onPress={() => {}}>
-        <BackgroundButton text="Xong"></BackgroundButton>
-      </TouchableOpacity>
-    </SafeAreaView>
+          ...STYLES.container,
+          opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
+        }}>
+        {renderHeader()}
+        {renderImagePicker()}
+        {renderTextField()}
+
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            marginTop: PIXEL.pixelSizeVertical(630),
+          }}
+          onPress={() => {}}>
+          <BackgroundButton text="Xong"></BackgroundButton>
+        </TouchableOpacity>
+      </Animated.View>
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={['40%', PIXEL.pixelSizeVertical(-100)]}
+        renderContent={renderInner}
+        initialSnap={1}
+        callbackNode={fall}
+        enabledGestureInteraction={true}
+        borderRadius={10}
+      />
+    </View>
   );
 }

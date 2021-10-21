@@ -53,7 +53,7 @@ const App = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={'SignUp'}>
+        initialRouteName={'UpdateProfile'}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="Login" component={Login} />

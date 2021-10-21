@@ -6,7 +6,7 @@ export default function BackgroundButton(props) {
   return (
     <View
       style={{
-        borderRadius: 40,
+        borderRadius: 10,
         backgroundColor: COLORS.primary,
         justifyContent: 'center',
         alignItems: 'center',
