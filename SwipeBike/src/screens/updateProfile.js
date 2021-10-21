@@ -83,6 +83,35 @@ export default function UpdateProfile(props) {
       );
     };
 
+    //Open Camera
+    const openCamera = () => {
+      launchCamera(
+        {
+          mediaType: 'photo',
+          maxWidth: PIXEL.pixelSizeHorizontal(100),
+          maxHeight: PIXEL.pixelSizeHorizontal(100),
+          includeBase64: true,
+        },
+        response => {
+          console.log('Image picker call back successfully');
+          if (response.didCancel) {
+            console.log('User canceled image picker');
+          } else if (response.errorMessage) {
+            console.log('Image picker error', response.errorMessage);
+          } else if (response.errorCode) {
+            console.log('Error code ', response.errorCode);
+          } else {
+            const source = {
+              uri: 'data:image/jpeg;base64,' + response.assets[0].base64,
+              //uri: response.assets[0].uri,
+            };
+            setImageUri(source);
+            console.log(source);
+          }
+        },
+      );
+    };
+
     return (
       <View
         style={{
