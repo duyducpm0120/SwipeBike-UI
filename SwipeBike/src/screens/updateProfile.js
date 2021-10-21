@@ -13,6 +13,7 @@ import {
 import DropDown from 'react-native-paper-dropdown';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ScrollView} from 'react-native-gesture-handler';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const fontConfig = {
   default: {
@@ -27,12 +28,14 @@ export default function UpdateProfile(props) {
   //User info
   const [name, setName] = useState();
   const [sex, setSex] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [imageUri, setImageUri] = useState(IMAGES.updateImage);
+  const [university, setUniversity] = useState();
 
   //Sex radioButton field
   const [checked, setChecked] = React.useState('first');
 
   //DatePicker Field
-  const [date, setDate] = useState(new Date());
   const [openDatePicker, setOpenDatePicker] = useState(false);
 
   function renderHeader() {
@@ -51,6 +54,35 @@ export default function UpdateProfile(props) {
     );
   }
   function renderImagePicker() {
+    //Imagepicker field
+    const openImagePicker = () => {
+      launchImageLibrary(
+        {
+          mediaType: 'photo',
+          maxWidth: PIXEL.pixelSizeHorizontal(100),
+          maxHeight: PIXEL.pixelSizeHorizontal(100),
+          includeBase64: true,
+        },
+        response => {
+          console.log('Image picker call back successfully');
+          if (response.didCancel) {
+            console.log('User canceled image picker');
+          } else if (response.errorMessage) {
+            console.log('Image picker error', response.errorMessage);
+          } else if (response.errorCode) {
+            console.log('Error code ', response.errorCode);
+          } else {
+            const source = {
+              uri: 'data:image/jpeg;base64,' + response.assets[0].base64,
+              //uri: response.assets[0].uri,
+            };
+            setImageUri(source);
+            console.log(source);
+          }
+        },
+      );
+    };
+
     return (
       <View
         style={{
@@ -64,14 +96,16 @@ export default function UpdateProfile(props) {
             alignItems: 'center',
           }}>
           <RoundedImage
-            image={IMAGES.updateImage}
+            image={imageUri}
             width={PIXEL.pixelSizeHorizontal(100)}
             height={PIXEL.pixelSizeHorizontal(100)}></RoundedImage>
           <TouchableOpacity
             style={{
               marginTop: 5,
             }}
-            onPress={() => {}}>
+            onPress={() => {
+              openImagePicker();
+            }}>
             <Text
               style={{
                 ...FONTS.h3,
@@ -108,6 +142,7 @@ export default function UpdateProfile(props) {
             <Text style={{...FONTS.h2Bold}}>Tên đại diện</Text>
             <TextInput
               //mode="outlined"
+              placeholder="Tên đại diện"
               value={name}
               theme={{
                 colors: {
@@ -185,7 +220,7 @@ export default function UpdateProfile(props) {
             </RadioButton.Group>
           </View>
 
-          {/* birthDay */}
+          {/* Date of birth */}
           <View
             style={{
               flexDirection: 'column',
@@ -194,7 +229,7 @@ export default function UpdateProfile(props) {
               width: '100%',
               marginBottom: PIXEL.pixelSizeVertical(10),
             }}>
-            <Text style={{...FONTS.h2Bold}}>Sinh nhật</Text>
+            <Text style={{...FONTS.h2Bold}}>Ngày sinh</Text>
             <View
               style={{
                 width: '100%',
@@ -247,6 +282,7 @@ export default function UpdateProfile(props) {
             <Text style={{...FONTS.h2Bold}}>Trường đại học</Text>
             <TextInput
               //mode="outlined"
+              placeholder="Trường đại học"
               value={name}
               theme={{
                 colors: {
@@ -261,9 +297,15 @@ export default function UpdateProfile(props) {
                 backgroundColor: COLORS.backGroundColor,
                 marginVertical: 0,
               }}
-              onChangeText={name => setName(name)}></TextInput>
+              onChangeText={university =>
+                setUniversity(university)
+              }></TextInput>
           </View>
-          <View style={{width: '100%', height: 200}}></View>
+          <View
+            style={{
+              width: '100%',
+              height: PIXEL.pixelSizeVertical(200),
+            }}></View>
         </ScrollView>
       </View>
     );
