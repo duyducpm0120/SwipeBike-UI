@@ -195,6 +195,7 @@ export default function Login(props) {
           marginTop: PIXEL.pixelSizeVertical(630),
         }}
         onPress={() => {
+          //validate Inputs
           if (!ValidateEmail(userEmail)) {
             console.log('invalid email');
             Alert.alert('Email không hợp lệ', '', [
@@ -212,6 +213,7 @@ export default function Login(props) {
             );
             return;
           }
+          //login
           loginApi(userEmail, userPassword)
             .then(result => {
               console.log(result.data);

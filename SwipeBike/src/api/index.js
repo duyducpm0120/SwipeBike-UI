@@ -1,3 +1,4 @@
 import signUpApi from './auth';
+import loginApi from './auth';
 
-export {signUpApi};
+export default {signUpApi, loginApi};

@@ -64,8 +64,8 @@ export default function Waiting() {
         <Image
           source={IMAGES.swipeBike}
           style={{
-            width: PIXEL.pixelSizeHorizontal(160),
-            height: PIXEL.pixelSizeVertical(90),
+            width: PIXEL.pixelSizeHorizontal(172),
+            height: PIXEL.pixelSizeHorizontal(93),
           }}></Image>
       </View>
       <View
