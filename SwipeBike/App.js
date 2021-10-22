@@ -20,6 +20,8 @@ import {
 } from './src/screens';
 import {COLORS, STYLES} from './src/constants';
 import {Waiting} from './src/components';
+import BottomTabs from './src/navigations/bottomTabs';
+
 const Stack = createStackNavigator();
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -55,6 +57,7 @@ const App = () => {
         }}
         initialRouteName={'UpdateProfile'}>
         <Stack.Screen name="Splash" component={Splash} />
+        <Stack.Screen name="Home" component={BottomTabs} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />

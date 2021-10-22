@@ -413,7 +413,9 @@ export default function UpdateProfile(props) {
             position: 'absolute',
             marginTop: PIXEL.pixelSizeVertical(630),
           }}
-          onPress={() => {}}>
+          onPress={() => {
+            props.navigation.navigate('Home');
+          }}>
           <BackgroundButton text="Xong"></BackgroundButton>
         </TouchableOpacity>
       </Animated.View>
