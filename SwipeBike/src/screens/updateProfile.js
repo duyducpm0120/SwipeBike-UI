@@ -402,12 +402,12 @@ export default function UpdateProfile(props) {
       <Animated.View
         style={{
           ...STYLES.container,
+          height: '100%',
           opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
         }}>
         {renderHeader()}
         {renderImagePicker()}
         {renderTextField()}
-
         <TouchableOpacity
           style={{
             position: 'absolute',
