@@ -24,7 +24,7 @@ const BottomTabs = () => {
         },
       }}>
       <Tab.Screen
-        name="Home"
+        name="Dashboard"
         component={Home}
         options={{
           tabBarIcon: ({focused}) => (

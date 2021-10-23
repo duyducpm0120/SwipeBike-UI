@@ -16,23 +16,23 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
-
-const fontConfig = {
-  default: {
-    regular: {
-      fontFamily: 'Roboto-Regular',
-      fontSize: PIXEL.fontPixel(16),
-    },
-  },
-};
+//redux Field
+import {useSelector, useDispatch} from 'react-redux';
+import {updateProfile} from '../redux/slices/profileSlice';
 
 export default function UpdateProfile(props) {
+  //Redux dispatch
+  const dispatch = useDispatch();
+  //Redux userProfile Slice
+  const userProfileInfo = useSelector(state => state.userProfile);
+
   //User info
-  const [name, setName] = useState();
-  const [sex, setSex] = useState('');
+  const [name, setName] = useState('');
+  const [gender, setGender] = useState('');
   const [date, setDate] = useState(new Date());
   const [imageUri, setImageUri] = useState(IMAGES.updateImage);
-  const [university, setUniversity] = useState();
+  //const [university, setUniversity] = useState();
+  const [phone, setPhone] = useState('0');
 
   //Sex radioButton field
   const [checked, setChecked] = React.useState('first');
@@ -251,8 +251,8 @@ export default function UpdateProfile(props) {
             }}>
             <Text style={{...FONTS.h2Bold}}>Giới tính</Text>
             <RadioButton.Group
-              onValueChange={value => setSex(value)}
-              value={sex}
+              onValueChange={value => setGender(value)}
+              value={gender}
               style={{
                 width: '100%',
                 paddingHorizontal: 0,
@@ -351,7 +351,7 @@ export default function UpdateProfile(props) {
             />
           </View>
 
-          {/* University */}
+          {/* Phone */}
           <View
             style={{
               flexDirection: 'column',
@@ -360,11 +360,11 @@ export default function UpdateProfile(props) {
               width: '100%',
               marginVertical: PIXEL.pixelSizeVertical(10),
             }}>
-            <Text style={{...FONTS.h2Bold}}>Trường đại học</Text>
+            <Text style={{...FONTS.h2Bold}}>Số điện thoại</Text>
             <TextInput
               //mode="outlined"
-              placeholder="Trường đại học"
-              value={name}
+              placeholder="Số điện thoại"
+              value={phone}
               theme={{
                 colors: {
                   primary: COLORS.primary,
@@ -378,9 +378,7 @@ export default function UpdateProfile(props) {
                 backgroundColor: COLORS.backGroundColor,
                 marginVertical: 0,
               }}
-              onChangeText={university =>
-                setUniversity(university)
-              }></TextInput>
+              onChangeText={phone => setPhone(phone)}></TextInput>
           </View>
           <View
             style={{
@@ -390,6 +388,16 @@ export default function UpdateProfile(props) {
         </ScrollView>
       </View>
     );
+  }
+
+  async function updateProfileSlice() {
+    const user = {
+      UserFullName: name,
+      UserGender: gender,
+      UserPhone: phone,
+      UserDoB: date.toDateString(),
+    };
+    await dispatch(updateProfile(user));
   }
 
   return (
@@ -414,6 +422,9 @@ export default function UpdateProfile(props) {
             marginTop: PIXEL.pixelSizeVertical(630),
           }}
           onPress={() => {
+            updateProfileSlice().then(() => {
+              console.log('user Inside Redux', userProfileInfo);
+            });
             props.navigation.navigate('Home');
           }}>
           <BackgroundButton text="Xong"></BackgroundButton>
