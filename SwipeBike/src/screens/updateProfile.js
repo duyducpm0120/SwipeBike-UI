@@ -19,6 +19,9 @@ import BottomSheet from 'reanimated-bottom-sheet';
 //redux Field
 import {useSelector, useDispatch} from 'react-redux';
 import {updateProfile} from '../redux/slices/profileSlice';
+//Handle moment
+import moment from 'moment';
+import 'moment/locale/vi';
 
 export default function UpdateProfile(props) {
   //Redux dispatch
@@ -38,6 +41,11 @@ export default function UpdateProfile(props) {
 
   //DatePicker Field
   const [openDatePicker, setOpenDatePicker] = useState(false);
+  //Use moment to convert to Vietnamese Datetime
+  function getVietnameseDatetime() {
+    moment.locale('vi');
+    return moment(date).format('LL');
+  }
 
   //vars for altering bottomsheet
   const bottomSheetRef = React.createRef();
@@ -335,7 +343,7 @@ export default function UpdateProfile(props) {
                 ...FONTS.h3,
                 width: PIXEL.pixelSizeHorizontal(240),
               }}>
-              {date.toDateString()}
+              {getVietnameseDatetime()}
             </Text>
             <TouchableOpacity onPress={() => setOpenDatePicker(true)}>
               <Image
@@ -406,11 +414,6 @@ export default function UpdateProfile(props) {
     await dispatch(updateProfile(user));
   }
 
-  function getDatetime() {
-    const d = new Date();
-    let text = d.toLocaleString();
-    console.log(text);
-  }
   return (
     <View
       style={{
@@ -435,7 +438,6 @@ export default function UpdateProfile(props) {
             updateProfileSlice().then(() => {
               console.log('user Inside Redux', userProfileInfo);
             });
-            getDatetime();
             props.navigation.navigate('Home');
           }}>
           <BackgroundButton text="Xong"></BackgroundButton>
