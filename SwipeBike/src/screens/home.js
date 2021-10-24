@@ -1,7 +1,27 @@
 import React, {useState} from 'react';
 import {View, Text, Image, TextInput, TouchableOpacity} from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
+import {Trip} from '../components';
 
 export default function Home() {
-  return <View></View>;
+  const date = new Date();
+  console.log('date', date);
+  //dummy data
+  const tripDetail = {
+    driver: {
+      name: 'Duong Thanh Vuong',
+      image: IMAGES.cuteDriver,
+    },
+    passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
+    time: '7 PM',
+    date: date,
+    from: 'Nhan van',
+    to: 'CNTT',
+  };
+
+  return (
+    <View style={{...STYLES.container}}>
+      <Trip tripDetail={tripDetail}></Trip>
+    </View>
+  );
 }

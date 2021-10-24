@@ -23,6 +23,9 @@ export const homeBold = require('../assets/icons/Bold/home-bold.png');
 export const sendBold = require('../assets/icons/Bold/send-bold.png');
 export const profileBold = require('../assets/icons/Bold/profile-bold.png');
 export const chatBold = require('../assets/icons/Bold/chat-bold.png');
+export const driver = require('../assets/icons/Light/driver.png');
+export const hitchHiker = require('../assets/icons/Light/hitchhiker.png');
+export const time = require('../assets/icons/Light/time.png');
 
 export default {
   cameraBold,
@@ -52,4 +55,7 @@ export default {
   sendBold,
   profileBold,
   chatBold,
+  driver,
+  hitchHiker,
+  time,
 };

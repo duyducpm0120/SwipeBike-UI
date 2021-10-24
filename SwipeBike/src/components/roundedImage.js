@@ -8,6 +8,8 @@ export default function RoundedImage(props) {
       style={{
         justifyContent: 'center',
         alignItems: 'center',
+        width: props.width,
+        height: props.height,
       }}>
       <Image
         source={props.image}

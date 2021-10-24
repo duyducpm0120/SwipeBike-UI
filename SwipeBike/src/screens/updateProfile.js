@@ -10,9 +10,6 @@ import {
   List,
   RadioButton,
 } from 'react-native-paper';
-import DropDown from 'react-native-paper-dropdown';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {ScrollView} from 'react-native-gesture-handler';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
