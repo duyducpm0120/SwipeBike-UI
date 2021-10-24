@@ -25,7 +25,6 @@ export default function UpdateProfile(props) {
   const dispatch = useDispatch();
   //Redux userProfile Slice
   const userProfileInfo = useSelector(state => state.userProfile);
-
   //User info
   const [name, setName] = useState('');
   const [gender, setGender] = useState('');
@@ -55,6 +54,21 @@ export default function UpdateProfile(props) {
         alignItems: 'center',
         flexDirection: 'column',
       }}>
+      <View
+        style={{
+          width: '100%',
+          height: 5,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginBottom: 10,
+        }}>
+        <View
+          style={{
+            width: 40,
+            height: '100%',
+            backgroundColor: COLORS.black,
+          }}></View>
+      </View>
       <TouchableOpacity
         style={{marginVertical: 10}}
         onPress={() => {
@@ -392,6 +406,11 @@ export default function UpdateProfile(props) {
     await dispatch(updateProfile(user));
   }
 
+  function getDatetime() {
+    const d = new Date();
+    let text = d.toLocaleString();
+    console.log(text);
+  }
   return (
     <View
       style={{
@@ -416,6 +435,7 @@ export default function UpdateProfile(props) {
             updateProfileSlice().then(() => {
               console.log('user Inside Redux', userProfileInfo);
             });
+            getDatetime();
             props.navigation.navigate('Home');
           }}>
           <BackgroundButton text="Xong"></BackgroundButton>
