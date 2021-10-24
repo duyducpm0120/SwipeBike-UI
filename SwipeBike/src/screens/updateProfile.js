@@ -202,190 +202,182 @@ export default function UpdateProfile(props) {
   }
   function renderTextField() {
     return (
-      <View style={{width: '100%', height: '60%'}}>
-        <ScrollView
-          contentContainerStyle={{
-            justifyContent: 'center',
-            alignItems: 'center',
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+          width: PIXEL.pixelSizeHorizontal(330),
+        }}
+        showsVerticalScrollIndicator={false}>
+        {/* Name */}
+        <View
+          style={{
             flexDirection: 'column',
-            width: PIXEL.pixelSizeHorizontal(330),
-          }}
-          showsVerticalScrollIndicator={false}>
-          {/* Name */}
-          <View
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            width: '100%',
+            marginVertical: PIXEL.pixelSizeVertical(10),
+          }}>
+          <Text style={{...FONTS.h2Bold}}>Tên đại diện</Text>
+          <TextInput
+            //mode="outlined"
+            placeholder="Tên đại diện"
+            value={name}
+            theme={{
+              colors: {
+                primary: COLORS.primary,
+              },
+            }}
             style={{
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'flex-start',
               width: '100%',
-              marginVertical: PIXEL.pixelSizeVertical(10),
+              height: PIXEL.pixelSizeVertical(50),
+              fontSize: SIZES.h3,
+              paddingHorizontal: 0,
+              backgroundColor: COLORS.backGroundColor,
+            }}
+            onChangeText={name => setName(name)}></TextInput>
+        </View>
+
+        {/* Sex */}
+        <View
+          style={{
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            width: '100%',
+            marginBottom: PIXEL.pixelSizeVertical(10),
+          }}>
+          <Text style={{...FONTS.h2Bold}}>Giới tính</Text>
+          <RadioButton.Group
+            onValueChange={value => setGender(value)}
+            value={gender}
+            style={{
+              width: '100%',
+              paddingHorizontal: 0,
             }}>
-            <Text style={{...FONTS.h2Bold}}>Tên đại diện</Text>
-            <TextInput
-              //mode="outlined"
-              placeholder="Tên đại diện"
-              value={name}
-              theme={{
-                colors: {
-                  primary: COLORS.primary,
-                },
+            <RadioButton.Item
+              label="Nam"
+              labelStyle={{
+                fontSize: SIZES.h3,
               }}
+              value="male"
+              color={COLORS.primary}
+              uncheckedColor={COLORS.darkgray}
               style={{
-                width: '100%',
-                height: PIXEL.pixelSizeVertical(50),
+                width: '75%',
                 fontSize: SIZES.h3,
                 paddingHorizontal: 0,
-                backgroundColor: COLORS.backGroundColor,
-              }}
-              onChangeText={name => setName(name)}></TextInput>
-          </View>
-
-          {/* Sex */}
-          <View
-            style={{
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-              width: '100%',
-              marginBottom: PIXEL.pixelSizeVertical(10),
-            }}>
-            <Text style={{...FONTS.h2Bold}}>Giới tính</Text>
-            <RadioButton.Group
-              onValueChange={value => setGender(value)}
-              value={gender}
-              style={{
-                width: '100%',
-                paddingHorizontal: 0,
-              }}>
-              <RadioButton.Item
-                label="Nam"
-                labelStyle={{
-                  fontSize: SIZES.h3,
-                }}
-                value="male"
-                color={COLORS.primary}
-                uncheckedColor={COLORS.darkgray}
-                style={{
-                  width: '75%',
-                  fontSize: SIZES.h3,
-                  paddingHorizontal: 0,
-                  marginHorizontal: 0,
-                }}
-              />
-              <RadioButton.Item
-                label="Nữ"
-                labelStyle={{fontSize: SIZES.h3}}
-                value="female"
-                color={COLORS.primary}
-                uncheckedColor={COLORS.darkgray}
-                style={{
-                  width: '75%',
-                  fontSize: SIZES.h2,
-                  paddingHorizontal: 0,
-                  marginHorizontal: 0,
-                }}
-              />
-              <RadioButton.Item
-                label="Khác"
-                labelStyle={{fontSize: SIZES.h3}}
-                value="others"
-                color={COLORS.primary}
-                uncheckedColor={COLORS.darkgray}
-                style={{
-                  width: '75%',
-                  fontSize: SIZES.h3,
-                  paddingHorizontal: 0,
-                  marginHorizontal: 0,
-                }}
-              />
-            </RadioButton.Group>
-          </View>
-
-          {/* Date of birth */}
-          <View
-            style={{
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-              width: '100%',
-              marginBottom: PIXEL.pixelSizeVertical(10),
-            }}>
-            <Text style={{...FONTS.h2Bold}}>Ngày sinh</Text>
-            <View
-              style={{
-                width: '100%',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexDirection: 'row',
-              }}>
-              <Text
-                style={{
-                  ...FONTS.h3,
-                  width: PIXEL.pixelSizeHorizontal(240),
-                }}>
-                {date.toDateString()}
-              </Text>
-              <TouchableOpacity onPress={() => setOpenDatePicker(true)}>
-                <Image
-                  source={ICONS.edit}
-                  style={{
-                    width: PIXEL.pixelSizeHorizontal(24),
-                    height: PIXEL.pixelSizeHorizontal(24),
-                    tintColor: COLORS.lightGray1,
-                  }}></Image>
-              </TouchableOpacity>
-            </View>
-
-            <DatePicker
-              modal
-              mode={'date'}
-              open={openDatePicker}
-              date={date}
-              onConfirm={date => {
-                setOpenDatePicker(false);
-                setDate(date);
-              }}
-              onCancel={() => {
-                setOpenDatePicker(false);
+                marginHorizontal: 0,
               }}
             />
-          </View>
-
-          {/* Phone */}
-          <View
-            style={{
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-              width: '100%',
-              marginVertical: PIXEL.pixelSizeVertical(10),
-            }}>
-            <Text style={{...FONTS.h2Bold}}>Số điện thoại</Text>
-            <TextInput
-              //mode="outlined"
-              placeholder="Số điện thoại"
-              value={phone}
-              theme={{
-                colors: {
-                  primary: COLORS.primary,
-                },
-              }}
+            <RadioButton.Item
+              label="Nữ"
+              labelStyle={{fontSize: SIZES.h3}}
+              value="female"
+              color={COLORS.primary}
+              uncheckedColor={COLORS.darkgray}
               style={{
-                width: '100%',
-                height: PIXEL.pixelSizeVertical(50),
+                width: '75%',
+                fontSize: SIZES.h2,
+                paddingHorizontal: 0,
+                marginHorizontal: 0,
+              }}
+            />
+            <RadioButton.Item
+              label="Khác"
+              labelStyle={{fontSize: SIZES.h3}}
+              value="others"
+              color={COLORS.primary}
+              uncheckedColor={COLORS.darkgray}
+              style={{
+                width: '75%',
                 fontSize: SIZES.h3,
                 paddingHorizontal: 0,
-                backgroundColor: COLORS.backGroundColor,
-                marginVertical: 0,
+                marginHorizontal: 0,
               }}
-              onChangeText={phone => setPhone(phone)}></TextInput>
-          </View>
+            />
+          </RadioButton.Group>
+        </View>
+
+        {/* Date of birth */}
+        <View
+          style={{
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            width: '100%',
+          }}>
+          <Text style={{...FONTS.h2Bold}}>Ngày sinh</Text>
           <View
             style={{
               width: '100%',
-              height: PIXEL.pixelSizeVertical(100),
-            }}></View>
-        </ScrollView>
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexDirection: 'row',
+            }}>
+            <Text
+              style={{
+                ...FONTS.h3,
+                width: PIXEL.pixelSizeHorizontal(240),
+              }}>
+              {date.toDateString()}
+            </Text>
+            <TouchableOpacity onPress={() => setOpenDatePicker(true)}>
+              <Image
+                source={ICONS.edit}
+                style={{
+                  width: PIXEL.pixelSizeHorizontal(24),
+                  height: PIXEL.pixelSizeHorizontal(24),
+                  tintColor: COLORS.lightGray1,
+                }}></Image>
+            </TouchableOpacity>
+          </View>
+
+          <DatePicker
+            modal
+            mode={'date'}
+            open={openDatePicker}
+            date={date}
+            onConfirm={date => {
+              setOpenDatePicker(false);
+              setDate(date);
+            }}
+            onCancel={() => {
+              setOpenDatePicker(false);
+            }}
+          />
+        </View>
+
+        {/* Phone */}
+        <View
+          style={{
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            width: '100%',
+            marginVertical: PIXEL.pixelSizeVertical(10),
+          }}>
+          <Text style={{...FONTS.h2Bold}}>Số điện thoại</Text>
+          <TextInput
+            //mode="outlined"
+            placeholder="Số điện thoại"
+            value={phone}
+            theme={{
+              colors: {
+                primary: COLORS.primary,
+              },
+            }}
+            style={{
+              width: '100%',
+              height: PIXEL.pixelSizeVertical(50),
+              fontSize: SIZES.h3,
+              paddingHorizontal: 0,
+              backgroundColor: COLORS.backGroundColor,
+              marginVertical: 0,
+            }}
+            onChangeText={phone => setPhone(phone)}></TextInput>
+        </View>
       </View>
     );
   }
@@ -404,13 +396,13 @@ export default function UpdateProfile(props) {
     <View
       style={{
         flex: 1,
-        width: '100%',
-        height: '100%',
       }}>
       <Animated.View
         style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
           ...STYLES.container,
-          height: '100%',
           opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
         }}>
         {renderHeader()}
@@ -418,8 +410,7 @@ export default function UpdateProfile(props) {
         {renderTextField()}
         <TouchableOpacity
           style={{
-            position: 'absolute',
-            marginTop: PIXEL.pixelSizeVertical(630),
+            marginTop: PIXEL.pixelSizeVertical(0),
           }}
           onPress={() => {
             updateProfileSlice().then(() => {

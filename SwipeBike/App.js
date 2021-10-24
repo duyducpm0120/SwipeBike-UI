@@ -10,6 +10,9 @@ import React, {useEffect, useState} from 'react';
 import {Image, Text, StyleSheet, View, Dimensions, Button} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
+//Ignore Reanimated 2 WARNING
+import {LogBox} from 'react-native';
+LogBox.ignoreLogs(['Reanimated 2']);
 
 import {
   Splash,

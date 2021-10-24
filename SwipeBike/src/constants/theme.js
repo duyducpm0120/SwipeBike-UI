@@ -151,8 +151,8 @@ export const STYLES = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: COLORS.backGroundColor,
-    paddingTop: PIXEL.pixelSizeVertical(30),
-    paddingHorizontal: PIXEL.pixelSizeHorizontal(30),
+    paddingTop: PIXEL.pixelSizeVertical(20),
+    paddingHorizontal: PIXEL.pixelSizeHorizontal(20),
   },
   shadow: {
     shadowColor: '#000',
