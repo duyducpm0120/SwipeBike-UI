@@ -355,6 +355,10 @@ export default function UpdateProfile(props) {
 
           <DatePicker
             modal
+            title="Chọn ngày sinh"
+            confirmText="Chọn"
+            cancelText="Hủy"
+            locale="vi"
             mode={'date'}
             open={openDatePicker}
             date={date}
