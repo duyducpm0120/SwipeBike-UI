@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, Image, TouchableOpacity, Button} from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 import {
@@ -16,18 +16,39 @@ import {
 } from 'react-native-paper';
 
 export default function Trip(props) {
-  var tripDetail = {
+  const [tripDetail, setTripDetail] = useState({
     driver: {name: '', image: null},
     passenger: {name: '', image: null},
     time: null,
     date: null,
     from: null,
     to: null,
-  };
-  tripDetail = props.tripDetail; //The details of trip
-  var type = props.tripType; //candidates/request/pairing
-  var status = props.tripStatus;
-  var editMode = props.editMode;
+  });
+  useEffect(() => {
+    setTripDetail(props.tripDetail); //The details of trip
+  });
+
+  // var type = props.tripType; //candidates/request/pairing
+  // var status = props.tripStatus;
+  // var editMode = props.editMode;
+
+  function renderDots() {
+    return (
+      <TouchableOpacity
+        style={{
+          width: '100%',
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          marginBottom: 10,
+        }}
+        onPress={() => props.pressTrip(tripDetail)}>
+        <Image
+          source={ICONS.threeDot}
+          style={{marginHorizontal: 5, tintColor: COLORS.darkgray}}></Image>
+      </TouchableOpacity>
+    );
+  }
 
   function renderImage() {
     return (
@@ -129,11 +150,106 @@ export default function Trip(props) {
             alignItems: 'center',
             flexDirection: 'row',
             width: '100%',
-            marginTop: PIXEL.pixelSizeVertical(20),
+            marginTop: PIXEL.pixelSizeVertical(10),
           }}>
-          <Image source={ICONS.time}></Image>
-          <Text style={{...FONTS.h3}}>
+          <Image
+            source={ICONS.time}
+            style={{
+              width: 24,
+              height: 24,
+              justifyContent: 'center',
+              alignItems: 'center',
+              tintColor: COLORS.darkgray,
+            }}></Image>
+          <Text
+            style={{
+              ...FONTS.h3,
+              marginLeft: 10,
+            }}>
+            {tripDetail.time}
+          </Text>
+        </View>
+        <View
+          style={{
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            flexDirection: 'row',
+            width: '100%',
+            marginTop: PIXEL.pixelSizeVertical(10),
+          }}>
+          <Image
+            source={ICONS.calendar}
+            style={{
+              width: 24,
+              height: 24,
+              justifyContent: 'center',
+              alignItems: 'center',
+              tintColor: COLORS.darkgray,
+            }}></Image>
+          <Text
+            style={{
+              ...FONTS.h3,
+              marginLeft: 10,
+            }}>
             {getVietnameseDatetime(tripDetail.date)}
+          </Text>
+        </View>
+        <View
+          style={{
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            flexDirection: 'row',
+            width: '100%',
+            marginTop: PIXEL.pixelSizeVertical(10),
+          }}>
+          <Image
+            source={ICONS.dot}
+            style={{
+              width: 24,
+              height: 24,
+              justifyContent: 'center',
+              alignItems: 'center',
+              tintColor: COLORS.darkgray,
+            }}></Image>
+          <Text
+            style={{
+              ...FONTS.h3,
+              marginLeft: 10,
+            }}>
+            {tripDetail.from}
+          </Text>
+        </View>
+        <View
+          style={{
+            justifyContent: 'flex-start',
+            alignItems: 'flex-start',
+            flexDirection: 'row',
+            width: '100%',
+          }}>
+          <Image source={IMAGES.downArrow}></Image>
+        </View>
+        <View
+          style={{
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            flexDirection: 'row',
+            width: '100%',
+          }}>
+          <Image
+            source={ICONS.dot}
+            style={{
+              width: 24,
+              height: 24,
+              justifyContent: 'center',
+              alignItems: 'center',
+              tintColor: COLORS.primary,
+            }}></Image>
+          <Text
+            style={{
+              ...FONTS.h3,
+              marginLeft: 10,
+            }}>
+            {tripDetail.to}
           </Text>
         </View>
       </View>
@@ -143,13 +259,18 @@ export default function Trip(props) {
   return (
     <View
       style={{
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         width: PIXEL.pixelSizeHorizontal(350),
-        height: PIXEL.pixelSizeHorizontal(330),
-        borderColor: COLORS.black,
-        borderWidth: 0.5,
+        height: PIXEL.pixelSizeHorizontal(350),
+        //borderColor: COLORS.black,
+        //borderWidth: 0.5,
+        padding: 20,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        backgroundColor: COLORS.primaryLighter2,
       }}>
+      {renderDots()}
       {renderImage()}
       {renderDetail()}
     </View>

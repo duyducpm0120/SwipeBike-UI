@@ -26,6 +26,7 @@ export const chatBold = require('../assets/icons/Bold/chat-bold.png');
 export const driver = require('../assets/icons/Light/driver.png');
 export const hitchHiker = require('../assets/icons/Light/hitchhiker.png');
 export const time = require('../assets/icons/Light/time.png');
+export const threeDot = require('../assets/icons/Light/3dot.png');
 
 export default {
   cameraBold,
@@ -58,4 +59,5 @@ export default {
   driver,
   hitchHiker,
   time,
+  threeDot,
 };

@@ -13,7 +13,7 @@ export default function Home() {
       image: IMAGES.cuteDriver,
     },
     passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-    time: '7 PM',
+    time: '7:00 AM',
     date: date,
     from: 'Nhan van',
     to: 'CNTT',
@@ -21,7 +21,11 @@ export default function Home() {
 
   return (
     <View style={{...STYLES.container}}>
-      <Trip tripDetail={tripDetail}></Trip>
+      <Trip
+        tripDetail={tripDetail}
+        pressTrip={() => {
+          console.log('press');
+        }}></Trip>
     </View>
   );
 }
