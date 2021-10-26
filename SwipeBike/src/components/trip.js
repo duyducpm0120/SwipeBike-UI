@@ -52,6 +52,7 @@ export default function Trip(props) {
 
   function renderImage() {
     return (
+      // driver field
       <View
         style={{
           justifyContent: 'center',
@@ -92,45 +93,54 @@ export default function Trip(props) {
         </View>
 
         {/* Divider */}
-        <View
-          style={{
-            marginHorizontal: '3%',
-            backgroundColor: COLORS.darkgray,
-            height: 40,
-            width: 1,
-          }}></View>
-
-        <View
-          style={{
-            width: '45%',
-            height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-          }}>
-          <RoundedImage
-            image={tripDetail.passenger.image}
-            width={60}
-            height={60}></RoundedImage>
-          <Image
-            source={ICONS.hitchHiker}
+        {tripDetail.passenger != null ? (
+          <View
             style={{
-              width: 20,
-              height: 20,
-              top: -20,
-              right: -20,
-            }}></Image>
-          <Text
-            style={{
-              ...FONTS.h3Bold,
+              marginHorizontal: '3%',
+              backgroundColor: COLORS.darkgray,
+              height: 40,
+              width: 1,
+            }}></View>
+        ) : (
+          <View></View>
+        )}
 
-              width: '90%',
-              textAlign: 'center',
-              marginTop: -15,
+        {/* passenger field */}
+        {tripDetail.passenger != null ? (
+          <View
+            style={{
+              width: '45%',
+              height: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'column',
             }}>
-            {tripDetail.passenger.name}
-          </Text>
-        </View>
+            <RoundedImage
+              image={tripDetail.passenger.image}
+              width={60}
+              height={60}></RoundedImage>
+            <Image
+              source={ICONS.hitchHiker}
+              style={{
+                width: 20,
+                height: 20,
+                top: -20,
+                right: -20,
+              }}></Image>
+            <Text
+              style={{
+                ...FONTS.h3Bold,
+
+                width: '90%',
+                textAlign: 'center',
+                marginTop: -15,
+              }}>
+              {tripDetail.passenger.name}
+            </Text>
+          </View>
+        ) : (
+          <View></View>
+        )}
       </View>
     );
   }
@@ -268,7 +278,7 @@ export default function Trip(props) {
         padding: 20,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
-        backgroundColor: COLORS.primaryLighter2,
+        backgroundColor: COLORS.backGroundColor,
       }}>
       {renderDots()}
       {renderImage()}

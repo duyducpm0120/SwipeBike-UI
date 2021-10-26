@@ -27,6 +27,7 @@ export const driver = require('../assets/icons/Light/driver.png');
 export const hitchHiker = require('../assets/icons/Light/hitchhiker.png');
 export const time = require('../assets/icons/Light/time.png');
 export const threeDot = require('../assets/icons/Light/3dot.png');
+export const belt = require('../assets/icons/Light/notification.png');
 
 export default {
   cameraBold,
@@ -60,4 +61,5 @@ export default {
   hitchHiker,
   time,
   threeDot,
+  belt,
 };

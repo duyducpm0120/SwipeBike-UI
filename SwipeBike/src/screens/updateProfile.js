@@ -1,5 +1,12 @@
-import React, {useState} from 'react';
-import {View, Text, Image, TouchableOpacity, Button} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Button,
+  ScrollView,
+} from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 import {BackgroundButton, RoundedImage} from '../components';
 import DatePicker from 'react-native-date-picker';
@@ -21,6 +28,7 @@ import moment from 'moment';
 import 'moment/locale/vi';
 
 export default function UpdateProfile(props) {
+  useEffect(() => {});
   //Redux dispatch
   const dispatch = useDispatch();
   //Redux userProfile Slice
@@ -33,9 +41,6 @@ export default function UpdateProfile(props) {
   //const [university, setUniversity] = useState();
   const [phone, setPhone] = useState('0');
 
-  //Sex radioButton field
-  const [checked, setChecked] = React.useState('first');
-
   //DatePicker Field
   const [openDatePicker, setOpenDatePicker] = useState(false);
   //Use moment to convert to Vietnamese Datetime
@@ -45,7 +50,7 @@ export default function UpdateProfile(props) {
   }
 
   //vars for altering bottomsheet
-  const bottomSheetRef = React.createRef();
+  const bottomSheetRef = React.createRef(null);
   const fall = new Animated.Value(1);
 
   //Create components inner bottomsheet
@@ -58,7 +63,9 @@ export default function UpdateProfile(props) {
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
+        paddingHorizontal: 10,
       }}>
+      {/* //bar signal */}
       <View
         style={{
           width: '100%',
@@ -71,7 +78,8 @@ export default function UpdateProfile(props) {
           style={{
             width: 40,
             height: '100%',
-            backgroundColor: COLORS.black,
+            backgroundColor: COLORS.darkgray,
+            borderRadius: 100,
           }}></View>
       </View>
       <TouchableOpacity
@@ -171,12 +179,19 @@ export default function UpdateProfile(props) {
     return (
       <View
         style={{
+          marginBottom: 10,
           justifyContent: 'center',
           alignItems: 'center',
-          marginBottom: 10,
+          width: '100%',
         }}>
-        <Text style={FONTS.title}>Cập nhật hồ sơ</Text>
-        <Text style={FONTS.h3}>
+        <Text
+          style={{
+            ...FONTS.title,
+            textAlign: 'center',
+          }}>
+          Cập nhật hồ sơ
+        </Text>
+        <Text style={{...FONTS.h3, textAlign: 'center'}}>
           Hồ sơ sẽ hiển thị trên trang cá nhân của bạn
         </Text>
       </View>
@@ -189,6 +204,7 @@ export default function UpdateProfile(props) {
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'column',
+          width: '100%',
         }}>
         <View
           style={{
@@ -226,7 +242,7 @@ export default function UpdateProfile(props) {
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'column',
-          width: PIXEL.pixelSizeHorizontal(330),
+          width: PIXEL.pixelSizeHorizontal(350),
         }}
         showsVerticalScrollIndicator={false}>
         {/* Name */}
@@ -419,21 +435,27 @@ export default function UpdateProfile(props) {
     <View
       style={{
         flex: 1,
+        paddingVertical: 20,
+        paddingHorizontal: 20,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
       }}>
-      <Animated.View
-        style={{
-          flex: 1,
+      <Animated.ScrollView
+        style={{opacity: Animated.add(0.3, Animated.multiply(fall, 1.0))}}
+        contentContainerStyle={{
           justifyContent: 'center',
-          alignItems: 'center',
-          ...STYLES.container,
-          opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
-        }}>
+          alignItems: 'flex-start',
+        }}
+        showsVerticalScrollIndicator={false}>
         {renderHeader()}
         {renderImagePicker()}
         {renderTextField()}
         <TouchableOpacity
           style={{
-            marginTop: PIXEL.pixelSizeVertical(0),
+            marginTop: PIXEL.pixelSizeVertical(30),
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
           onPress={() => {
             updateProfileSlice().then(() => {
@@ -443,10 +465,10 @@ export default function UpdateProfile(props) {
           }}>
           <BackgroundButton text="Xong"></BackgroundButton>
         </TouchableOpacity>
-      </Animated.View>
+      </Animated.ScrollView>
       <BottomSheet
         ref={bottomSheetRef}
-        snapPoints={['40%', PIXEL.pixelSizeVertical(-100)]}
+        snapPoints={['40%', PIXEL.pixelSizeVertical(-50)]}
         renderContent={renderInner}
         initialSnap={1}
         callbackNode={fall}
