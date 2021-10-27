@@ -13,6 +13,7 @@ import {NavigationContainer} from '@react-navigation/native';
 //Ignore Reanimated 2 WARNING
 import {LogBox} from 'react-native';
 LogBox.ignoreLogs(['Reanimated 2']);
+LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop.']);
 
 import {
   Splash,
@@ -20,6 +21,7 @@ import {
   Login,
   ForgotPassword,
   UpdateProfile,
+  TripsScreen,
 } from './src/screens';
 import {COLORS, STYLES} from './src/constants';
 import {Waiting} from './src/components';
@@ -65,6 +67,7 @@ const App = () => {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+        <Stack.Screen name="TripsScreen" component={TripsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

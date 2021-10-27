@@ -6,6 +6,7 @@ import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 
 import {TabIcon} from '../components';
 import {View} from 'react-native';
+import {TripsScreen} from '../screens';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,8 +38,8 @@ const BottomTabs = () => {
         }}
       />
       <Tab.Screen
-        name="Play"
-        component={Home}
+        name="TripsScreen"
+        component={TripsScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <TabIcon

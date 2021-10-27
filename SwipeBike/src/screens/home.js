@@ -13,7 +13,7 @@ import {Trip, BackgroundButton} from '../components';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 
-export default function Home() {
+export default function Home(props) {
   //the user
   const [user, setUser] = useState({
     name: 'Vuong',
@@ -240,7 +240,7 @@ export default function Home() {
         onPress={() => {
           bottomSheetRef.current.snapTo(1);
         }}>
-        <Text style={FONTS.h2Bold}>Từ chối ghép đôi</Text>
+        <Text style={FONTS.h2Bold}>Hủy</Text>
       </TouchableOpacity>
     </View>
   );
@@ -249,6 +249,20 @@ export default function Home() {
   function openTripOptions(tripDetail) {
     bottomSheetRef.current.snapTo(0);
   }
+  //Trip options bottomSheet
+  const tripOptionsBottomSheet = () => {
+    return (
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={['50%', PIXEL.pixelSizeVertical(-50)]}
+        renderContent={renderInner}
+        initialSnap={1}
+        callbackNode={fall}
+        enabledGestureInteraction={true}
+        borderRadius={10}
+      />
+    );
+  };
 
   function renderHeader() {
     return (
@@ -314,7 +328,8 @@ export default function Home() {
             marginBottom: 10,
           }}>
           <Text style={{...FONTS.h2Bold}}>Đang chờ</Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => props.navigation.jumpTo('TripsScreen')}>
             <Text
               style={{
                 ...FONTS.h3,
@@ -408,15 +423,7 @@ export default function Home() {
         {renderWaitingTripList()}
         {renderRecommendedTrip()}
       </Animated.ScrollView>
-      <BottomSheet
-        ref={bottomSheetRef}
-        snapPoints={['50%', PIXEL.pixelSizeVertical(-50)]}
-        renderContent={renderInner}
-        initialSnap={1}
-        callbackNode={fall}
-        enabledGestureInteraction={true}
-        borderRadius={10}
-      />
+      {tripOptionsBottomSheet()}
     </View>
   );
 }

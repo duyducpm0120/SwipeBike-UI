@@ -113,6 +113,19 @@ export default function UpdateProfile(props) {
       </TouchableOpacity>
     </View>
   );
+  const updatePhotoBottomSheet = () => {
+    return (
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={['40%', PIXEL.pixelSizeVertical(-50)]}
+        renderContent={renderInner}
+        initialSnap={1}
+        callbackNode={fall}
+        enabledGestureInteraction={true}
+        borderRadius={10}
+      />
+    );
+  };
 
   //Open Phone Library
   const openImagePicker = () => {
@@ -465,15 +478,7 @@ export default function UpdateProfile(props) {
           <BackgroundButton text="Xong"></BackgroundButton>
         </TouchableOpacity>
       </Animated.ScrollView>
-      <BottomSheet
-        ref={bottomSheetRef}
-        snapPoints={['40%', PIXEL.pixelSizeVertical(-50)]}
-        renderContent={renderInner}
-        initialSnap={1}
-        callbackNode={fall}
-        enabledGestureInteraction={true}
-        borderRadius={10}
-      />
+      {updatePhotoBottomSheet()}
     </View>
   );
 }
