@@ -53,6 +53,7 @@ export const COLORS = {
 
   transparent: 'transparent',
 
+  // backGroundColor: '#F5F5F5',
   backGroundColor: '#F5F5F5',
 };
 
@@ -149,9 +150,16 @@ export const STYLES = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: COLORS.backGroundColor,
-    paddingTop: PIXEL.pixelSizeVertical(30),
-    paddingHorizontal: PIXEL.pixelSizeHorizontal(30),
+    //backgroundColor: COLORS.backGroundColor,
+    paddingTop: PIXEL.pixelSizeVertical(20),
+    paddingHorizontal: PIXEL.pixelSizeHorizontal(20),
+  },
+  scrollContainer: {
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    //backgroundColor: COLORS.backGroundColor,
+    paddingTop: PIXEL.pixelSizeVertical(20),
+    paddingHorizontal: PIXEL.pixelSizeHorizontal(20),
   },
   shadow: {
     shadowColor: '#000',

@@ -6,13 +6,18 @@ export default function RoundedImage(props) {
   return (
     <View
       style={{
-        borderRadius: 200,
         justifyContent: 'center',
         alignItems: 'center',
+        width: props.width,
+        height: props.height,
       }}>
       <Image
         source={props.image}
-        style={{width: props.width, height: props.height}}></Image>
+        style={{
+          width: props.width,
+          height: props.height,
+          borderRadius: 200,
+        }}></Image>
     </View>
   );
 }

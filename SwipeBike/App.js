@@ -10,6 +10,9 @@ import React, {useEffect, useState} from 'react';
 import {Image, Text, StyleSheet, View, Dimensions, Button} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
+//Ignore Reanimated 2 WARNING
+import {LogBox} from 'react-native';
+LogBox.ignoreLogs(['Reanimated 2']);
 
 import {
   Splash,
@@ -20,6 +23,8 @@ import {
 } from './src/screens';
 import {COLORS, STYLES} from './src/constants';
 import {Waiting} from './src/components';
+import BottomTabs from './src/navigations/bottomTabs';
+
 const Stack = createStackNavigator();
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -53,8 +58,9 @@ const App = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={'SignUp'}>
+        initialRouteName={'UpdateProfile'}>
         <Stack.Screen name="Splash" component={Splash} />
+        <Stack.Screen name="Home" component={BottomTabs} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
