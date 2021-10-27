@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
-import {Trip} from '../components';
+import {Trip, BackgroundButton} from '../components';
 
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -165,6 +165,91 @@ export default function Home() {
     },
   ]);
 
+  //vars for altering bottomsheet
+  const bottomSheetRef = React.createRef(null);
+  const fall = new Animated.Value(1);
+
+  //Create components inner bottomsheet
+  const renderInner = () => (
+    <View
+      style={{
+        backgroundColor: COLORS.backGroundColor,
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        paddingHorizontal: 10,
+      }}>
+      {/* //bar signal */}
+      <View
+        style={{
+          width: '100%',
+          height: 5,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginBottom: 10,
+        }}>
+        <View
+          style={{
+            width: 40,
+            height: '100%',
+            backgroundColor: COLORS.darkgray,
+            borderRadius: 100,
+          }}></View>
+      </View>
+      <TouchableOpacity
+        style={{marginVertical: 10}}
+        onPress={() => {
+          //openImagePicker();
+        }}>
+        <BackgroundButton text="Xem trên bản đồ"></BackgroundButton>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{marginVertical: 10}}
+        onPress={() => {
+          //openCamera();
+        }}>
+        <BackgroundButton text="Chấp nhận ghép đôi"></BackgroundButton>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          marginVertical: 10,
+          borderRadius: 10,
+          backgroundColor: COLORS.darkgray,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: PIXEL.pixelSizeHorizontal(315),
+          height: PIXEL.pixelSizeVertical(60),
+        }}
+        onPress={() => {
+          bottomSheetRef.current.snapTo(1);
+        }}>
+        <Text style={FONTS.h2Bold}>Từ chối ghép đôi</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          marginVertical: 10,
+          borderRadius: 10,
+          backgroundColor: COLORS.darkgray,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: PIXEL.pixelSizeHorizontal(315),
+          height: PIXEL.pixelSizeVertical(60),
+        }}
+        onPress={() => {
+          bottomSheetRef.current.snapTo(1);
+        }}>
+        <Text style={FONTS.h2Bold}>Từ chối ghép đôi</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  //Open options for trip
+  function openTripOptions(tripDetail) {
+    bottomSheetRef.current.snapTo(0);
+  }
+
   function renderHeader() {
     return (
       <View
@@ -194,11 +279,12 @@ export default function Home() {
     return (
       <View
         style={{
-          width: '100%',
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'column',
           marginVertical: 20,
+          width: SIZES.width - 40,
+          //width: '100%', //width size bug but I don't know why
         }}>
         <Image source={IMAGES.cuteDriver}></Image>
         <TouchableOpacity
@@ -247,7 +333,11 @@ export default function Home() {
           {waitingTripList.map(trip => {
             return (
               <View style={{marginHorizontal: 10}}>
-                <Trip tripDetail={trip.tripDetail} pressTrip={() => {}}></Trip>
+                <Trip
+                  tripDetail={trip.tripDetail}
+                  pressTrip={() => {
+                    openTripOptions(trip.tripDetail);
+                  }}></Trip>
               </View>
             );
           })}
@@ -286,7 +376,11 @@ export default function Home() {
           {recommendedTripList.map(trip => {
             return (
               <View style={{marginHorizontal: 10}} key={trip.tripId}>
-                <Trip tripDetail={trip.tripDetail} pressTrip={() => {}}></Trip>
+                <Trip
+                  tripDetail={trip.tripDetail}
+                  pressTrip={() => {
+                    openTripOptions(trip.tripDetail);
+                  }}></Trip>
               </View>
             );
           })}
@@ -296,16 +390,33 @@ export default function Home() {
   }
 
   return (
-    <ScrollView
-      nestedScrollEnabled={true}
-      contentContainerStyle={{
-        ...STYLES.scrollContainer,
-      }}
-      showsVerticalScrollIndicator={false}>
-      {renderHeader()}
-      {renderCreateTrip()}
-      {renderWaitingTripList()}
-      {renderRecommendedTrip()}
-    </ScrollView>
+    <View
+      style={{
+        ...STYLES.container,
+      }}>
+      <Animated.ScrollView
+        nestedScrollEnabled={true}
+        style={{opacity: Animated.add(0.3, Animated.multiply(fall, 1.0))}}
+        contentContainerStyle={{
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'flex-start',
+        }}
+        showsVerticalScrollIndicator={false}>
+        {renderHeader()}
+        {renderCreateTrip()}
+        {renderWaitingTripList()}
+        {renderRecommendedTrip()}
+      </Animated.ScrollView>
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={['50%', PIXEL.pixelSizeVertical(-50)]}
+        renderContent={renderInner}
+        initialSnap={1}
+        callbackNode={fall}
+        enabledGestureInteraction={true}
+        borderRadius={10}
+      />
+    </View>
   );
 }

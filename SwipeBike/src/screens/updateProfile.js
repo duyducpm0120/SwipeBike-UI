@@ -434,7 +434,6 @@ export default function UpdateProfile(props) {
   return (
     <View
       style={{
-        flex: 1,
         paddingVertical: 20,
         paddingHorizontal: 20,
         justifyContent: 'flex-start',
