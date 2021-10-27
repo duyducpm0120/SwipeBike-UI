@@ -6,10 +6,12 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  FlatList,
 } from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 import {Trip} from '../components';
+
+import Animated from 'react-native-reanimated';
+import BottomSheet from 'reanimated-bottom-sheet';
 
 export default function Home() {
   //the user
@@ -223,6 +225,7 @@ export default function Home() {
             justifyContent: 'space-between',
             alignItems: 'center',
             flexDirection: 'row',
+            marginBottom: 10,
           }}>
           <Text style={{...FONTS.h2Bold}}>Đang chờ</Text>
           <TouchableOpacity>
@@ -261,6 +264,7 @@ export default function Home() {
             justifyContent: 'space-between',
             alignItems: 'center',
             flexDirection: 'row',
+            marginBottom: 10,
           }}>
           <Text style={{...FONTS.h2Bold}}>Gợi ý cho bạn</Text>
           <TouchableOpacity>
@@ -281,7 +285,7 @@ export default function Home() {
           scrollEventThrottle={1}>
           {recommendedTripList.map(trip => {
             return (
-              <View style={{marginHorizontal: 10}}>
+              <View style={{marginHorizontal: 10}} key={trip.tripId}>
                 <Trip tripDetail={trip.tripDetail} pressTrip={() => {}}></Trip>
               </View>
             );

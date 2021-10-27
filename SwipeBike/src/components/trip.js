@@ -276,9 +276,9 @@ export default function Trip(props) {
         //borderColor: COLORS.black,
         //borderWidth: 0.5,
         padding: 20,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
+        borderRadius: 10,
         backgroundColor: COLORS.backGroundColor,
+        ...STYLES.shadow,
       }}>
       {renderDots()}
       {renderImage()}
