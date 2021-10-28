@@ -392,7 +392,6 @@ export default function TripsScreen() {
           justifyContent: 'center',
           alignItems: 'center',
           width: '100%',
-          marginBottom: 20,
         }}>
         <Text style={{...FONTS.title}}>Chuyến đi</Text>
       </View>
@@ -420,7 +419,7 @@ export default function TripsScreen() {
                 backgroundColor:
                   tripType == tripTypeControl
                     ? COLORS.primaryLighter1
-                    : COLORS.darkgray,
+                    : 'transparent',
               }}
               onPress={() => {
                 setTripTypeControl(tripType);

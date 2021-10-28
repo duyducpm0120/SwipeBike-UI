@@ -32,23 +32,23 @@ export default function Trip(props) {
   // var status = props.tripStatus;
   // var editMode = props.editMode;
 
-  function renderDots() {
-    return (
-      <TouchableOpacity
-        style={{
-          width: '100%',
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          marginBottom: 10,
-        }}
-        onPress={() => props.pressTrip(tripDetail)}>
-        <Image
-          source={ICONS.threeDot}
-          style={{marginHorizontal: 5, tintColor: COLORS.darkgray}}></Image>
-      </TouchableOpacity>
-    );
-  }
+  // function renderDots() {
+  //   return (
+  //     <TouchableOpacity
+  //       style={{
+  //         width: '100%',
+  //         flexDirection: 'row',
+  //         justifyContent: 'flex-end',
+  //         alignItems: 'center',
+  //         marginBottom: 10,
+  //       }}
+  //       onPress={() => props.pressTrip(tripDetail)}>
+  //       <Image
+  //         source={ICONS.threeDot}
+  //         style={{marginHorizontal: 5, tintColor: COLORS.darkgray}}></Image>
+  //     </TouchableOpacity>
+  //   );
+  // }
 
   function renderImage() {
     return (
@@ -267,7 +267,7 @@ export default function Trip(props) {
   }
 
   return (
-    <View
+    <TouchableOpacity
       style={{
         justifyContent: 'flex-start',
         alignItems: 'center',
@@ -279,10 +279,10 @@ export default function Trip(props) {
         borderRadius: 10,
         backgroundColor: COLORS.backGroundColor,
         ...STYLES.shadow,
-      }}>
-      {renderDots()}
+      }}
+      onPress={() => props.pressTrip(tripDetail)}>
       {renderImage()}
       {renderDetail()}
-    </View>
+    </TouchableOpacity>
   );
 }
