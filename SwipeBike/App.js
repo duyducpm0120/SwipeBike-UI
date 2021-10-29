@@ -12,8 +12,11 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 //Ignore Reanimated 2 WARNING
 import {LogBox} from 'react-native';
+//Ignore BottomSheet warning
 LogBox.ignoreLogs(['Reanimated 2']);
 LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop.']);
+//Ignore Mapbox integration warning
+LogBox.ignoreLogs(['new NativeEventEmitter']);
 
 import {
   Splash,

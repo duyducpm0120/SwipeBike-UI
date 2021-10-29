@@ -1,6 +1,20 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL, {Logger} from '@react-native-mapbox-gl/maps';
+
+//Ignore Mapbox warning
+Logger.setLogCallback(log => {
+  const {message} = log;
+
+  // expected warnings - see https://github.com/mapbox/mapbox-gl-native/issues/15341#issuecomment-522889062
+  if (
+    message.match('Request failed due to a permanent error: Canceled') ||
+    message.match('Request failed due to a permanent error: Socket Closed')
+  ) {
+    return true;
+  }
+  return false;
+});
 
 MapboxGL.setAccessToken(
   'sk.eyJ1IjoiZHV5ZHVjIiwiYSI6ImNrdmIyZTg3eDAybzkycW1wcWQ5bzcydmUifQ.e0MwCEpWohvpAkDmVSK8wQ',
