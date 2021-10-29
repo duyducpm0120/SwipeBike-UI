@@ -13,7 +13,7 @@ import {Trip, BackgroundButton} from '../components';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 
-export default function TripsScreen() {
+export default function TripsScreen(props) {
   //dummy waitingTripList
   const [waitingTripList, setWaitingTripList] = useState([
     {
@@ -337,6 +337,8 @@ export default function TripsScreen() {
         style={{marginVertical: 10}}
         onPress={() => {
           //openImagePicker();
+          props.navigation.navigate('MapViewing');
+          console.log('SSS');
         }}>
         <BackgroundButton text="Xem trên bản đồ"></BackgroundButton>
       </TouchableOpacity>

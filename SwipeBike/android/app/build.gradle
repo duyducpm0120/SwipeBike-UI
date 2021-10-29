@@ -215,6 +215,11 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    //Mapbox
+    // implementation ("com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.0", {
+    //     exclude group: 'com.mapbox.mapboxsdk', module:'mapbox-android-telemetry'
+    // })
 }
 
 // Run this once to be able to run the application with BUCK

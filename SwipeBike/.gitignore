@@ -58,3 +58,6 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+#Mapbox access token
+android/app/src/main/res/values/developer-config.xml
