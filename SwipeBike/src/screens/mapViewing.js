@@ -16,8 +16,9 @@ Logger.setLogCallback(log => {
   return false;
 });
 
+//Set Mapbox access token
 MapboxGL.setAccessToken(
-  'sk.eyJ1IjoiZHV5ZHVjIiwiYSI6ImNrdmIyZTg3eDAybzkycW1wcWQ5bzcydmUifQ.e0MwCEpWohvpAkDmVSK8wQ',
+  'pk.eyJ1IjoiZHV5ZHVjIiwiYSI6ImNrdXprM2R2ajJpaW0ycm55ZWR6M2tmM28ifQ.DSwiCyEQrbGsqs6ek7F-vg',
 );
 
 const styles = StyleSheet.create({
@@ -41,7 +42,9 @@ export default function MapViewing() {
   return (
     <View style={styles.page}>
       <View style={styles.container}>
-        <MapboxGL.MapView style={styles.map} />
+        <MapboxGL.MapView style={styles.map}>
+          <MapboxGL.UserLocation visible={true}></MapboxGL.UserLocation>
+        </MapboxGL.MapView>
       </View>
     </View>
   );
