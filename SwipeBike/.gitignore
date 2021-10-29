@@ -61,3 +61,4 @@ buck-out/
 
 #Mapbox access token
 android/app/src/main/res/values/developer-config.xml
+token.js

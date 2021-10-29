@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import MapboxGL, {Logger} from '@react-native-mapbox-gl/maps';
+import {MAPBOX_ACCESS_TOKEN} from '../../token';
 
 //Ignore Mapbox warning
 Logger.setLogCallback(log => {
@@ -17,9 +18,7 @@ Logger.setLogCallback(log => {
 });
 
 //Set Mapbox access token
-MapboxGL.setAccessToken(
-  'pk.eyJ1IjoiZHV5ZHVjIiwiYSI6ImNrdXprM2R2ajJpaW0ycm55ZWR6M2tmM28ifQ.DSwiCyEQrbGsqs6ek7F-vg',
-);
+MapboxGL.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
 const styles = StyleSheet.create({
   page: {

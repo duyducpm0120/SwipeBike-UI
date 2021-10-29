@@ -338,7 +338,6 @@ export default function TripsScreen(props) {
         onPress={() => {
           //openImagePicker();
           props.navigation.navigate('MapViewing');
-          console.log('SSS');
         }}>
         <BackgroundButton text="Xem trên bản đồ"></BackgroundButton>
       </TouchableOpacity>
