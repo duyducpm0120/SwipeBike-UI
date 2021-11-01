@@ -22,6 +22,7 @@ import {
   ForgotPassword,
   UpdateProfile,
   TripsScreen,
+  GoogleMapView,
 } from './src/screens';
 import {COLORS, STYLES} from './src/constants';
 import {Waiting} from './src/components';
@@ -60,7 +61,7 @@ const App = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={'UpdateProfile'}>
+        initialRouteName={'GoogleMapView'}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Home" component={BottomTabs} />
         <Stack.Screen name="SignUp" component={SignUp} />
@@ -68,6 +69,7 @@ const App = () => {
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
         <Stack.Screen name="TripsScreen" component={TripsScreen} />
+        <Stack.Screen name="GoogleMapView" component={GoogleMapView} />
       </Stack.Navigator>
     </NavigationContainer>
   );
