@@ -1,7 +1,16 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, Tex, Alert, PermissionsAndroid} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Tex,
+  Alert,
+  PermissionsAndroid,
+  Image,
+} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import Geolocation from 'react-native-geolocation-service';
+import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
+import {RoundedImage} from '../components';
 
 export default function GoogleMapView() {
   const [locationPermission, setLocationPermission] = useState();
@@ -44,7 +53,7 @@ export default function GoogleMapView() {
   async function getCurrentLocation() {
     if (locationPermission !== PermissionsAndroid.RESULTS.GRANTED)
       await requestLocationPermission();
-    await Geolocation.getCurrentPosition(
+    await Geolocation.watchPosition(
       position => {
         if (
           position.coords.latitude === currentLocation.latitude &&
@@ -70,12 +79,12 @@ export default function GoogleMapView() {
         maximumAge: 0,
       },
     );
-    console.log(currentLocation);
+    //console.log(currentLocation);
   }
 
   useEffect(() => {
     getCurrentLocation();
-  }, [currentLocation]);
+  });
   return (
     <View style={styles.container}>
       <MapView
@@ -86,7 +95,15 @@ export default function GoogleMapView() {
           longitude: currentLocation.longitude,
           latitudeDelta: 0.015,
           longitudeDelta: 0.0121,
-        }}></MapView>
+        }}>
+        <Marker
+          coordinate={{
+            latitude: currentLocation.latitude,
+            longitude: currentLocation.longitude,
+          }}>
+          <Image source={IMAGES.cuteDriver} style={{width: 40, height: 40}} />
+        </Marker>
+      </MapView>
     </View>
   );
 }
