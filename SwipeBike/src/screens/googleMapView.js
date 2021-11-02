@@ -2,25 +2,88 @@ import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
-  Tex,
+  Text,
   Alert,
   PermissionsAndroid,
   Image,
+  Button,
+  TouchableOpacity,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import Geolocation from 'react-native-geolocation-service';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 import {RoundedImage} from '../components';
+import {MAPS_API_KEY} from '../../key';
 
 export default function GoogleMapView() {
-  const [locationPermission, setLocationPermission] = useState();
+  //Locations for testing route
+  const testLocation1 = [14.1717, 109.0508];
+  const testLocation2 = [14.1668, 109.0488];
+  const [coords, setCoords] = useState([
+    // {latitude: testLocation1[0], longitude: testLocation1[1]},
+    // {latitude: testLocation2[0], longitude: testLocation2[1]},
+  ]);
 
+  const [locationPermission, setLocationPermission] = useState();
   //User current location
   const [currentLocation, setCurrentLocation] = useState({
     latitude: 14.1693,
     longitude: 109.0495,
     coordinates: [14.1693, 109.0495],
   });
+
+  function decode(t, e) {
+    for (
+      var n,
+        o,
+        u = 0,
+        l = 0,
+        r = 0,
+        d = [],
+        h = 0,
+        i = 0,
+        a = null,
+        c = Math.pow(10, e || 5);
+      u < t.length;
+
+    ) {
+      (a = null), (h = 0), (i = 0);
+      do (a = t.charCodeAt(u++) - 63), (i |= (31 & a) << h), (h += 5);
+      while (a >= 32);
+      (n = 1 & i ? ~(i >> 1) : i >> 1), (h = i = 0);
+      do (a = t.charCodeAt(u++) - 63), (i |= (31 & a) << h), (h += 5);
+      while (a >= 32);
+      (o = 1 & i ? ~(i >> 1) : i >> 1),
+        (l += n),
+        (r += o),
+        d.push([l / c, r / c]);
+    }
+    return (d = d.map(function (t) {
+      return {latitude: t[0], longitude: t[1]};
+    }));
+    // transforms something like this geocFltrhVvDsEtA}ApSsVrDaEvAcBSYOS_@... to an array of coordinates
+  }
+
+  async function getRoute() {
+    console.log('getroute');
+    const mode = 'driving'; // 'walking';
+    const origin = testLocation1.toString();
+    const destination = testLocation2.toString();
+    const APIKEY = MAPS_API_KEY;
+    const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${APIKEY}&mode=${mode}`;
+
+    await fetch(url)
+      .then(response => response.json())
+      .then(responseJson => {
+        if (responseJson.routes.length) {
+          setCoords(decode(responseJson.routes[0].overview_polyline.points));
+          console.log(coords);
+        }
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
 
   function requestLocationPermission() {
     if (locationPermission === PermissionsAndroid.RESULTS.GRANTED) {
@@ -103,7 +166,30 @@ export default function GoogleMapView() {
           }}>
           <Image source={IMAGES.cuteDriver} style={{width: 40, height: 40}} />
         </Marker>
+
+        {/* Route */}
+        <MapView.Polyline
+          coordinates={[
+            //{latitude: testLocation1[0], longitude: testLocation1[1]}, // optional
+            ...coords,
+            //{latitude: testLocation2[0], longitude: testLocation2[1]}, // optional
+          ]}
+          strokeWidth={5}
+        />
       </MapView>
+      <TouchableOpacity
+        style={{
+          position: 'absolute',
+          width: 70,
+          height: 40,
+          backgroundColor: COLORS.primary,
+          marginTop: 10,
+        }}
+        onPress={() => {
+          getRoute();
+        }}>
+        <Text>AAAA</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -111,9 +197,9 @@ export default function GoogleMapView() {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    height: '100%',
+    height: '90%',
     width: '100%',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   map: {
