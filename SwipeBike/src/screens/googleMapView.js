@@ -15,28 +15,9 @@ import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 import {RoundedImage} from '../components';
 import {MAPS_API_KEY} from '../../key';
 
-export default function GoogleMapView() {
+export default function GoogleMapView(props) {
   //Trip to display
-  const [trip, setTrip] = useState({
-    tripId: 0,
-    tripDetail: {
-      driver: {
-        name: 'Duong Thanh Vuong',
-        image: IMAGES.cuteDriver,
-      },
-      passenger: null,
-      time: '7:00 AM',
-      date: new Date(),
-      from: {
-        name: 'Nhan van',
-        coordinate: [14.1717, 109.0508],
-      },
-      to: {
-        name: 'CNTT',
-        coordinate: [14.1668, 109.0488],
-      },
-    },
-  });
+  const [tripData, setTripData] = useState({});
 
   const [coords, setCoords] = useState([
     // {latitude: testLocation1[0], longitude: testLocation1[1]},
@@ -50,6 +31,11 @@ export default function GoogleMapView() {
     longitude: 109.0495,
     coordinates: [14.1693, 109.0495],
   });
+
+  //Get trip param data
+  function getTripData() {
+    setTripData(props.route.params.trip);
+  }
 
   function decode(t, e) {
     for (
@@ -86,8 +72,8 @@ export default function GoogleMapView() {
   async function getRoute() {
     console.log('getroute');
     const mode = 'driving'; // 'walking';
-    const origin = trip.tripDetail.from.coordinate;
-    const destination = trip.tripDetail.to.coordinate;
+    const origin = tripData.tripDetail.from.coordinate;
+    const destination = tripData.tripDetail.to.coordinate;
     const APIKEY = MAPS_API_KEY;
     const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${APIKEY}&mode=${mode}`;
 
@@ -96,12 +82,13 @@ export default function GoogleMapView() {
       .then(responseJson => {
         if (responseJson.routes.length) {
           setCoords(decode(responseJson.routes[0].overview_polyline.points));
-          console.log(coords);
+          console.log('get route successfully');
         }
       })
       .catch(e => {
         console.log(e);
       });
+    //console.log('End getroute');
   }
 
   function requestLocationPermission() {
@@ -164,9 +151,26 @@ export default function GoogleMapView() {
     //console.log(currentLocation);
   }
 
+  //draw route between origin and destination
+  function drawRoute() {
+    return (
+      //Route between origin and destination
+      <MapView.Polyline
+        coordinates={[
+          //{latitude: testLocation1[0], longitude: testLocation1[1]}, // optional
+          ...coords,
+          //{latitude: testLocation2[0], longitude: testLocation2[1]}, // optional
+        ]}
+        strokeWidth={8}
+        strokeColor={COLORS.primary}
+      />
+    );
+  }
+
   useEffect(() => {
     getCurrentLocation();
-  });
+    getTripData();
+  }, [tripData]);
   return (
     <View style={styles.container}>
       <MapView
@@ -185,8 +189,6 @@ export default function GoogleMapView() {
           }}>
           <Image source={IMAGES.cuteDriver} style={{width: 40, height: 40}} />
         </Marker>
-
-        {/* Route */}
         <MapView.Polyline
           coordinates={[
             //{latitude: testLocation1[0], longitude: testLocation1[1]}, // optional
@@ -207,6 +209,7 @@ export default function GoogleMapView() {
         }}
         onPress={() => {
           getRoute();
+          console.log(tripData);
         }}>
         <Text>AAAA</Text>
       </TouchableOpacity>
@@ -217,7 +220,7 @@ export default function GoogleMapView() {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    height: '90%',
+    height: '100%',
     width: '100%',
     justifyContent: 'flex-start',
     alignItems: 'center',

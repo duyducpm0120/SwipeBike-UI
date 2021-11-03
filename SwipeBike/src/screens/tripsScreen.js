@@ -8,113 +8,41 @@ import {
   ScrollView,
 } from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
-import {Trip, BackgroundButton} from '../components';
+import {
+  Trip,
+  BackgroundButton,
+  waitingTripDetail,
+  pairingTripDetail,
+} from '../components';
 
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 
-export default function TripsScreen() {
+export default function TripsScreen(props) {
+  //Chosen clicking trip
+  const [chosenTrip, setChosenTrip] = useState({});
+
   //dummy waitingTripList
   const [waitingTripList, setWaitingTripList] = useState([
     {
       tripId: 0,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: null,
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: waitingTripDetail,
     },
     {
       tripId: 1,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: null,
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: waitingTripDetail,
     },
     {
       tripId: 2,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: null,
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: waitingTripDetail,
     },
     {
       tripId: 3,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: null,
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: waitingTripDetail,
     },
     {
       tripId: 4,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: null,
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: waitingTripDetail,
     },
   ]);
 
@@ -122,103 +50,23 @@ export default function TripsScreen() {
   const [pairingTripList, setPairingTripList] = useState([
     {
       tripId: 0,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: pairingTripDetail,
     },
     {
       tripId: 1,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: pairingTripDetail,
     },
     {
       tripId: 2,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: pairingTripDetail,
     },
     {
       tripId: 3,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: pairingTripDetail,
     },
     {
       tripId: 4,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: pairingTripDetail,
     },
   ]);
 
@@ -226,184 +74,40 @@ export default function TripsScreen() {
   const [historyTripList, setHistoryTripList] = useState([
     {
       tripId: 0,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: pairingTripDetail,
     },
     {
       tripId: 1,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: pairingTripDetail,
     },
     {
       tripId: 2,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: pairingTripDetail,
     },
     {
       tripId: 3,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: pairingTripDetail,
     },
     {
       tripId: 4,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: pairingTripDetail,
     },
     {
       tripId: 5,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: pairingTripDetail,
     },
     {
       tripId: 6,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: pairingTripDetail,
     },
 
     {
       tripId: 7,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: pairingTripDetail,
     },
     {
       tripId: 8,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: {
-          name: 'Nhan van',
-          coordinate: [14.1717, 109.0508],
-        },
-        to: {
-          name: 'CNTT',
-          coordinate: [14.1668, 109.0488],
-        },
-      },
+      tripDetail: pairingTripDetail,
     },
   ]);
 
@@ -450,7 +154,7 @@ export default function TripsScreen() {
       <TouchableOpacity
         style={{marginVertical: 10}}
         onPress={() => {
-          //openImagePicker();
+          props.navigation.navigate('GoogleMapView', {trip: chosenTrip});
         }}>
         <BackgroundButton text="Xem trên bản đồ"></BackgroundButton>
       </TouchableOpacity>
@@ -574,6 +278,7 @@ export default function TripsScreen() {
               <Trip
                 tripDetail={trip.tripDetail}
                 pressTrip={() => {
+                  setChosenTrip(trip);
                   openTripOptions(trip.tripDetail);
                 }}></Trip>
             </View>
