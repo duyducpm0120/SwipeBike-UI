@@ -19,17 +19,6 @@ export default function Home(props) {
     name: 'Vuong',
   });
   //dummy data
-  const tripDetail = {
-    driver: {
-      name: 'Duong Thanh Vuong',
-      image: IMAGES.cuteDriver,
-    },
-    passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-    time: '7:00 AM',
-    date: new Date(),
-    from: 'Nhan van',
-    to: 'CNTT',
-  };
 
   //dummy waitingTripList
   const [waitingTripList, setWaitingTripList] = useState([
@@ -40,11 +29,17 @@ export default function Home(props) {
           name: 'Duong Thanh Vuong',
           image: IMAGES.cuteDriver,
         },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
+        passenger: null,
         time: '7:00 AM',
         date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
+        from: {
+          name: 'Nhan van',
+          coordinate: [14.1717, 109.0508],
+        },
+        to: {
+          name: 'CNTT',
+          coordinate: [14.1668, 109.0488],
+        },
       },
     },
     {
@@ -54,11 +49,17 @@ export default function Home(props) {
           name: 'Duong Thanh Vuong',
           image: IMAGES.cuteDriver,
         },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
+        passenger: null,
         time: '7:00 AM',
         date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
+        from: {
+          name: 'Nhan van',
+          coordinate: [14.1717, 109.0508],
+        },
+        to: {
+          name: 'CNTT',
+          coordinate: [14.1668, 109.0488],
+        },
       },
     },
     {
@@ -68,11 +69,17 @@ export default function Home(props) {
           name: 'Duong Thanh Vuong',
           image: IMAGES.cuteDriver,
         },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
+        passenger: null,
         time: '7:00 AM',
         date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
+        from: {
+          name: 'Nhan van',
+          coordinate: [14.1717, 109.0508],
+        },
+        to: {
+          name: 'CNTT',
+          coordinate: [14.1668, 109.0488],
+        },
       },
     },
     {
@@ -82,11 +89,17 @@ export default function Home(props) {
           name: 'Duong Thanh Vuong',
           image: IMAGES.cuteDriver,
         },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
+        passenger: null,
         time: '7:00 AM',
         date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
+        from: {
+          name: 'Nhan van',
+          coordinate: [14.1717, 109.0508],
+        },
+        to: {
+          name: 'CNTT',
+          coordinate: [14.1668, 109.0488],
+        },
       },
     },
     {
@@ -96,11 +109,17 @@ export default function Home(props) {
           name: 'Duong Thanh Vuong',
           image: IMAGES.cuteDriver,
         },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
+        passenger: null,
         time: '7:00 AM',
         date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
+        from: {
+          name: 'Nhan van',
+          coordinate: [14.1717, 109.0508],
+        },
+        to: {
+          name: 'CNTT',
+          coordinate: [14.1668, 109.0488],
+        },
       },
     },
   ]);
@@ -117,8 +136,14 @@ export default function Home(props) {
         passenger: null,
         time: '7:00 AM',
         date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
+        from: {
+          name: 'Nhan van',
+          coordinate: [14.1717, 109.0508],
+        },
+        to: {
+          name: 'CNTT',
+          coordinate: [14.1668, 109.0488],
+        },
       },
     },
     {
@@ -131,8 +156,14 @@ export default function Home(props) {
         passenger: null,
         time: '7:00 AM',
         date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
+        from: {
+          name: 'Nhan van',
+          coordinate: [14.1717, 109.0508],
+        },
+        to: {
+          name: 'CNTT',
+          coordinate: [14.1668, 109.0488],
+        },
       },
     },
     {
@@ -145,8 +176,14 @@ export default function Home(props) {
         passenger: null,
         time: '7:00 AM',
         date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
+        from: {
+          name: 'Nhan van',
+          coordinate: [14.1717, 109.0508],
+        },
+        to: {
+          name: 'CNTT',
+          coordinate: [14.1668, 109.0488],
+        },
       },
     },
     {
@@ -159,8 +196,14 @@ export default function Home(props) {
         passenger: null,
         time: '7:00 AM',
         date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
+        from: {
+          name: 'Nhan van',
+          coordinate: [14.1717, 109.0508],
+        },
+        to: {
+          name: 'CNTT',
+          coordinate: [14.1668, 109.0488],
+        },
       },
     },
   ]);

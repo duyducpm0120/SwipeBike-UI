@@ -16,9 +16,28 @@ import {RoundedImage} from '../components';
 import {MAPS_API_KEY} from '../../key';
 
 export default function GoogleMapView() {
-  //Locations for testing route
-  const testLocation1 = [14.1717, 109.0508];
-  const testLocation2 = [14.1668, 109.0488];
+  //Trip to display
+  const [trip, setTrip] = useState({
+    tripId: 0,
+    tripDetail: {
+      driver: {
+        name: 'Duong Thanh Vuong',
+        image: IMAGES.cuteDriver,
+      },
+      passenger: null,
+      time: '7:00 AM',
+      date: new Date(),
+      from: {
+        name: 'Nhan van',
+        coordinate: [14.1717, 109.0508],
+      },
+      to: {
+        name: 'CNTT',
+        coordinate: [14.1668, 109.0488],
+      },
+    },
+  });
+
   const [coords, setCoords] = useState([
     // {latitude: testLocation1[0], longitude: testLocation1[1]},
     // {latitude: testLocation2[0], longitude: testLocation2[1]},
@@ -67,8 +86,8 @@ export default function GoogleMapView() {
   async function getRoute() {
     console.log('getroute');
     const mode = 'driving'; // 'walking';
-    const origin = testLocation1.toString();
-    const destination = testLocation2.toString();
+    const origin = trip.tripDetail.from.coordinate;
+    const destination = trip.tripDetail.to.coordinate;
     const APIKEY = MAPS_API_KEY;
     const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${APIKEY}&mode=${mode}`;
 
@@ -174,7 +193,8 @@ export default function GoogleMapView() {
             ...coords,
             //{latitude: testLocation2[0], longitude: testLocation2[1]}, // optional
           ]}
-          strokeWidth={5}
+          strokeWidth={8}
+          strokeColor={COLORS.primary}
         />
       </MapView>
       <TouchableOpacity
