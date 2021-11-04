@@ -12,12 +12,22 @@ import {
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import Geolocation from 'react-native-geolocation-service';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
-import {RoundedImage} from '../components';
 import {MAPS_API_KEY} from '../../key';
+import {
+  Trip,
+  BackgroundButton,
+  waitingTripDetail,
+  pairingTripDetail,
+} from '../components';
+
+import Animated from 'react-native-reanimated';
+import BottomSheet from 'reanimated-bottom-sheet';
 
 export default function GoogleMapView(props) {
   //Trip to display
   const [tripData, setTripData] = useState({});
+  //check trip is loaded ?
+  const [loaded, setLoaded] = useState(false);
 
   const [coords, setCoords] = useState([
     // {latitude: testLocation1[0], longitude: testLocation1[1]},
@@ -32,9 +42,53 @@ export default function GoogleMapView(props) {
     coordinates: [14.1693, 109.0495],
   });
 
+  //Vars for altering bottomsheet
+  const bottomSheetRef = React.createRef(null);
+  const fall = new Animated.Value(1);
+
+  //Render inside bottomsheet
+  const renderInner = () => (
+    <View
+      style={{
+        backgroundColor: COLORS.backGroundColor,
+        width: '100%',
+        height: '100%',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        flexDirection: 'column',
+        paddingHorizontal: 10,
+        paddingTop: 20,
+        borderRadius: 30,
+      }}>
+      {/* //bar signal */}
+      <View
+        style={{
+          width: '100%',
+          height: 5,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginBottom: 10,
+        }}>
+        <View
+          style={{
+            width: 40,
+            height: '100%',
+            backgroundColor: COLORS.darkgray,
+            borderRadius: 100,
+          }}></View>
+      </View>
+      {/* Trip Component */}
+      {loaded ? (
+        <Trip tripDetail={tripData.tripDetail} pressTrip={() => {}}></Trip>
+      ) : (
+        <View></View>
+      )}
+    </View>
+  );
   //Get trip param data
   function getTripData() {
     setTripData(props.route.params.trip);
+    console.log('Success load trip', tripData);
   }
 
   function decode(t, e) {
@@ -70,6 +124,7 @@ export default function GoogleMapView(props) {
   }
 
   async function getRoute() {
+    if (!loaded) return;
     console.log('getroute');
     const mode = 'driving'; // 'walking';
     const origin = tripData.tripDetail.from.coordinate;
@@ -120,6 +175,7 @@ export default function GoogleMapView(props) {
   }
 
   async function getCurrentLocation() {
+    if (!loaded) return;
     if (locationPermission !== PermissionsAndroid.RESULTS.GRANTED)
       await requestLocationPermission();
     await Geolocation.watchPosition(
@@ -151,26 +207,12 @@ export default function GoogleMapView(props) {
     //console.log(currentLocation);
   }
 
-  //draw route between origin and destination
-  function drawRoute() {
-    return (
-      //Route between origin and destination
-      <MapView.Polyline
-        coordinates={[
-          //{latitude: testLocation1[0], longitude: testLocation1[1]}, // optional
-          ...coords,
-          //{latitude: testLocation2[0], longitude: testLocation2[1]}, // optional
-        ]}
-        strokeWidth={8}
-        strokeColor={COLORS.primary}
-      />
-    );
-  }
-
   useEffect(() => {
-    getCurrentLocation();
     getTripData();
-  }, [tripData]);
+    setLoaded(true);
+    getCurrentLocation();
+    getRoute();
+  }, [tripData, loaded]);
   return (
     <View style={styles.container}>
       <MapView
@@ -181,38 +223,61 @@ export default function GoogleMapView(props) {
           longitude: currentLocation.longitude,
           latitudeDelta: 0.015,
           longitudeDelta: 0.0121,
-        }}>
+        }}
+        showsUserLocation={true}
+        followsUserLocation={true}
+        showsTraffic={true}>
+        {/* Trip Marker */}
         <Marker
           coordinate={{
-            latitude: currentLocation.latitude,
-            longitude: currentLocation.longitude,
+            latitude: loaded ? tripData.tripDetail.from.coordinate[0] : 0,
+            longitude: loaded ? tripData.tripDetail.from.coordinate[1] : 0,
           }}>
-          <Image source={IMAGES.cuteDriver} style={{width: 40, height: 40}} />
+          <MapView.Callout tooltip={true}>
+            <View
+              style={{backgroundColor: COLORS.white, width: 100, height: 100}}>
+              <Text style={{...FONTS.h1Bold}}>
+                {/* {tripData.tripDetail ? tripData.tripDetail.from.name : ''} */}
+                AAAAAA
+              </Text>
+            </View>
+          </MapView.Callout>
         </Marker>
+        <Marker
+          coordinate={{
+            latitude: loaded ? tripData.tripDetail.to.coordinate[0] : 0,
+            longitude: loaded ? tripData.tripDetail.to.coordinate[1] : 0,
+          }}></Marker>
         <MapView.Polyline
           coordinates={[
-            //{latitude: testLocation1[0], longitude: testLocation1[1]}, // optional
+            {
+              latitude: loaded ? tripData.tripDetail.from.coordinate[0] : 0,
+              longitude: tripData.tripDetail
+                ? tripData.tripDetail.from.coordinate[1]
+                : 0,
+            }, // optional
             ...coords,
-            //{latitude: testLocation2[0], longitude: testLocation2[1]}, // optional
+            {
+              latitude: loaded ? tripData.tripDetail.to.coordinate[0] : 0,
+              longitude: tripData.tripDetail
+                ? tripData.tripDetail.to.coordinate[1]
+                : 0,
+            }, // optional
           ]}
           strokeWidth={8}
           strokeColor={COLORS.primary}
         />
       </MapView>
-      <TouchableOpacity
-        style={{
-          position: 'absolute',
-          width: 70,
-          height: 40,
-          backgroundColor: COLORS.primary,
-          marginTop: 10,
-        }}
-        onPress={() => {
-          getRoute();
-          console.log(tripData);
-        }}>
-        <Text>AAAA</Text>
-      </TouchableOpacity>
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={['55%', PIXEL.pixelSizeVertical(50)]}
+        renderContent={renderInner}
+        s
+        initialSnap={1}
+        callbackNode={fall}
+        enabledGestureInteraction={true}
+        borderRadius={10}
+      />
     </View>
   );
 }
@@ -226,6 +291,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   map: {
-    ...StyleSheet.absoluteFillObject,
+    // ...StyleSheet.absoluteFillObject,
+    width: '100%',
+    height: '100%',
   },
 });
