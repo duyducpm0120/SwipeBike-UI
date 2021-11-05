@@ -23,6 +23,7 @@ import {
   UpdateProfile,
   TripsScreen,
   GoogleMapView,
+  CreateTrip,
 } from './src/screens';
 import {COLORS, STYLES} from './src/constants';
 import {Waiting} from './src/components';
@@ -70,6 +71,7 @@ const App = () => {
         <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
         <Stack.Screen name="TripsScreen" component={TripsScreen} />
         <Stack.Screen name="GoogleMapView" component={GoogleMapView} />
+        <Stack.Screen name="CreateTrip" component={CreateTrip} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -28,6 +28,12 @@ export const hitchHiker = require('../assets/icons/Light/hitchhiker.png');
 export const time = require('../assets/icons/Light/time.png');
 export const threeDot = require('../assets/icons/Light/3dot.png');
 export const belt = require('../assets/icons/Light/notification.png');
+export const rightArr1 = require('../assets/icons/Light/right1.png');
+export const rightArr2 = require('../assets/icons/Light/right2.png');
+export const upArr1 = require('../assets/icons/Light/up1.png');
+export const upArr2 = require('../assets/icons/Light/up2.png');
+export const leftArr1 = require('../assets/icons/Light/left1.png');
+export const leftArr2 = require('../assets/icons/Light/left2.png');
 
 export default {
   cameraBold,
@@ -62,4 +68,10 @@ export default {
   time,
   threeDot,
   belt,
+  rightArr1,
+  rightArr2,
+  upArr1,
+  upArr2,
+  leftArr1,
+  leftArr2,
 };

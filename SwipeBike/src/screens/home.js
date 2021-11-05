@@ -214,7 +214,8 @@ export default function Home(props) {
             backgroundColor: COLORS.primaryLighter1,
             borderRadius: 10,
             marginTop: 10,
-          }}>
+          }}
+          onPress={() => props.navigation.navigate('CreateTrip')}>
           <Text style={FONTS.h3Bold}>Tạo chuyến đi mới</Text>
         </TouchableOpacity>
       </View>

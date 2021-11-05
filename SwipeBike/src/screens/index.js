@@ -6,6 +6,7 @@ import UpdateProfile from './updateProfile';
 import Home from './home';
 import TripsScreen from './tripsScreen';
 import GoogleMapView from './googleMapView';
+import CreateTrip from './createTrip';
 
 export {
   Splash,
@@ -16,4 +17,5 @@ export {
   Home,
   TripsScreen,
   GoogleMapView,
+  CreateTrip,
 };

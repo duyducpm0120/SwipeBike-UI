@@ -3,7 +3,7 @@ import BackgroundButton from './backgroudButton';
 import RoundedImage from './roundedImage';
 import TabIcon from './TabIcon';
 import Trip from './trip';
-import getVietnameseDatetime from './VietnameseDatetime';
+import {getVietnameseDate, getVietnameseTime} from './VietnameseDatetime';
 import {waitingTripDetail, pairingTripDetail} from './dummyTripDetail';
 
 export {
@@ -12,7 +12,8 @@ export {
   RoundedImage,
   TabIcon,
   Trip,
-  getVietnameseDatetime,
+  getVietnameseDate,
+  getVietnameseTime,
   waitingTripDetail,
   pairingTripDetail,
 };

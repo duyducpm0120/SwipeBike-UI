@@ -151,8 +151,8 @@ export const STYLES = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     //backgroundColor: COLORS.backGroundColor,
-    paddingTop: PIXEL.pixelSizeVertical(20),
-    paddingHorizontal: PIXEL.pixelSizeHorizontal(20),
+    paddingTop: 20,
+    paddingHorizontal: 20,
   },
   scrollContainer: {
     justifyContent: 'flex-start',

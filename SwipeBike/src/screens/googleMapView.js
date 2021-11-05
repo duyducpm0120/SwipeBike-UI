@@ -37,9 +37,9 @@ export default function GoogleMapView(props) {
   const [locationPermission, setLocationPermission] = useState();
   //User current location
   const [currentLocation, setCurrentLocation] = useState({
-    latitude: 14.1693,
-    longitude: 109.0495,
-    coordinates: [14.1693, 109.0495],
+    latitude: 0,
+    longitude: 0,
+    coordinates: [0, 0],
   });
 
   //Vars for altering bottomsheet
