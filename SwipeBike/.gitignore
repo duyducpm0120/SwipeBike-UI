@@ -59,8 +59,6 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 
-#Mapbox access token
-android/app/src/main/res/values/developer-config.xml
-token.js
-
-android/gradle.properties
+#GG map
+/android/app/src/main/res/values/google_maps_api.xml
+/key.js
