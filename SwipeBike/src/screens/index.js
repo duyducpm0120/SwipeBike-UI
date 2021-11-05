@@ -5,7 +5,7 @@ import ForgotPassword from './forgotPasswod';
 import UpdateProfile from './updateProfile';
 import Home from './home';
 import TripsScreen from './tripsScreen';
-import MapViewing from './mapViewing';
+import GoogleMapView from './googleMapView';
 
 export {
   Splash,
@@ -15,5 +15,5 @@ export {
   UpdateProfile,
   Home,
   TripsScreen,
-  MapViewing,
+  GoogleMapView,
 };

@@ -12,11 +12,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 //Ignore Reanimated 2 WARNING
 import {LogBox} from 'react-native';
-//Ignore BottomSheet warning
 LogBox.ignoreLogs(['Reanimated 2']);
 LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop.']);
-//Ignore Mapbox integration warning
-LogBox.ignoreLogs(['new NativeEventEmitter']);
 
 import {
   Splash,
@@ -25,7 +22,7 @@ import {
   ForgotPassword,
   UpdateProfile,
   TripsScreen,
-  MapViewing,
+  GoogleMapView,
 } from './src/screens';
 import {COLORS, STYLES} from './src/constants';
 import {Waiting} from './src/components';
@@ -64,7 +61,7 @@ const App = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={'UpdateProfile'}>
+        initialRouteName={'Home'}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Home" component={BottomTabs} />
         <Stack.Screen name="SignUp" component={SignUp} />
@@ -72,7 +69,7 @@ const App = () => {
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
         <Stack.Screen name="TripsScreen" component={TripsScreen} />
-        <Stack.Screen name="MapViewing" component={MapViewing} />
+        <Stack.Screen name="GoogleMapView" component={GoogleMapView} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -21,34 +21,15 @@ export default function Trip(props) {
     passenger: {name: '', image: null},
     time: null,
     date: null,
-    from: null,
-    to: null,
+    from: {
+      name: '',
+      coordinate: [],
+    },
+    to: {name: '', coordinate: []},
   });
   useEffect(() => {
     setTripDetail(props.tripDetail); //The details of trip
   });
-
-  // var type = props.tripType; //candidates/request/pairing
-  // var status = props.tripStatus;
-  // var editMode = props.editMode;
-
-  function renderDots() {
-    return (
-      <TouchableOpacity
-        style={{
-          width: '100%',
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          marginBottom: 10,
-        }}
-        onPress={() => props.pressTrip(tripDetail)}>
-        <Image
-          source={ICONS.threeDot}
-          style={{marginHorizontal: 5, tintColor: COLORS.darkgray}}></Image>
-      </TouchableOpacity>
-    );
-  }
 
   function renderImage() {
     return (
@@ -226,7 +207,7 @@ export default function Trip(props) {
               ...FONTS.h3,
               marginLeft: 10,
             }}>
-            {tripDetail.from}
+            {tripDetail.from.name}
           </Text>
         </View>
         <View
@@ -259,7 +240,7 @@ export default function Trip(props) {
               ...FONTS.h3,
               marginLeft: 10,
             }}>
-            {tripDetail.to}
+            {tripDetail.to.name}
           </Text>
         </View>
       </View>
@@ -267,7 +248,7 @@ export default function Trip(props) {
   }
 
   return (
-    <View
+    <TouchableOpacity
       style={{
         justifyContent: 'flex-start',
         alignItems: 'center',
@@ -279,10 +260,10 @@ export default function Trip(props) {
         borderRadius: 10,
         backgroundColor: COLORS.backGroundColor,
         ...STYLES.shadow,
-      }}>
-      {renderDots()}
+      }}
+      onPress={() => props.pressTrip(tripDetail)}>
       {renderImage()}
       {renderDetail()}
-    </View>
+    </TouchableOpacity>
   );
 }

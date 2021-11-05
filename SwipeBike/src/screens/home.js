@@ -8,7 +8,12 @@ import {
   ScrollView,
 } from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
-import {Trip, BackgroundButton} from '../components';
+import {
+  Trip,
+  BackgroundButton,
+  waitingTripDetail,
+  pairingTripDetail,
+} from '../components';
 
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -19,89 +24,28 @@ export default function Home(props) {
     name: 'Vuong',
   });
   //dummy data
-  const tripDetail = {
-    driver: {
-      name: 'Duong Thanh Vuong',
-      image: IMAGES.cuteDriver,
-    },
-    passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-    time: '7:00 AM',
-    date: new Date(),
-    from: 'Nhan van',
-    to: 'CNTT',
-  };
 
   //dummy waitingTripList
   const [waitingTripList, setWaitingTripList] = useState([
     {
       tripId: 0,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
-      },
+      tripDetail: waitingTripDetail,
     },
     {
       tripId: 1,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
-      },
+      tripDetail: waitingTripDetail,
     },
     {
       tripId: 2,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
-      },
+      tripDetail: waitingTripDetail,
     },
     {
       tripId: 3,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
-      },
+      tripDetail: waitingTripDetail,
     },
     {
       tripId: 4,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-        time: '7:00 AM',
-        date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
-      },
+      tripDetail: waitingTripDetail,
     },
   ]);
 
@@ -109,59 +53,19 @@ export default function Home(props) {
   const [recommendedTripList, setRecommendedTripList] = useState([
     {
       tripId: 0,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: null,
-        time: '7:00 AM',
-        date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
-      },
+      tripDetail: waitingTripDetail,
     },
     {
       tripId: 1,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: null,
-        time: '7:00 AM',
-        date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
-      },
+      tripDetail: waitingTripDetail,
     },
     {
       tripId: 2,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: null,
-        time: '7:00 AM',
-        date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
-      },
+      tripDetail: waitingTripDetail,
     },
     {
       tripId: 3,
-      tripDetail: {
-        driver: {
-          name: 'Duong Thanh Vuong',
-          image: IMAGES.cuteDriver,
-        },
-        passenger: null,
-        time: '7:00 AM',
-        date: new Date(),
-        from: 'Nhan van',
-        to: 'CNTT',
-      },
+      tripDetail: waitingTripDetail,
     },
   ]);
 

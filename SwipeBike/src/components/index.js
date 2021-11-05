@@ -4,6 +4,7 @@ import RoundedImage from './roundedImage';
 import TabIcon from './TabIcon';
 import Trip from './trip';
 import getVietnameseDatetime from './VietnameseDatetime';
+import {waitingTripDetail, pairingTripDetail} from './dummyTripDetail';
 
 export {
   Waiting,
@@ -12,4 +13,6 @@ export {
   TabIcon,
   Trip,
   getVietnameseDatetime,
+  waitingTripDetail,
+  pairingTripDetail,
 };
