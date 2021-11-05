@@ -90,7 +90,7 @@ export const SIZES = {
 //Fonts
 export const FONTS = {
   title: {
-    fontFamily: 'Roboto-Black',
+    fontFamily: 'Roboto-Bold',
     fontSize: SIZES.title,
     color: COLORS.black,
     //lineHeight: PIXEL.pixelSizeVertical(30),
