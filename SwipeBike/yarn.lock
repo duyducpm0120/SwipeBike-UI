@@ -5950,6 +5950,11 @@
   "resolved" "https://registry.npmjs.org/punycode/-/punycode-2.1.1.tgz"
   "version" "2.1.1"
 
+"qs@~6.9.1":
+  "integrity" "sha512-TIRk4aqYLNoJUbd+g2lEdz5kLWIuTMRagAXxl78Q0RiVjAOugHmeKNGdd3cwo/ktpf9aL9epCfFqWDEKysUlLQ=="
+  "resolved" "https://registry.npmjs.org/qs/-/qs-6.9.6.tgz"
+  "version" "6.9.6"
+
 "query-string@^7.0.0":
   "integrity" "sha512-uIw3iRvHnk9to1blJCG3BTc+Ro56CBowJXKmNNAm3RulvPBzWLRqKSiiDk+IplJhsydwtuNMHi8UGQFcCLVfkA=="
   "resolved" "https://registry.npmjs.org/query-string/-/query-string-7.0.1.tgz"
@@ -6049,6 +6054,15 @@
     "invariant" "^2.2.4"
     "prop-types" "^15.7.2"
 
+"react-native-google-places-autocomplete@^2.4.1":
+  "integrity" "sha512-NJrzZ5zsguhTqe0C5tIW9PfxOn2wkWDiGYIBFksHzFOIIURxFPUlO0cJmfOjs5CBIDtMampgNXBdgADExBen5w=="
+  "resolved" "https://registry.npmjs.org/react-native-google-places-autocomplete/-/react-native-google-places-autocomplete-2.4.1.tgz"
+  "version" "2.4.1"
+  dependencies:
+    "lodash.debounce" "^4.0.8"
+    "prop-types" "^15.7.2"
+    "qs" "~6.9.1"
+
 "react-native-image-picker@^4.1.1":
   "integrity" "sha512-O78kljfaLQkFNzba4yWueqXlAWzDNzYUavqSQloJAf+ISGsOk95WO/a4Tp27E6hck8vPtx7u0GBrvEULyh1XAw=="
   "resolved" "https://registry.npmjs.org/react-native-image-picker/-/react-native-image-picker-4.1.1.tgz"
@@ -6131,7 +6145,7 @@
     "prop-types" "^15.6.0"
     "react-timer-mixin" "^0.13.4"
 
-"react-native@*", "react-native@>= 0.51", "react-native@>=0.42.0", "react-native@>=0.57", "react-native@>=0.59.9", "react-native@0.66.0":
+"react-native@*", "react-native@>= 0.51", "react-native@>= 0.59", "react-native@>=0.42.0", "react-native@>=0.57", "react-native@>=0.59.9", "react-native@0.66.0":
   "integrity" "sha512-m26TKwzsfHVdZ1hDG+7mZ4M4ftxFFZrhtiT0OXuwfBzmNtB3xhsJtYszPeizw33c9YNp8rvehKT3c4ldDCW6kA=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.66.0.tgz"
   "version" "0.66.0"

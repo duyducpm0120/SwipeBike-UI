@@ -20,6 +20,7 @@ import DatePicker from 'react-native-date-picker';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import Geolocation from 'react-native-geolocation-service';
 import {MAPS_API_KEY} from '../../key';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 export default function CreateTrip() {
   const [isDriver, setIsDriver] = useState(true);
@@ -285,6 +286,31 @@ export default function CreateTrip() {
         width: SIZES.width - 40,
       }}>
       <Text style={{...FONTS.h2Bold}}>Chọn vị trí</Text>
+      <GooglePlacesAutocomplete
+        placeholder="Search"
+        onPress={(data, details = null) => {
+          // 'details' is provided when fetchDetails = true
+          console.log(data, details);
+        }}
+        query={{
+          key: MAPS_API_KEY,
+          language: 'vi',
+          components: 'country:vi',
+        }}
+        styles={{
+          textInputContainer: {
+            width: '100%',
+          },
+          textInput: {
+            height: 38,
+            color: '#5d5d5d',
+            fontSize: 16,
+          },
+          predefinedPlacesDescription: {
+            color: '#1faadb',
+          },
+        }}
+      />
       <MapView
         provider={PROVIDER_GOOGLE} // remove if not using Google Maps
         style={{width: '100%', height: '50%'}}
