@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -21,8 +21,13 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'; // remove PR
 import Geolocation from 'react-native-geolocation-service';
 import {MAPS_API_KEY} from '../../key';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+//For places search
+navigator.geolocation = require('react-native-geolocation-service');
 
 export default function CreateTrip() {
+  //Search Text
+  const searchTextRef = useRef();
+
   const [isDriver, setIsDriver] = useState(true);
   const [gender, setGender] = useState('male');
   //dateTime
@@ -287,16 +292,24 @@ export default function CreateTrip() {
       }}>
       <Text style={{...FONTS.h2Bold}}>Chọn vị trí</Text>
       <GooglePlacesAutocomplete
+        ref={searchTextRef}
         placeholder="Search"
         onPress={(data, details = null) => {
           // 'details' is provided when fetchDetails = true
           console.log(data, details);
+          searchTextRef.current.setAddressText(data.description);
+          console.log(searchTextRef.current.getAddressText());
         }}
         query={{
           key: MAPS_API_KEY,
           language: 'vi',
-          components: 'country:vi',
+          //components: 'country:vi',
+          components: 'country:vn',
+          type: 'establishment',
         }}
+        currentLocation={true}
+        currentLocationLabel="Vị trí hiện tại"
+        textInputProps={{onBlur: () => {}}}
         styles={{
           textInputContainer: {
             width: '100%',
@@ -348,7 +361,8 @@ export default function CreateTrip() {
         horizontal
         showsHorizontalScrollIndicator={false}
         pagingEnabled
-        scrollEventThrottle={1}>
+        scrollEventThrottle={1}
+        keyboardShouldPersistTaps="always">
         {chooseDriver}
         {chooseGender}
         {chooseTime}
@@ -381,6 +395,10 @@ export default function CreateTrip() {
       </View>
     );
   }
+  useEffect(() => {
+    searchTextRef.current?.setAddressText('Chọn địa điểm');
+  }, []);
+
   return (
     <View
       style={{
