@@ -34,6 +34,7 @@ export const upArr1 = require('../assets/icons/Light/up1.png');
 export const upArr2 = require('../assets/icons/Light/up2.png');
 export const leftArr1 = require('../assets/icons/Light/left1.png');
 export const leftArr2 = require('../assets/icons/Light/left2.png');
+export const dot2 = require('../assets/icons/Light/dot2.png');
 
 export default {
   cameraBold,
@@ -74,4 +75,5 @@ export default {
   upArr2,
   leftArr1,
   leftArr2,
+  dot2,
 };

@@ -6,8 +6,7 @@ export const waitingTripDetail = {
     image: IMAGES.cuteDriver,
   },
   passenger: null,
-  time: '7:00 AM',
-  date: 'November 3, 2021',
+  dateTime: '3 Nov 2021 7:00:00',
   from: {
     name: 'Nhan van',
     coordinate: [14.1717, 109.0508],
@@ -24,8 +23,7 @@ export const pairingTripDetail = {
     image: IMAGES.cuteDriver,
   },
   passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-  time: '7:00 AM',
-  date: 'November 3, 2021',
+  dateTime: '3 Nov 2021 7:00:00',
   from: {
     name: 'Nhan van',
     coordinate: [14.1717, 109.0508],

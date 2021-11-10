@@ -1,7 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, Image, TouchableOpacity, Button} from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
-import {BackgroundButton, RoundedImage, getVietnameseDate} from '../components';
+import {
+  BackgroundButton,
+  RoundedImage,
+  getVietnameseDate,
+  getVietnameseTime,
+} from '../components';
 import DatePicker from 'react-native-date-picker';
 import {
   TextInput,
@@ -15,8 +20,7 @@ export default function Trip(props) {
   const [tripDetail, setTripDetail] = useState({
     driver: {name: '', image: null},
     passenger: {name: '', image: null},
-    time: null,
-    date: null,
+    dateTime: null,
     from: {
       name: '',
       coordinate: [],
@@ -153,7 +157,7 @@ export default function Trip(props) {
               ...FONTS.h3,
               marginLeft: 10,
             }}>
-            {tripDetail.time}
+            {getVietnameseTime(tripDetail.dateTime)}
           </Text>
         </View>
         <View
@@ -178,7 +182,7 @@ export default function Trip(props) {
               ...FONTS.h3,
               marginLeft: 10,
             }}>
-            {getVietnameseDate(tripDetail.date)}
+            {getVietnameseDate(tripDetail.dateTime)}
           </Text>
         </View>
         <View
