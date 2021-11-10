@@ -131,9 +131,9 @@ export default function CreateTrip() {
     //console.log(currentLocation);
   }
 
-  function getDataRoute() {
+  async function getDataRoute() {
     if (!fromLocation || !toLocation) return;
-    const route = getRoute(fromLocation, toLocation).then(route =>
+    getRoute(fromLocation.coordinates, toLocation.coordinates).then(route =>
       setCoords(route),
     );
     //
@@ -386,7 +386,7 @@ export default function CreateTrip() {
         placeholder="Tìm điểm xuất phát"
         onPress={(data, details = null) => {
           fromSearchTextRef.current.setAddressText(data.description);
-          let location = {
+          const location = {
             latitude: details.geometry.location.lat,
             longitude: details.geometry.location.lng,
             coordinates: [
@@ -394,16 +394,15 @@ export default function CreateTrip() {
               details.geometry.location.lng,
             ],
           };
+          console.log('fromLocation', location);
           setFromLocation(location);
-          getDataRoute();
-          //console.log(fromSearchTextRef.current.getAddressText());
         }}
         query={{
           key: MAPS_API_KEY,
           language: 'vi',
           //components: 'country:vi',
           components: 'country:vn',
-          type: 'establishment',
+          //type: 'establishment',
         }}
         //currentLocation={true}
         //currentLocationLabel="Vị trí hiện tại"
@@ -442,15 +441,15 @@ export default function CreateTrip() {
               details.geometry.location.lng,
             ],
           };
+          console.log('toLocation', location);
           setToLocation(location);
-          getDataRoute();
         }}
         query={{
           key: MAPS_API_KEY,
           language: 'vi',
           //components: 'country:vi',
           components: 'country:vn',
-          type: 'establishment',
+          //type: 'establishment',
         }}
         //currentLocation={true}
         //currentLocationLabel="Vị trí hiện tại"
@@ -607,9 +606,9 @@ export default function CreateTrip() {
     );
   }
   useEffect(() => {
-    fromSearchTextRef.current?.setAddressText('');
     getCurrentLocation();
-  }, [currentLocation]);
+    getDataRoute();
+  }, [currentLocation, fromLocation, toLocation]);
 
   return (
     <View

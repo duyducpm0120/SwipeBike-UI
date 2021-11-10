@@ -39,6 +39,8 @@ export async function getRoute(originCoordinates, destinationCoordinates) {
   const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${APIKEY}&mode=${mode}`;
 
   var route = [];
+  console.log('origin', originCoordinates);
+  console.log('destination', destinationCoordinates);
   await fetch(url)
     .then(response => response.json())
     .then(responseJson => {
@@ -49,6 +51,5 @@ export async function getRoute(originCoordinates, destinationCoordinates) {
     .catch(e => {
       console.log(e);
     });
-  console.log('get route successfully');
   return route;
 }

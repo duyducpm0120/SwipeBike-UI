@@ -164,7 +164,7 @@ export default function GoogleMapView(props) {
 
   function getDataRoute() {
     if (loaded != true) return;
-    const route = getRoute(
+    getRoute(
       tripData.tripDetail.from.coordinate,
       tripData.tripDetail.to.coordinate,
     ).then(route => setCoords(route));
