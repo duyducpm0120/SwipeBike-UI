@@ -24,6 +24,7 @@ import {
   TripsScreen,
   GoogleMapView,
   CreateTrip,
+  TripInfo,
 } from './src/screens';
 import {COLORS, STYLES} from './src/constants';
 import {Waiting} from './src/components';
@@ -72,6 +73,7 @@ const App = () => {
         <Stack.Screen name="TripsScreen" component={TripsScreen} />
         <Stack.Screen name="GoogleMapView" component={GoogleMapView} />
         <Stack.Screen name="CreateTrip" component={CreateTrip} />
+        <Stack.Screen name="TripInfo" component={TripInfo} />
       </Stack.Navigator>
     </NavigationContainer>
   );

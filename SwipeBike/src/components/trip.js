@@ -39,13 +39,10 @@ export default function Trip(props) {
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'row',
-          height: '35%',
           width: '100%',
         }}>
         <View
           style={{
-            width: '45%',
-            height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'column',
@@ -143,6 +140,7 @@ export default function Trip(props) {
             width: '100%',
             marginTop: PIXEL.pixelSizeVertical(10),
           }}>
+          {/* Time */}
           <Image
             source={ICONS.time}
             style={{
@@ -185,10 +183,13 @@ export default function Trip(props) {
             {getVietnameseDate(tripDetail.dateTime)}
           </Text>
         </View>
+
+        {/* Location */}
+        {/* From lOcation */}
         <View
           style={{
             justifyContent: 'flex-start',
-            alignItems: 'center',
+            alignItems: 'flex-end',
             flexDirection: 'row',
             width: '100%',
             marginTop: PIXEL.pixelSizeVertical(10),
@@ -206,6 +207,7 @@ export default function Trip(props) {
             style={{
               ...FONTS.h3,
               marginLeft: 10,
+              width: '90%',
             }}>
             {tripDetail.from.name}
           </Text>
@@ -219,10 +221,12 @@ export default function Trip(props) {
           }}>
           <Image source={IMAGES.downArrow}></Image>
         </View>
+
+        {/* To Location */}
         <View
           style={{
             justifyContent: 'flex-start',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             flexDirection: 'row',
             width: '100%',
           }}>
@@ -239,6 +243,7 @@ export default function Trip(props) {
             style={{
               ...FONTS.h3,
               marginLeft: 10,
+              width: '90%',
             }}>
             {tripDetail.to.name}
           </Text>
@@ -254,14 +259,12 @@ export default function Trip(props) {
         alignItems: 'center',
         width: PIXEL.pixelSizeHorizontal(350),
         height: PIXEL.pixelSizeHorizontal(350),
-        //borderColor: COLORS.black,
-        //borderWidth: 0.5,
         padding: 20,
         borderRadius: 10,
         backgroundColor: COLORS.backGroundColor,
         ...STYLES.shadow,
       }}
-      onPress={() => props.pressTrip(tripDetail)}>
+      onPress={() => (props.pressTrip ? props.pressTrip(tripDetail) : null)}>
       {renderImage()}
       {renderDetail()}
     </TouchableOpacity>

@@ -3,7 +3,6 @@ import {
   View,
   Text,
   Image,
-  TextInput,
   PermissionsAndroid,
   TouchableOpacity,
   ScrollView,
@@ -20,12 +19,7 @@ import {
   STYLES,
   getRoute,
 } from '../constants';
-import {
-  Trip,
-  BackgroundButton,
-  getVietnameseDate,
-  getVietnameseTime,
-} from '../components';
+import {getVietnameseDate, getVietnameseTime} from '../components';
 import DatePicker from 'react-native-date-picker';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import Geolocation from 'react-native-geolocation-service';
@@ -34,7 +28,7 @@ import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete'
 //For places search
 navigator.geolocation = require('react-native-geolocation-service');
 
-export default function CreateTrip() {
+export default function CreateTrip(props) {
   //Dummy user info
   const userInfo = {
     name: 'Vuong',
@@ -186,6 +180,7 @@ export default function CreateTrip() {
       },
     };
     console.log(trip);
+    props.navigation.navigate('TripInfo', {trip: trip});
   }
   const chooseDriver = (
     <View
@@ -434,7 +429,10 @@ export default function CreateTrip() {
         fetchDetails={true}
         placeholder="Tìm điểm xuất phát"
         onPress={(data, details = null) => {
-          fromSearchTextRef.current.setAddressText(data.description);
+          console.log(data, details);
+          fromSearchTextRef.current.setAddressText(
+            data.structured_formatting.main_text,
+          );
           const location = {
             latitude: details.geometry.location.lat,
             longitude: details.geometry.location.lng,
@@ -481,7 +479,9 @@ export default function CreateTrip() {
         fetchDetails={true}
         placeholder="Tìm điểm đến"
         onPress={(data, details = null) => {
-          toSearchTextRef.current.setAddressText(data.description);
+          toSearchTextRef.current.setAddressText(
+            data.structured_formatting.main_text,
+          );
           const location = {
             latitude: details.geometry.location.lat,
             longitude: details.geometry.location.lng,
@@ -710,7 +710,6 @@ export default function CreateTrip() {
             width: PIXEL.pixelSizeHorizontal(315),
             height: PIXEL.pixelSizeVertical(60),
           }}
-          touchSoundDisabled={false}
           onPress={() => createNewTrip()}>
           <Text style={FONTS.h2Bold}>Tạo chuyến đi</Text>
         </TouchableOpacity>

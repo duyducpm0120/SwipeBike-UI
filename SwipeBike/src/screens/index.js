@@ -7,6 +7,7 @@ import Home from './home';
 import TripsScreen from './tripsScreen';
 import GoogleMapView from './googleMapView';
 import CreateTrip from './createTrip';
+import TripInfo from './tripInfo';
 
 export {
   Splash,
@@ -18,4 +19,5 @@ export {
   TripsScreen,
   GoogleMapView,
   CreateTrip,
+  TripInfo,
 };
