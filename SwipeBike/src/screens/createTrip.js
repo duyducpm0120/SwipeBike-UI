@@ -7,6 +7,8 @@ import {
   PermissionsAndroid,
   TouchableOpacity,
   ScrollView,
+  Animated,
+  Alert,
 } from 'react-native';
 import {
   FONTS,
@@ -33,6 +35,11 @@ import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete'
 navigator.geolocation = require('react-native-geolocation-service');
 
 export default function CreateTrip() {
+  //Dummy user info
+  const userInfo = {
+    name: 'Vuong',
+    image: IMAGES.cuteDriver,
+  };
   //Search Text
   const fromSearchTextRef = useRef();
   const toSearchTextRef = useRef();
@@ -63,6 +70,10 @@ export default function CreateTrip() {
     // {latitude: testLocation1[0], longitude: testLocation1[1]},
     // {latitude: testLocation2[0], longitude: testLocation2[1]},
   ]);
+
+  //Var for Scroll animation
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const ScrollArr = [0, 1, 2, 3];
 
   //TimePicker Field
   const [openTimePicker, setOpenTimePicker] = useState(false);
@@ -133,10 +144,48 @@ export default function CreateTrip() {
 
   async function getDataRoute() {
     if (!fromLocation || !toLocation) return;
-    getRoute(fromLocation.coordinates, toLocation.coordinates).then(route =>
+    getRoute(fromLocation.coordinate, toLocation.coordinate).then(route =>
       setCoords(route),
     );
     //
+  }
+  function checkInfo() {
+    if (
+      isDriver &&
+      gender &&
+      dateTime &&
+      dateTime &&
+      fromLocation &&
+      toLocation
+    )
+      return true;
+    return false;
+  }
+  function createNewTrip() {
+    if (!checkInfo()) {
+      Alert.alert('Chưa đủ thông tin', '', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+      return;
+    }
+
+    const driver = isDriver ? userInfo : null;
+    const passenger = !isDriver ? userInfo : null;
+
+    const trip = {
+      driver: driver,
+      passenger: passenger,
+      dateTime: dateTime.toString(),
+      from: {
+        name: fromSearchTextRef.current.getAddressText(),
+        coordinate: fromLocation.coordinate,
+      },
+      to: {
+        name: toSearchTextRef.current.getAddressText(),
+        coordinate: toLocation.coordinate,
+      },
+    };
+    console.log(trip);
   }
   const chooseDriver = (
     <View
@@ -389,7 +438,7 @@ export default function CreateTrip() {
           const location = {
             latitude: details.geometry.location.lat,
             longitude: details.geometry.location.lng,
-            coordinates: [
+            coordinate: [
               details.geometry.location.lat,
               details.geometry.location.lng,
             ],
@@ -436,7 +485,7 @@ export default function CreateTrip() {
           const location = {
             latitude: details.geometry.location.lat,
             longitude: details.geometry.location.lng,
-            coordinates: [
+            coordinate: [
               details.geometry.location.lat,
               details.geometry.location.lng,
             ],
@@ -565,14 +614,26 @@ export default function CreateTrip() {
     return (
       <ScrollView
         contentContainerStyle={{
-          // height: '40%',
-          marginTop: 20,
+          height: '100%',
+          marginTop: 10,
         }}
         horizontal
         showsHorizontalScrollIndicator={false}
         pagingEnabled
         scrollEventThrottle={1}
-        keyboardShouldPersistTaps="always">
+        keyboardShouldPersistTaps="always"
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: {
+                contentOffset: {
+                  x: scrollX,
+                },
+              },
+            },
+          ],
+          {listener: event => {}, useNativeDriver: false},
+        )}>
         {chooseDriver}
         {chooseGender}
         {chooseTime}
@@ -580,27 +641,78 @@ export default function CreateTrip() {
       </ScrollView>
     );
   }
-  function renderNextButton() {
+  function renderFooter() {
     return (
       <View
         style={{
-          justifyContent: 'flex-end',
+          justifyContent: 'center',
           alignItems: 'center',
-          flexDirection: 'row',
-          height: '10%',
+          flexDirection: 'column',
           width: '100%',
-          marginTop: 20,
+          height: '15%',
         }}>
-        <TouchableOpacity
+        <View
           style={{
-            width: 50,
-            height: 50,
-            borderRadius: 50,
-            backgroundColor: COLORS.primary,
+            flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
+            width: '100%',
+            height: PIXEL.pixelSizeVertical(20),
           }}>
-          <Image source={ICONS.rightArr2}></Image>
+          {ScrollArr.map((number, index) => {
+            const w = scrollX.interpolate({
+              inputRange: [
+                SIZES.width * (index - 1),
+                SIZES.width * index,
+                SIZES.width * (index + 1),
+              ],
+              outputRange: [8, 15, 8],
+              extrapolate: 'clamp',
+            });
+            const h = scrollX.interpolate({
+              inputRange: [
+                SIZES.width * (index - 1),
+                SIZES.width * index,
+                SIZES.width * (index + 1),
+              ],
+              outputRange: [8, 15, 8],
+              extrapolate: 'clamp',
+            });
+            const color = scrollX.interpolate({
+              inputRange: [
+                SIZES.width * (index - 1),
+                SIZES.width * index,
+                SIZES.width * (index + 1),
+              ],
+              outputRange: [COLORS.darkgray, COLORS.primary, COLORS.darkgray],
+              extrapolate: 'clamp',
+            });
+            return (
+              <Animated.View
+                key={index}
+                style={{
+                  backgroundColor: color,
+                  height: h,
+                  width: w,
+                  borderRadius: 50,
+                  marginHorizontal: 5,
+                }}></Animated.View>
+            );
+          })}
+        </View>
+        <TouchableOpacity
+          style={{
+            borderRadius: 10,
+            backgroundColor: checkInfo() ? COLORS.primary : COLORS.lightGray0,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: PIXEL.pixelSizeVertical(10),
+            width: PIXEL.pixelSizeHorizontal(315),
+            height: PIXEL.pixelSizeVertical(60),
+          }}
+          touchSoundDisabled={false}
+          onPress={() => createNewTrip()}>
+          <Text style={FONTS.h2Bold}>Tạo chuyến đi</Text>
         </TouchableOpacity>
       </View>
     );
@@ -617,7 +729,7 @@ export default function CreateTrip() {
       }}>
       {renderHeader()}
       {renderCreateTrip()}
-      {renderNextButton()}
+      {renderFooter()}
     </View>
   );
 }
