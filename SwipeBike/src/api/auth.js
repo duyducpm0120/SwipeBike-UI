@@ -12,3 +12,5 @@ export const loginApi = (email, password) => {
     AccountPassword: password,
   });
 };
+
+export default {signUpApi,loginApi};

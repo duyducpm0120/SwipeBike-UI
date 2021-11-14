@@ -24,75 +24,82 @@ import DatePicker from 'react-native-date-picker';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import Geolocation from 'react-native-geolocation-service';
 import {MAPS_API_KEY} from '../../key';
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import {
+  GooglePlacesAutocomplete,
+} from 'react-native-google-places-autocomplete';
+import {createCandidateTrip} from '../api';
 //For places search
-navigator.geolocation = require('react-native-geolocation-service');
+navigator.geolocation = require ('react-native-geolocation-service');
 
-export default function CreateTrip(props) {
-  //Dummy user info
+export default function CreateTrip (props) {
+  //Demo token
+  const token = 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWUyOTRlZWRjMTY3Y2Q5N2JiNWE4MTliYmY3OTA2MzZmMTIzN2UiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc3dpcGViaWtlLTM4NzM2IiwiYXVkIjoic3dpcGViaWtlLTM4NzM2IiwiYXV0aF90aW1lIjoxNjM2OTAyMzI2LCJ1c2VyX2lkIjoiQU9kRGx2aWdZblVVWXpWOHUyM2hDT2puUE9EMyIsInN1YiI6IkFPZERsdmlnWW5VVVl6Vjh1MjNoQ09qblBPRDMiLCJpYXQiOjE2MzY5MDIzMjYsImV4cCI6MTYzNjkwNTkyNiwiZW1haWwiOiIxODUyMTY3N0BnbS51aXQuZWR1LnZuIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbIjE4NTIxNjc3QGdtLnVpdC5lZHUudm4iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.mFGdL9yJwSW5M2Za85hEgwE5_CcsP96ewSgVrehUPHwVdsgZqghdPQeWbG1kSJD08vVG2qexDLdQrgxlnpYn6TCtMsE__BTGLs59k2m1MbmEFlpWh9AN-DmDrkwTQRcv4S1iUaQyJGAmUnFIbd1fJKENv3BnfKgipUsxN8cyzYJp6dz20-mR7onEydYvDCxHhWv6fynjxQebhihntZIbJwfq9z4Tuzi1Ur88ghnPfUj40rGnMULnCxPRTgUXE-EInLVrN2v3UtUa8GJtYVBbCSKvhrVVyAhnkLWoxkYNtlant1WIE-u-5TBeCBuXiOdogcoOX4KUDk7JRtqCK5slFw';
+    //Dummy user info
   const userInfo = {
     name: 'Vuong',
     image: IMAGES.cuteDriver,
   };
   //Search Text
-  const fromSearchTextRef = useRef();
-  const toSearchTextRef = useRef();
+  const fromSearchTextRef = useRef ();
+  const toSearchTextRef = useRef ();
   //Location
-  const [fromLocation, setFromLocation] = useState();
-  const [toLocation, setToLocation] = useState();
+  const [fromLocation, setFromLocation] = useState ();
+  const [toLocation, setToLocation] = useState ();
 
-  const [isDriver, setIsDriver] = useState(true);
-  const [gender, setGender] = useState('male');
+  const [isDriver, setIsDriver] = useState (true);
+  const [gender, setGender] = useState ('male');
   //dateTime
-  const [dateTime, setDateTime] = useState(new Date());
+  const [dateTime, setDateTime] = useState (new Date ());
   //From location
-  const [from, setFrom] = useState({});
+  const [from, setFrom] = useState ({});
   //To location
-  const [to, setTo] = useState({});
+  const [to, setTo] = useState ({});
 
   //Device permission for location
-  const [locationPermission, setLocationPermission] = useState();
+  const [locationPermission, setLocationPermission] = useState ();
   //Current Location
-  const [currentLocation, setCurrentLocation] = useState({
+  const [currentLocation, setCurrentLocation] = useState ({
     latitude: 0,
     longitude: 0,
     coordinates: [0, 0],
   });
 
   //Polyline coordinates
-  const [coords, setCoords] = useState([
-    // {latitude: testLocation1[0], longitude: testLocation1[1]},
-    // {latitude: testLocation2[0], longitude: testLocation2[1]},
-  ]);
+  const [coords, setCoords] = useState (
+    [
+      // {latitude: testLocation1[0], longitude: testLocation1[1]},
+      // {latitude: testLocation2[0], longitude: testLocation2[1]},
+    ]
+  );
 
   //Var for Scroll animation
-  const scrollX = useRef(new Animated.Value(0)).current;
+  const scrollX = useRef (new Animated.Value (0)).current;
   const ScrollArr = [0, 1, 2, 3];
 
   //TimePicker Field
-  const [openTimePicker, setOpenTimePicker] = useState(false);
+  const [openTimePicker, setOpenTimePicker] = useState (false);
   //DatePicker Field
-  const [openDatePicker, setOpenDatePicker] = useState(false);
+  const [openDatePicker, setOpenDatePicker] = useState (false);
 
-  function requestLocationPermission() {
+  function requestLocationPermission () {
     if (locationPermission === PermissionsAndroid.RESULTS.GRANTED) {
       () => {
-        console.log(locationPermission);
+        console.log (locationPermission);
         return;
       };
     }
     try {
-      const granted = PermissionsAndroid.request(
+      const granted = PermissionsAndroid.request (
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
           title: 'SwipeBike App',
           message: 'Permit SwipeBike access to your location ',
-        },
+        }
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         //console.log('You can use the location');
         //alert('You can use the location');
-        setLocationPermission(granted);
+        setLocationPermission (granted);
       } else {
         //console.log('location permission denied');
         //alert('Location permission denied');
@@ -102,26 +109,26 @@ export default function CreateTrip(props) {
     }
   }
 
-  async function getCurrentLocation() {
-    console.log('get current location!');
+  async function getCurrentLocation () {
+    console.log ('get current location!');
     if (locationPermission !== PermissionsAndroid.RESULTS.GRANTED)
-      await requestLocationPermission();
-    await Geolocation.getCurrentPosition(
+      await requestLocationPermission ();
+    await Geolocation.getCurrentPosition (
       position => {
         if (
           position.coords.latitude === currentLocation.latitude &&
           position.coords.longitude === currentLocation.longitude
         )
           return;
-        setCurrentLocation({
+        setCurrentLocation ({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
-          coordinates: currentLocation.coordinates.concat({
+          coordinates: currentLocation.coordinates.concat ({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           }),
         });
-        console.log('get current location!');
+        console.log ('get current location!');
       },
       error => {
         //Alert.alert(error.message.toString());
@@ -131,19 +138,19 @@ export default function CreateTrip(props) {
         enableHighAccuracy: true,
         timeout: 20000,
         maximumAge: 0,
-      },
+      }
     );
     //console.log(currentLocation);
   }
 
-  async function getDataRoute() {
+  async function getDataRoute () {
     if (!fromLocation || !toLocation) return;
-    getRoute(fromLocation.coordinate, toLocation.coordinate).then(route =>
-      setCoords(route),
+    getRoute (fromLocation.coordinate, toLocation.coordinate).then (route =>
+      setCoords (route)
     );
     //
   }
-  function checkInfo() {
+  function checkInfo () {
     if (
       isDriver &&
       gender &&
@@ -155,10 +162,10 @@ export default function CreateTrip(props) {
       return true;
     return false;
   }
-  function createNewTrip() {
-    if (!checkInfo()) {
-      Alert.alert('Chưa đủ thông tin', '', [
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
+  function createNewTrip () {
+    if (!checkInfo ()) {
+      Alert.alert ('Chưa đủ thông tin', '', [
+        {text: 'OK', onPress: () => console.log ('OK Pressed')},
       ]);
       return;
     }
@@ -167,20 +174,28 @@ export default function CreateTrip(props) {
     const passenger = !isDriver ? userInfo : null;
 
     const trip = {
-      driver: driver,
-      passenger: passenger,
-      dateTime: dateTime.toString(),
-      from: {
-        name: fromSearchTextRef.current.getAddressText(),
-        coordinate: fromLocation.coordinate,
-      },
-      to: {
-        name: toSearchTextRef.current.getAddressText(),
-        coordinate: toLocation.coordinate,
-      },
+      CandidateTripDateTime: dateTime.toString (),
+      CandidateTripFromAddress: fromSearchTextRef.current.getAddressText (),
+      CandidateTripToAddress: toSearchTextRef.current.getAddressText (),
+      CandidateTripFromLat: fromLocation.coordinate[0],
+      CandidateTripFromLong: fromLocation.coordinate[1],
+      CandidateTripToLat: toLocation.coordinate[0],
+      CandidateTripToLong: toLocation.coordinate[1],
+      CandidateTripBike: isDriver,
+      CandidateTripMessage: null,
     };
-    console.log(trip);
-    props.navigation.navigate('TripInfo', {trip: trip});
+    console.log (trip);
+
+    //Call API here
+    createCandidateTrip (trip, token)
+      .then (res => {
+        console.log (res);
+      })
+      .catch (error => {
+        console.log (error);
+      });
+
+    //props.navigation.navigate('TripInfo', {trip: trip});
   }
   const chooseDriver = (
     <View
@@ -188,14 +203,16 @@ export default function CreateTrip(props) {
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         width: SIZES.width - 40,
-      }}>
+      }}
+    >
       <Text style={{...FONTS.h2Bold}}>Bạn có xe không ?</Text>
       <View
         style={{
           justifyContent: 'flex-start',
           alignItems: 'flex-start',
           marginTop: 30,
-        }}>
+        }}
+      >
         <TouchableOpacity
           style={{
             justifyContent: 'center',
@@ -206,14 +223,16 @@ export default function CreateTrip(props) {
               : COLORS.lightGray0,
             marginBottom: 20,
           }}
-          onPress={() => setIsDriver(true)}>
+          onPress={() => setIsDriver (true)}
+        >
           <Text
             style={{
               ...FONTS.h2,
               color: isDriver ? COLORS.primaryDarker1 : COLORS.black,
               marginHorizontal: 20,
               marginVertical: 5,
-            }}>
+            }}
+          >
             Có xe
           </Text>
         </TouchableOpacity>
@@ -226,14 +245,16 @@ export default function CreateTrip(props) {
               ? COLORS.primaryLighter1
               : COLORS.lightGray0,
           }}
-          onPress={() => setIsDriver(false)}>
+          onPress={() => setIsDriver (false)}
+        >
           <Text
             style={{
               ...FONTS.h2,
               color: !isDriver ? COLORS.primaryDarker1 : COLORS.black,
               marginHorizontal: 20,
               marginVertical: 5,
-            }}>
+            }}
+          >
             Không có xe
           </Text>
         </TouchableOpacity>
@@ -247,31 +268,36 @@ export default function CreateTrip(props) {
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         width: SIZES.width - 40,
-      }}>
+      }}
+    >
       <Text style={{...FONTS.h2Bold}}>Bạn muốn đi cùng ?</Text>
       <View
         style={{
           justifyContent: 'flex-start',
           alignItems: 'flex-start',
           marginTop: 30,
-        }}>
+        }}
+      >
         <TouchableOpacity
           style={{
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: 50,
-            backgroundColor:
-              gender === 'male' ? COLORS.primaryLighter1 : COLORS.lightGray0,
+            backgroundColor: gender === 'male'
+              ? COLORS.primaryLighter1
+              : COLORS.lightGray0,
             marginBottom: 20,
           }}
-          onPress={() => setGender('male')}>
+          onPress={() => setGender ('male')}
+        >
           <Text
             style={{
               ...FONTS.h2,
               color: gender === 'male' ? COLORS.primaryDarker1 : COLORS.black,
               marginHorizontal: 20,
               marginVertical: 5,
-            }}>
+            }}
+          >
             Nam
           </Text>
         </TouchableOpacity>
@@ -280,18 +306,21 @@ export default function CreateTrip(props) {
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: 50,
-            backgroundColor:
-              gender === 'female' ? COLORS.primaryLighter1 : COLORS.lightGray0,
+            backgroundColor: gender === 'female'
+              ? COLORS.primaryLighter1
+              : COLORS.lightGray0,
             marginBottom: 20,
           }}
-          onPress={() => setGender('female')}>
+          onPress={() => setGender ('female')}
+        >
           <Text
             style={{
               ...FONTS.h2,
               color: gender === 'female' ? COLORS.primaryDarker1 : COLORS.black,
               marginHorizontal: 20,
               marginVertical: 5,
-            }}>
+            }}
+          >
             Nữ
           </Text>
         </TouchableOpacity>
@@ -300,17 +329,20 @@ export default function CreateTrip(props) {
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: 50,
-            backgroundColor:
-              gender === 'none' ? COLORS.primaryLighter1 : COLORS.lightGray0,
+            backgroundColor: gender === 'none'
+              ? COLORS.primaryLighter1
+              : COLORS.lightGray0,
           }}
-          onPress={() => setGender('none')}>
+          onPress={() => setGender ('none')}
+        >
           <Text
             style={{
               ...FONTS.h2,
               color: gender === 'none' ? COLORS.primaryDarker1 : COLORS.black,
               marginHorizontal: 20,
               marginVertical: 5,
-            }}>
+            }}
+          >
             Không quan trọng
           </Text>
         </TouchableOpacity>
@@ -324,7 +356,8 @@ export default function CreateTrip(props) {
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         width: SIZES.width - 40,
-      }}>
+      }}
+    >
       <Text style={{...FONTS.h2Bold}}>Chọn thời gian</Text>
       <View
         style={{
@@ -332,7 +365,8 @@ export default function CreateTrip(props) {
           alignItems: 'flex-start',
           marginTop: 30,
           width: '100%',
-        }}>
+        }}
+      >
         <TouchableOpacity
           style={{
             flexDirection: 'row',
@@ -342,17 +376,20 @@ export default function CreateTrip(props) {
             marginBottom: 20,
             width: '100%',
           }}
-          onPress={() => setOpenTimePicker(true)}>
+          onPress={() => setOpenTimePicker (true)}
+        >
           <Image
             source={ICONS.time}
-            style={{width: 30, height: 30, tintColor: COLORS.black}}></Image>
+            style={{width: 30, height: 30, tintColor: COLORS.black}}
+          />
           <Text
             style={{
               ...FONTS.h2,
               marginHorizontal: 20,
               marginVertical: 5,
-            }}>
-            {getVietnameseTime(dateTime)}
+            }}
+          >
+            {getVietnameseTime (dateTime)}
           </Text>
           <DatePicker
             modal
@@ -364,12 +401,12 @@ export default function CreateTrip(props) {
             open={openTimePicker}
             date={dateTime}
             onConfirm={date => {
-              setOpenTimePicker(false);
-              setDateTime(date);
-              console.log(date.toString());
+              setOpenTimePicker (false);
+              setDateTime (date);
+              console.log (date.toString ());
             }}
             onCancel={() => {
-              setOpenTimePicker(false);
+              setOpenTimePicker (false);
             }}
           />
         </TouchableOpacity>
@@ -382,17 +419,20 @@ export default function CreateTrip(props) {
             marginBottom: 20,
             width: '100%',
           }}
-          onPress={() => setOpenDatePicker(true)}>
+          onPress={() => setOpenDatePicker (true)}
+        >
           <Image
             source={ICONS.calendar}
-            style={{width: 30, height: 30, tintColor: COLORS.black}}></Image>
+            style={{width: 30, height: 30, tintColor: COLORS.black}}
+          />
           <Text
             style={{
               ...FONTS.h2,
               marginHorizontal: 20,
               marginVertical: 5,
-            }}>
-            {getVietnameseDate(dateTime)}
+            }}
+          >
+            {getVietnameseDate (dateTime)}
           </Text>
           <DatePicker
             modal
@@ -404,12 +444,12 @@ export default function CreateTrip(props) {
             open={openDatePicker}
             date={dateTime}
             onConfirm={date => {
-              setOpenDatePicker(false);
-              setDateTime(date);
-              console.log(date.toString());
+              setOpenDatePicker (false);
+              setDateTime (date);
+              console.log (date.toString ());
             }}
             onCancel={() => {
-              setOpenDatePicker(false);
+              setOpenDatePicker (false);
             }}
           />
         </TouchableOpacity>
@@ -422,16 +462,17 @@ export default function CreateTrip(props) {
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         width: SIZES.width - 40,
-      }}>
+      }}
+    >
       <Text style={{...FONTS.h2Bold, marginBottom: 20}}>Chọn vị trí</Text>
       <GooglePlacesAutocomplete
         ref={fromSearchTextRef}
         fetchDetails={true}
         placeholder="Tìm điểm xuất phát"
         onPress={(data, details = null) => {
-          console.log(data, details);
-          fromSearchTextRef.current.setAddressText(
-            data.structured_formatting.main_text,
+          console.log (data, details);
+          fromSearchTextRef.current.setAddressText (
+            data.structured_formatting.main_text
           );
           const location = {
             latitude: details.geometry.location.lat,
@@ -441,8 +482,8 @@ export default function CreateTrip(props) {
               details.geometry.location.lng,
             ],
           };
-          console.log('fromLocation', location);
-          setFromLocation(location);
+          console.log ('fromLocation', location);
+          setFromLocation (location);
         }}
         query={{
           key: MAPS_API_KEY,
@@ -479,8 +520,8 @@ export default function CreateTrip(props) {
         fetchDetails={true}
         placeholder="Tìm điểm đến"
         onPress={(data, details = null) => {
-          toSearchTextRef.current.setAddressText(
-            data.structured_formatting.main_text,
+          toSearchTextRef.current.setAddressText (
+            data.structured_formatting.main_text
           );
           const location = {
             latitude: details.geometry.location.lat,
@@ -490,8 +531,8 @@ export default function CreateTrip(props) {
               details.geometry.location.lng,
             ],
           };
-          console.log('toLocation', location);
-          setToLocation(location);
+          console.log ('toLocation', location);
+          setToLocation (location);
         }}
         query={{
           key: MAPS_API_KEY,
@@ -536,25 +577,29 @@ export default function CreateTrip(props) {
         }}
         showsUserLocation={true}
         followsUserLocation={true}
-        showsTraffic={true}>
+        showsTraffic={true}
+      >
         {/* Route marker */}
         <Marker
           coordinate={{
             latitude: fromLocation ? fromLocation.latitude : 0,
             longitude: fromLocation ? fromLocation.longitude : 0,
-          }}></Marker>
+          }}
+        />
         <Marker
           coordinate={{
             latitude: toLocation ? toLocation.latitude : 0,
             longitude: toLocation ? toLocation.longitude : 0,
-          }}></Marker>
+          }}
+        />
         {/* Marker at the start of PolyLine */}
         <Marker
           coordinate={{
             latitude: coords.length > 1 ? coords[0].latitude : 0,
             longitude: coords.length > 1 ? coords[0].longitude : 0,
           }}
-          anchor={{x: 0.5, y: 0.5}}>
+          anchor={{x: 0.5, y: 0.5}}
+        >
           <View>
             <Image
               source={ICONS.dot2}
@@ -562,18 +607,22 @@ export default function CreateTrip(props) {
                 //tintColor: COLORS.darkgray,
                 width: 25,
                 height: 25,
-              }}></Image>
+              }}
+            />
           </View>
         </Marker>
         {/* Marker at the end of PolyLine */}
         <Marker
           coordinate={{
-            latitude:
-              coords.length > 1 ? coords[coords.length - 1].latitude : 0,
-            longitude:
-              coords.length > 1 ? coords[coords.length - 1].longitude : 0,
+            latitude: coords.length > 1
+              ? coords[coords.length - 1].latitude
+              : 0,
+            longitude: coords.length > 1
+              ? coords[coords.length - 1].longitude
+              : 0,
           }}
-          anchor={{x: 0.5, y: 0.5}}>
+          anchor={{x: 0.5, y: 0.5}}
+        >
           <View>
             <Image
               source={ICONS.dot2}
@@ -581,7 +630,8 @@ export default function CreateTrip(props) {
                 //tintColor: COLORS.primary,
                 width: 25,
                 height: 25,
-              }}></Image>
+              }}
+            />
           </View>
         </Marker>
         <MapView.Polyline
@@ -598,19 +648,20 @@ export default function CreateTrip(props) {
     </View>
   );
 
-  function renderHeader() {
+  function renderHeader () {
     return (
       <View
         style={{
           justifyContent: 'center',
           alignItems: 'center',
           width: '100%',
-        }}>
+        }}
+      >
         <Text style={{...FONTS.title}}>Tạo chuyến đi mới</Text>
       </View>
     );
   }
-  function renderCreateTrip() {
+  function renderCreateTrip () {
     return (
       <ScrollView
         contentContainerStyle={{
@@ -622,7 +673,7 @@ export default function CreateTrip(props) {
         pagingEnabled
         scrollEventThrottle={1}
         keyboardShouldPersistTaps="always"
-        onScroll={Animated.event(
+        onScroll={Animated.event (
           [
             {
               nativeEvent: {
@@ -632,8 +683,9 @@ export default function CreateTrip(props) {
               },
             },
           ],
-          {listener: event => {}, useNativeDriver: false},
-        )}>
+          {listener: event => {}, useNativeDriver: false}
+        )}
+      >
         {chooseDriver}
         {chooseGender}
         {chooseTime}
@@ -641,7 +693,7 @@ export default function CreateTrip(props) {
       </ScrollView>
     );
   }
-  function renderFooter() {
+  function renderFooter () {
     return (
       <View
         style={{
@@ -650,17 +702,19 @@ export default function CreateTrip(props) {
           flexDirection: 'column',
           width: '100%',
           height: '15%',
-        }}>
+        }}
+      >
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%',
-            height: PIXEL.pixelSizeVertical(20),
-          }}>
-          {ScrollArr.map((number, index) => {
-            const w = scrollX.interpolate({
+            height: PIXEL.pixelSizeVertical (20),
+          }}
+        >
+          {ScrollArr.map ((number, index) => {
+            const w = scrollX.interpolate ({
               inputRange: [
                 SIZES.width * (index - 1),
                 SIZES.width * index,
@@ -669,7 +723,7 @@ export default function CreateTrip(props) {
               outputRange: [8, 15, 8],
               extrapolate: 'clamp',
             });
-            const h = scrollX.interpolate({
+            const h = scrollX.interpolate ({
               inputRange: [
                 SIZES.width * (index - 1),
                 SIZES.width * index,
@@ -678,7 +732,7 @@ export default function CreateTrip(props) {
               outputRange: [8, 15, 8],
               extrapolate: 'clamp',
             });
-            const color = scrollX.interpolate({
+            const color = scrollX.interpolate ({
               inputRange: [
                 SIZES.width * (index - 1),
                 SIZES.width * index,
@@ -696,39 +750,45 @@ export default function CreateTrip(props) {
                   width: w,
                   borderRadius: 50,
                   marginHorizontal: 5,
-                }}></Animated.View>
+                }}
+              />
             );
           })}
         </View>
         <TouchableOpacity
           style={{
             borderRadius: 10,
-            backgroundColor: checkInfo() ? COLORS.primary : COLORS.lightGray0,
+            backgroundColor: checkInfo () ? COLORS.primary : COLORS.lightGray0,
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: PIXEL.pixelSizeVertical(10),
-            width: PIXEL.pixelSizeHorizontal(315),
-            height: PIXEL.pixelSizeVertical(60),
+            marginTop: PIXEL.pixelSizeVertical (10),
+            width: PIXEL.pixelSizeHorizontal (315),
+            height: PIXEL.pixelSizeVertical (60),
           }}
-          onPress={() => createNewTrip()}>
+          onPress={() => createNewTrip ()}
+        >
           <Text style={FONTS.h2Bold}>Tạo chuyến đi</Text>
         </TouchableOpacity>
       </View>
     );
   }
-  useEffect(() => {
-    getCurrentLocation();
-    getDataRoute();
-  }, [currentLocation, fromLocation, toLocation]);
+  useEffect (
+    () => {
+      getCurrentLocation ();
+      getDataRoute ();
+    },
+    [currentLocation, fromLocation, toLocation]
+  );
 
   return (
     <View
       style={{
         ...STYLES.container,
-      }}>
-      {renderHeader()}
-      {renderCreateTrip()}
-      {renderFooter()}
+      }}
+    >
+      {renderHeader ()}
+      {renderCreateTrip ()}
+      {renderFooter ()}
     </View>
   );
 }

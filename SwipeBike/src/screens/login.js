@@ -9,12 +9,43 @@ import {
 } from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 import {BackgroundButton} from '../components';
-import {signUpApi, loginApi} from '../api/auth';
+import {signUpApi, loginApi} from '../api';
 
 export default function Login(props) {
   const [showPassword, setShowPassword] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
+
+  function login(){
+     //validate Inputs
+     if (!ValidateEmail(userEmail)) {
+      console.log('invalid email');
+      Alert.alert('Email không hợp lệ', '', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+      return;
+    }
+    if (!ValidatePassword(userPassword)) {
+      console.log('invalid password');
+      //Mật khẩu có 7 đến 16 ký tự chỉ chứa các ký tự, chữ số, dấu gạch dưới và ký tự đầu tiên phải là một chữ cái
+      Alert.alert(
+        'Mật khẩu không hợp lệ',
+        'Mật khẩu có 7 đến 16 ký tự chỉ chứa các ký tự, chữ số, dấu gạch dưới và ký tự đầu tiên phải là một chữ cái',
+        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+      );
+      return;
+    }
+    //login
+    loginApi(userEmail, userPassword)
+      .then(result => {
+        console.log(result.data);
+        props.navigation.navigate('UpdateProfile');
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   function ValidateEmail(email) {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       return true;
@@ -24,22 +55,13 @@ export default function Login(props) {
   //To check a password between 7 to 16 characters which contain only characters,
   //numeric digits, underscore and first character must be a letter
   function ValidatePassword(password) {
+    return true;
     var passw = /^[A-Za-z]\w{7,14}$/;
     if (password.match(passw)) {
       //alert('Correct, try another...');
       return true;
     } else {
       //alert('Wrong...!');
-      return false;
-    }
-  }
-  function CheckPassword(inputtxt) {
-    var passw = /^[A-Za-z]\w{7,14}$/;
-    if (inputtxt.value.match(passw)) {
-      alert('Correct, try another...');
-      return true;
-    } else {
-      alert('Wrong...!');
       return false;
     }
   }
@@ -195,33 +217,7 @@ export default function Login(props) {
           marginTop: PIXEL.pixelSizeVertical(630),
         }}
         onPress={() => {
-          //validate Inputs
-          if (!ValidateEmail(userEmail)) {
-            console.log('invalid email');
-            Alert.alert('Email không hợp lệ', '', [
-              {text: 'OK', onPress: () => console.log('OK Pressed')},
-            ]);
-            return;
-          }
-          if (!ValidatePassword(userPassword)) {
-            console.log('invalid password');
-            //Mật khẩu có 7 đến 16 ký tự chỉ chứa các ký tự, chữ số, dấu gạch dưới và ký tự đầu tiên phải là một chữ cái
-            Alert.alert(
-              'Mật khẩu không hợp lệ',
-              'Mật khẩu có 7 đến 16 ký tự chỉ chứa các ký tự, chữ số, dấu gạch dưới và ký tự đầu tiên phải là một chữ cái',
-              [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-            );
-            return;
-          }
-          //login
-          loginApi(userEmail, userPassword)
-            .then(result => {
-              console.log(result.data);
-              props.navigation.navigate('UpdateProfile');
-            })
-            .catch(err => {
-              console.log(err);
-            });
+         login();
         }}>
         <BackgroundButton text="Đăng nhập"></BackgroundButton>
       </TouchableOpacity>

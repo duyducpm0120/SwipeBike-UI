@@ -1,4 +1,5 @@
-import signUpApi from './auth';
-import loginApi from './auth';
+import {signUpApi,loginApi} from "./auth";
 
-export default {signUpApi, loginApi};
+import {createCandidateTrip}  from './CandidateTrip' ;
+
+export {signUpApi, loginApi,createCandidateTrip};
