@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "681511264680",
+    "project_id": "swipebike-38736",
+    "storage_bucket": "swipebike-38736.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:681511264680:android:f20367f0dd26871fdcfd9d",
+        "android_client_info": {
+          "package_name": "com.swipebike"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "681511264680-rb4fh0q5phupif9t0e2jfc975cq18d24.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBf71BahDf5tw9KfVH4HAUyGnyjNir3Sv0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "681511264680-rb4fh0q5phupif9t0e2jfc975cq18d24.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
