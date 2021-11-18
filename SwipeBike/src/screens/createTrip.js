@@ -26,13 +26,13 @@ import Geolocation from 'react-native-geolocation-service';
 import {MAPS_API_KEY} from '../../key';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {createCandidateTrip} from '../api';
+import {loadTokenFromLocalStorage} from '../storage';
 //For places search
 navigator.geolocation = require('react-native-geolocation-service');
 
 export default function CreateTrip(props) {
-  //Demo token
-  const token =
-    'eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWUyOTRlZWRjMTY3Y2Q5N2JiNWE4MTliYmY3OTA2MzZmMTIzN2UiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc3dpcGViaWtlLTM4NzM2IiwiYXVkIjoic3dpcGViaWtlLTM4NzM2IiwiYXV0aF90aW1lIjoxNjM2OTAyMzI2LCJ1c2VyX2lkIjoiQU9kRGx2aWdZblVVWXpWOHUyM2hDT2puUE9EMyIsInN1YiI6IkFPZERsdmlnWW5VVVl6Vjh1MjNoQ09qblBPRDMiLCJpYXQiOjE2MzY5MDIzMjYsImV4cCI6MTYzNjkwNTkyNiwiZW1haWwiOiIxODUyMTY3N0BnbS51aXQuZWR1LnZuIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbIjE4NTIxNjc3QGdtLnVpdC5lZHUudm4iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.mFGdL9yJwSW5M2Za85hEgwE5_CcsP96ewSgVrehUPHwVdsgZqghdPQeWbG1kSJD08vVG2qexDLdQrgxlnpYn6TCtMsE__BTGLs59k2m1MbmEFlpWh9AN-DmDrkwTQRcv4S1iUaQyJGAmUnFIbd1fJKENv3BnfKgipUsxN8cyzYJp6dz20-mR7onEydYvDCxHhWv6fynjxQebhihntZIbJwfq9z4Tuzi1Ur88ghnPfUj40rGnMULnCxPRTgUXE-EInLVrN2v3UtUa8GJtYVBbCSKvhrVVyAhnkLWoxkYNtlant1WIE-u-5TBeCBuXiOdogcoOX4KUDk7JRtqCK5slFw';
+  //Local token
+  const token = loadTokenFromLocalStorage();
   //Dummy user info
   const userInfo = {
     name: 'Vuong',
@@ -179,6 +179,7 @@ export default function CreateTrip(props) {
       CandidateTripMessage: null,
     };
     console.log(trip);
+    console.log('token', token);
     //Call API here
     createCandidateTrip(trip, token)
       .then(res => {

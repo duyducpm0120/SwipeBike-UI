@@ -31,7 +31,10 @@ import {
 import {COLORS, STYLES} from './src/constants';
 import {Waiting} from './src/components';
 import BottomTabs from './src/navigations/bottomTabs';
-
+import {
+  saveTokenToLocalStorage,
+  loadTokenFromLocalStorage,
+} from '../SwipeBike/src/storage';
 const Stack = createStackNavigator();
 const App = () => {
   //FCM Token Registration
@@ -42,7 +45,7 @@ const App = () => {
       .catch(err => {
         console.log(err);
       });
-    console.log('token ', token);
+    console.log('Firebase token ', token);
     axios
       .post('http://10.0.2.2:3001/notification/register', {token})
       .then(result => {
@@ -53,7 +56,6 @@ const App = () => {
   useEffect(() => {
     sendFcmToken();
   }, []);
-
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     // const fetchData = async () => {
@@ -85,7 +87,7 @@ const App = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={'Login'}>
+        initialRouteName={loadTokenFromLocalStorage() ? 'Home' : 'Login'}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Home" component={BottomTabs} />
         <Stack.Screen name="SignUp" component={SignUp} />

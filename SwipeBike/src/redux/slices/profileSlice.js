@@ -10,12 +10,12 @@ export const profileSlice = createSlice({
   },
   reducers: {
     updateProfile: (state, action) => {
-      console.log('action payload', action.payload);
+      //console.log('action payload', action.payload);
       state.UserFullName = action.payload.UserFullName;
       state.UserPhone = action.payload.UserPhone;
       state.UserGender = action.payload.UserGender;
       state.UserDoB = action.payload.UserDoB;
-      console.log('state', state);
+      //console.log('state', state);
     },
     //   // Redux Toolkit allows us to write "mutating" logic in reducers. It
     //   // doesn't actually mutate the state because it uses the Immer library,

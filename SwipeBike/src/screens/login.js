@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 import {BackgroundButton} from '../components';
 import {signUpApi, loginApi} from '../api';
+import {saveTokenToLocalStorage, loadTokenFromLocalStorage} from '../storage';
 
 export default function Login(props) {
   const [showPassword, setShowPassword] = useState(false);
@@ -35,12 +36,16 @@ export default function Login(props) {
       );
       return;
     }
-    console.log('valid information');
+    //console.log('valid information');
     //login
     loginApi(userEmail, userPassword)
       .then(result => {
-        console.log(result.data);
-        props.navigation.navigate('UpdateProfile');
+        //console.log(result.data);
+        //Saving token to localStorage
+        saveTokenToLocalStorage(result.data.token).then(() =>
+          props.navigation.navigate('UpdateProfile'),
+        );
+        //Navigation
       })
       .catch(err => {
         console.log(err);
@@ -207,6 +212,12 @@ export default function Login(props) {
       </View>
     );
   }
+
+  useEffect(() => {
+    loadTokenFromLocalStorage().then(
+      props.navigation.navigate('UpdateProfile'),
+    );
+  });
   return (
     <View style={STYLES.container}>
       {renderHeader()}
