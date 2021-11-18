@@ -18,14 +18,20 @@ import {
 
 export default function Trip(props) {
   const [tripDetail, setTripDetail] = useState({
-    driver: {name: '', image: null},
-    passenger: {name: '', image: null},
-    dateTime: null,
-    from: {
+    CandidateTripDriver: {
       name: '',
-      coordinate: [],
+      image: null,
     },
-    to: {name: '', coordinate: []},
+    CandidateTripPassenger: null,
+    CandidateTripBike: true,
+    CandidateTripDateTime: '',
+    CandidateTripFromAddress: '',
+    CandidateTripToAddress: '',
+    CandidateTripFromLat: null,
+    CandidateTripFromLong: null,
+    CandidateTripToLat: null,
+    CandidateTripToLong: null,
+    CandidateTripMessage: null,
   });
   useEffect(() => {
     setTripDetail(props.tripDetail); //The details of trip
@@ -48,7 +54,7 @@ export default function Trip(props) {
             flexDirection: 'column',
           }}>
           <RoundedImage
-            image={tripDetail.driver.image}
+            image={tripDetail.CandidateTripDriver.image}
             width={60}
             height={60}></RoundedImage>
           <Image
@@ -66,12 +72,12 @@ export default function Trip(props) {
               textAlign: 'center',
               marginTop: -15,
             }}>
-            {tripDetail.driver.name}
+            {tripDetail.CandidateTripDriver.name}
           </Text>
         </View>
 
         {/* Divider */}
-        {tripDetail.passenger != null ? (
+        {tripDetail.CandidateTripPassenger != null ? (
           <View
             style={{
               marginHorizontal: '3%',
@@ -84,7 +90,7 @@ export default function Trip(props) {
         )}
 
         {/* passenger field */}
-        {tripDetail.passenger != null ? (
+        {tripDetail.CandidateTripPassenger != null ? (
           <View
             style={{
               width: '45%',
@@ -94,7 +100,7 @@ export default function Trip(props) {
               flexDirection: 'column',
             }}>
             <RoundedImage
-              image={tripDetail.passenger.image}
+              image={tripDetail.CandidateTripPassenger.image}
               width={60}
               height={60}></RoundedImage>
             <Image
@@ -113,7 +119,7 @@ export default function Trip(props) {
                 textAlign: 'center',
                 marginTop: -15,
               }}>
-              {tripDetail.passenger.name}
+              {tripDetail.CandidateTripPassenger.name}
             </Text>
           </View>
         ) : (
@@ -155,7 +161,7 @@ export default function Trip(props) {
               ...FONTS.h3,
               marginLeft: 10,
             }}>
-            {getVietnameseTime(tripDetail.dateTime)}
+            {getVietnameseTime(tripDetail.CandidateTripDateTime)}
           </Text>
         </View>
         <View
@@ -180,7 +186,7 @@ export default function Trip(props) {
               ...FONTS.h3,
               marginLeft: 10,
             }}>
-            {getVietnameseDate(tripDetail.dateTime)}
+            {getVietnameseDate(tripDetail.CandidateTripDateTime)}
           </Text>
         </View>
 
@@ -209,7 +215,7 @@ export default function Trip(props) {
               marginLeft: 10,
               width: '90%',
             }}>
-            {tripDetail.from.name}
+            {tripDetail.CandidateTripFromAddress.name}
           </Text>
         </View>
         <View
@@ -245,7 +251,7 @@ export default function Trip(props) {
               marginLeft: 10,
               width: '90%',
             }}>
-            {tripDetail.to.name}
+            {tripDetail.CandidateTripToAddress.name}
           </Text>
         </View>
       </View>

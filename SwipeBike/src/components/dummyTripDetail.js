@@ -1,35 +1,58 @@
 import {IMAGES} from '../constants';
 
-export const waitingTripDetail = {
-  driver: {
+const waiting = {
+  CandidateTripDriver: {
     name: 'Duong Thanh Vuong',
     image: IMAGES.cuteDriver,
   },
-  passenger: null,
-  dateTime: '3 Nov 2021 7:00:00',
-  from: {
-    name: 'Nhan van',
-    coordinate: [10.8722574, 106.8020436],
+  CandidateTripPassenger: {
+    name: 'Oanhhhhhhhhhhhhhhhhh',
+    image: IMAGES.swipeBike,
   },
-  to: {
-    name: 'CNTT',
-    coordinate: [10.8697981, 106.8028301],
+  CandidateTripBike: true,
+  CandidateTripDateTime: '3 Nov 2021 7:00:00',
+  CandidateTripFromAddress: 'Nhan van',
+  CandidateTripToAddress: 'CNTT',
+  CandidateTripFromLat: 10.8722574,
+  CandidateTripFromLong: 106.8020436,
+  CandidateTripToLat: 10.8697981,
+  CandidateTripToLong: 106.8028301,
+  CandidateTripMessage: null,
+};
+
+export const waitingTripDetail = {
+  CandidateTripDriver: {
+    name: 'Duong Thanh Vuong',
+    image: IMAGES.cuteDriver,
   },
+  CandidateTripPassenger: null,
+  CandidateTripBike: true,
+  CandidateTripDateTime: '3 Nov 2021 7:00:00',
+  CandidateTripFromAddress: 'Nhan van',
+  CandidateTripToAddress: 'CNTT',
+  CandidateTripFromLat: 10.8722574,
+  CandidateTripFromLong: 106.8020436,
+  CandidateTripToLat: 10.8697981,
+  CandidateTripToLong: 106.8028301,
+  CandidateTripMessage: null,
 };
 
 export const pairingTripDetail = {
-  driver: {
+  CandidateTripDriver: {
     name: 'Duong Thanh Vuong',
     image: IMAGES.cuteDriver,
   },
-  passenger: {name: 'Oanhhhhhhhhhhhhhhhhh', image: IMAGES.swipeBike},
-  dateTime: '3 Nov 2021 7:00:00',
-  from: {
-    name: 'Nhan van',
-    coordinate: [10.8722574, 106.8020436],
+  CandidateTripPassenger: {
+    name: 'Oanhhhhhhhhhhhhhhhhh',
+    image: IMAGES.swipeBike,
   },
-  to: {
-    name: 'CNTT',
-    coordinate: [10.8697981, 106.8028301],
-  },
+  CandidateTripBike: true,
+  CandidateTripDateTime: '3 Nov 2021 7:00:00',
+  CandidateTripFromAddress: 'Nhan van',
+  CandidateTripToAddress: 'CNTT',
+  CandidateTripFromLat: 10.8722574,
+  CandidateTripFromLong: 106.8020436,
+  CandidateTripToLat: 10.8697981,
+  CandidateTripToLong: 106.8028301,
+  CandidateTripMessage: null,
 };

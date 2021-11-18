@@ -16,9 +16,9 @@ export default function Login(props) {
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
 
-  function login(){
-     //validate Inputs
-     if (!ValidateEmail(userEmail)) {
+  function login() {
+    //validate Inputs
+    if (!ValidateEmail(userEmail)) {
       console.log('invalid email');
       Alert.alert('Email không hợp lệ', '', [
         {text: 'OK', onPress: () => console.log('OK Pressed')},
@@ -35,6 +35,7 @@ export default function Login(props) {
       );
       return;
     }
+    console.log('valid information');
     //login
     loginApi(userEmail, userPassword)
       .then(result => {
@@ -217,7 +218,7 @@ export default function Login(props) {
           marginTop: PIXEL.pixelSizeVertical(630),
         }}
         onPress={() => {
-         login();
+          login();
         }}>
         <BackgroundButton text="Đăng nhập"></BackgroundButton>
       </TouchableOpacity>
