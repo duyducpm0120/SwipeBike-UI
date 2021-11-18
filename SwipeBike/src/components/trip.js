@@ -215,7 +215,7 @@ export default function Trip(props) {
               marginLeft: 10,
               width: '90%',
             }}>
-            {tripDetail.CandidateTripFromAddress.name}
+            {tripDetail.CandidateTripFromAddress}
           </Text>
         </View>
         <View
@@ -251,7 +251,7 @@ export default function Trip(props) {
               marginLeft: 10,
               width: '90%',
             }}>
-            {tripDetail.CandidateTripToAddress.name}
+            {tripDetail.CandidateTripToAddress}
           </Text>
         </View>
       </View>
