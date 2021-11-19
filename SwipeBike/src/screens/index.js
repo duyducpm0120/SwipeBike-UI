@@ -8,6 +8,7 @@ import TripsScreen from './tripsScreen';
 import GoogleMapView from './googleMapView';
 import CreateTrip from './createTrip';
 import TripInfo from './tripInfo';
+import RecommendTrip from './recommendTrip';
 
 export {
   Splash,
@@ -20,4 +21,5 @@ export {
   GoogleMapView,
   CreateTrip,
   TripInfo,
+  RecommendTrip,
 };

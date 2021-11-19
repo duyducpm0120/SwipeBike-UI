@@ -1,19 +1,7 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import {View, Text, Image, TouchableOpacity, ScrollView} from 'react-native';
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
-import {
-  Trip,
-  BackgroundButton,
-  waitingTripDetail,
-  pairingTripDetail,
-} from '../components';
+import {Trip, BackgroundButton, waitingTripDetail} from '../components';
 
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -252,7 +240,11 @@ export default function Home(props) {
           scrollEventThrottle={1}>
           {waitingTripList.map(trip => {
             return (
-              <View style={{marginHorizontal: 10}}>
+              <View
+                style={{
+                  marginHorizontal:
+                    (SIZES.width - PIXEL.pixelSizeHorizontal(350) - 40) / 2,
+                }}>
                 <Trip
                   tripDetail={trip.tripDetail}
                   pressTrip={() => {
@@ -283,7 +275,8 @@ export default function Home(props) {
                 ...FONTS.h3,
                 color: COLORS.primary,
                 textDecorationLine: 'underline',
-              }}>
+              }}
+              onPress={() => props.navigation.navigate('RecommendTrip')}>
               Xem thêm
             </Text>
           </TouchableOpacity>
@@ -295,7 +288,12 @@ export default function Home(props) {
           scrollEventThrottle={1}>
           {recommendedTripList.map(trip => {
             return (
-              <View style={{marginHorizontal: 10}} key={trip.tripId}>
+              <View
+                style={{
+                  marginHorizontal:
+                    (SIZES.width - PIXEL.pixelSizeHorizontal(350) - 40) / 2,
+                }}
+                key={trip.tripId}>
                 <Trip
                   tripDetail={trip.tripDetail}
                   pressTrip={() => {

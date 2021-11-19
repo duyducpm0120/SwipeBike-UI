@@ -1,20 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Image, TouchableOpacity, Button} from 'react-native';
-import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {FONTS, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 import {
-  BackgroundButton,
   RoundedImage,
   getVietnameseDate,
   getVietnameseTime,
 } from '../components';
-import DatePicker from 'react-native-date-picker';
-import {
-  TextInput,
-  configureFonts,
-  Provider,
-  List,
-  RadioButton,
-} from 'react-native-paper';
 
 export default function Trip(props) {
   const [tripDetail, setTripDetail] = useState({

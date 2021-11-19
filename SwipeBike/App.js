@@ -7,7 +7,7 @@
  */
 import 'react-native-gesture-handler';
 import React, {useEffect, useState} from 'react';
-import {Image, Text, StyleSheet, View, Dimensions, Button} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
@@ -27,14 +27,12 @@ import {
   GoogleMapView,
   CreateTrip,
   TripInfo,
+  RecommendTrip,
 } from './src/screens';
-import {COLORS, STYLES} from './src/constants';
+import {STYLES} from './src/constants';
 import {Waiting} from './src/components';
 import BottomTabs from './src/navigations/bottomTabs';
-import {
-  saveTokenToLocalStorage,
-  loadTokenFromLocalStorage,
-} from '../SwipeBike/src/storage';
+import {loadTokenFromLocalStorage} from '../SwipeBike/src/storage';
 const Stack = createStackNavigator();
 const App = () => {
   //FCM Token Registration
@@ -49,7 +47,7 @@ const App = () => {
     axios
       .post('http://10.0.2.2:3001/notification/register', {token})
       .then(result => {
-        console.log(result);
+        //console.log(result);
       });
   };
 
@@ -87,7 +85,7 @@ const App = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={loadTokenFromLocalStorage() ? 'Home' : 'Login'}>
+        initialRouteName="Login">
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Home" component={BottomTabs} />
         <Stack.Screen name="SignUp" component={SignUp} />
@@ -98,6 +96,7 @@ const App = () => {
         <Stack.Screen name="GoogleMapView" component={GoogleMapView} />
         <Stack.Screen name="CreateTrip" component={CreateTrip} />
         <Stack.Screen name="TripInfo" component={TripInfo} />
+        <Stack.Screen name="RecommendTrip" component={RecommendTrip} />
       </Stack.Navigator>
     </NavigationContainer>
   );

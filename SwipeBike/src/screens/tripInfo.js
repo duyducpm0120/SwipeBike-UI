@@ -1,13 +1,6 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
+import React from 'react';
+import {View, Text, TouchableOpacity} from 'react-native';
+import {FONTS, STYLES} from '../constants';
 import {BackgroundButton, Trip} from '../components';
 
 export default function TripInfo(props) {

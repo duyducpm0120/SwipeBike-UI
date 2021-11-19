@@ -1,22 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  Button,
-  ScrollView,
-} from 'react-native';
-import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES} from '../constants';
 import {BackgroundButton, RoundedImage, getVietnameseDate} from '../components';
 import DatePicker from 'react-native-date-picker';
-import {
-  TextInput,
-  configureFonts,
-  Provider,
-  List,
-  RadioButton,
-} from 'react-native-paper';
+import {TextInput, RadioButton} from 'react-native-paper';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -24,10 +11,16 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateProfile} from '../redux/slices/profileSlice';
 //Handle moment
-import moment from 'moment';
 import 'moment/locale/vi';
 
+import {updateProfilePic} from '../api';
+import {saveTokenToLocalStorage, loadTokenFromLocalStorage} from '../storage';
+
 export default function UpdateProfile(props) {
+  //dummy token
+  const token =
+    'eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWUyOTRlZWRjMTY3Y2Q5N2JiNWE4MTliYmY3OTA2MzZmMTIzN2UiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc3dpcGViaWtlLTM4NzM2IiwiYXVkIjoic3dpcGViaWtlLTM4NzM2IiwiYXV0aF90aW1lIjoxNjM3MzM3NTczLCJ1c2VyX2lkIjoiTzVWVTY1OEF4Tk4xdVFDemRaMWJJckFsaU1mMiIsInN1YiI6Ik81VlU2NThBeE5OMXVRQ3pkWjFiSXJBbGlNZjIiLCJpYXQiOjE2MzczMzc1NzMsImV4cCI6MTYzNzM0MTE3MywiZW1haWwiOiJkdWNkdXlwbTAxMkBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsiZHVjZHV5cG0wMTJAZ21haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.mxi8vehP87XGD5KD-f9jCjkLoSp5H3m69MgPBVn6VQSnJPdf6WH4UtxDgyFoGz1gwXQqwruJLek6bWDJo_xtmA4SDpS5GfUitf8KRx8PPMV68NewniAl2Vi1j-2mtF_VbwugFMNMohlMtIavDsuUBDrupMCHNtJeQPMpgAwP4bCHCNqCWj7gH3_jjZ8Qd2jGZWaEMhgs6eF-cFfo0mxzVi29I_5qeqYxztjoyZbOcWOcjPnsKxWXPIWKaehjQzJEmoyT8P8sYfTwkFjq2I5NkJ3cVOj52NlITGAWXimSKOqvJZZUZidERZmdpWL3K_Z9Q2RRd5NR2IfiDvuSX42q2Q';
+
   useEffect(() => {});
   //Redux dispatch
   const dispatch = useDispatch();
@@ -143,11 +136,22 @@ export default function UpdateProfile(props) {
           console.log('Error code ', response.errorCode);
         } else {
           const source = {
-            uri: 'data:image/jpeg;base64,' + response.assets[0].base64,
-            //uri: response.assets[0].uri,
+            uri: response.assets[0].uri,
           };
+          const newUri =
+            response.assets[0].uri.substr(0, 5) +
+            response.assets[0].uri.substr(6, response.assets[0].uri.length);
+          console.log(newUri);
+          //  console.log('source', source);
+          // console.log('test token', token);
+          updateProfilePic(newUri, token)
+            .then(res => console.log(res))
+            .catch(error => {
+              console.log(JSON.stringify(error));
+              //  console.log(error);
+            });
           setImageUri(source);
-          console.log(source);
+          //console.log(source);
         }
       },
     );
@@ -173,11 +177,21 @@ export default function UpdateProfile(props) {
           console.log('Error code ', response.errorCode);
         } else {
           const source = {
-            uri: 'data:image/jpeg;base64,' + response.assets[0].base64,
-            //uri: response.assets[0].uri,
+            uri: response.assets[0].uri,
           };
+
+          const newUri =
+            response.assets[0].uri.substr(0, 5) +
+            response.assets[0].uri.substr(6, response.assets[0].uri.length);
+          //   console.log('source', source);
+          updateProfilePic(newUri, token)
+            .then(res => console.log(res))
+            .catch(error => {
+              console.log(JSON.stringify(error));
+              console.log(error.status);
+            });
           setImageUri(source);
-          console.log(source);
+          //console.log(source);
           //close bottomsheet
         }
       },
@@ -222,8 +236,8 @@ export default function UpdateProfile(props) {
           }}>
           <RoundedImage
             image={imageUri}
-            width={PIXEL.pixelSizeHorizontal(100)}
-            height={PIXEL.pixelSizeHorizontal(100)}></RoundedImage>
+            width={PIXEL.pixelSizeHorizontal(150)}
+            height={PIXEL.pixelSizeHorizontal(150)}></RoundedImage>
           <TouchableOpacity
             style={{
               marginTop: 5,

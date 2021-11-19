@@ -42,9 +42,11 @@ export default function Login(props) {
       .then(result => {
         //console.log(result.data);
         //Saving token to localStorage
-        saveTokenToLocalStorage(result.data.token).then(() =>
-          props.navigation.navigate('UpdateProfile'),
-        );
+        saveTokenToLocalStorage(result.data.token).then(async () => {
+          const token = await loadTokenFromLocalStorage();
+          console.log('load token:', token), console.log('token saved');
+          props.navigation.navigate('UpdateProfile');
+        });
         //Navigation
       })
       .catch(err => {
@@ -214,9 +216,9 @@ export default function Login(props) {
   }
 
   useEffect(() => {
-    loadTokenFromLocalStorage().then(
-      props.navigation.navigate('UpdateProfile'),
-    );
+    // loadTokenFromLocalStorage().then(
+    //   props.navigation.navigate('UpdateProfile'),
+    // );
   });
   return (
     <View style={STYLES.container}>

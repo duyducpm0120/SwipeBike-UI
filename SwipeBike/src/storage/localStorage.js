@@ -33,7 +33,8 @@ const saveTokenToLocalStorage = async token => {
     },
     // if expires not specified, the defaultExpires will be applied instead.
     // if set to null, then it will never expire.
-    expires: 1000 * 3600,
+    // expires: 1000 * 3600,
+    expires: null,
   });
 };
 
@@ -60,6 +61,7 @@ const loadTokenFromLocalStorage = async () => {
           break;
       }
     });
+  return null;
 };
 
 export {saveTokenToLocalStorage, loadTokenFromLocalStorage};

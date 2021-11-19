@@ -1,5 +1,6 @@
-import {signUpApi,loginApi} from "./auth";
+import {signUpApi, loginApi} from './auth';
 
-import {createCandidateTrip}  from './CandidateTrip' ;
+import {createCandidateTrip} from './CandidateTrip';
+import {updateProfilePic} from './profile';
 
-export {signUpApi, loginApi,createCandidateTrip};
+export {signUpApi, loginApi, createCandidateTrip, updateProfilePic};

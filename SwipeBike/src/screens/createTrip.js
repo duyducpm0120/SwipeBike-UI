@@ -732,11 +732,16 @@ export default function CreateTrip(props) {
       </View>
     );
   }
+
+  //updating current location
   useEffect(() => {
     getCurrentLocation();
-    getDataRoute();
-  }, [currentLocation, fromLocation, toLocation]);
+  });
 
+  //updating route
+  useEffect(() => {
+    getDataRoute();
+  }, [fromLocation, toLocation]);
   return (
     <View
       style={{
