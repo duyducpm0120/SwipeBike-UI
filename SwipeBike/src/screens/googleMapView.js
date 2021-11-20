@@ -15,7 +15,7 @@ import {
   FONTS,
   SIZES,
   COLORS,
-  PIXEL,
+  RESPONSIVE,
   ICONS,
   IMAGES,
   STYLES,
@@ -254,7 +254,7 @@ export default function GoogleMapView(props) {
       </MapView>
       <BottomSheet
         ref={bottomSheetRef}
-        snapPoints={['55%', PIXEL.pixelSizeVertical(50)]}
+        snapPoints={['55%', RESPONSIVE.pixelSizeVertical(50)]}
         renderContent={renderInner}
         s
         initialSnap={1}

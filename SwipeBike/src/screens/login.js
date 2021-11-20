@@ -7,7 +7,15 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
+import {
+  FONTS,
+  SIZES,
+  COLORS,
+  RESPONSIVE,
+  ICONS,
+  IMAGES,
+  STYLES,
+} from '../constants';
 import {BackgroundButton} from '../components';
 import {signUpApi, loginApi} from '../api';
 import {
@@ -85,7 +93,7 @@ export default function Login(props) {
           justifyContent: 'center',
           alignItems: 'center',
           marginBottom: 20,
-          marginTop: PIXEL.pixelSizeVertical(150),
+          marginTop: RESPONSIVE.pixelSizeVertical(150),
         }}>
         <Text style={FONTS.title}>Đăng nhập</Text>
       </View>
@@ -98,7 +106,7 @@ export default function Login(props) {
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'column',
-          width: PIXEL.pixelSizeHorizontal(330),
+          width: RESPONSIVE.pixelSizeHorizontal(330),
         }}>
         <View
           style={{
@@ -107,21 +115,21 @@ export default function Login(props) {
             alignItems: 'center',
             borderRadius: 10,
             width: '100%',
-            marginVertical: PIXEL.pixelSizeVertical(10),
+            marginVertical: RESPONSIVE.pixelSizeVertical(10),
           }}>
           <Image
             source={ICONS.email}
             style={{
-              width: PIXEL.pixelSizeHorizontal(24),
-              height: PIXEL.pixelSizeHorizontal(24),
+              width: RESPONSIVE.pixelSizeHorizontal(24),
+              height: RESPONSIVE.pixelSizeHorizontal(24),
               tintColor: COLORS.lightGray1,
             }}></Image>
           <TextInput
             placeholder="Email"
             style={{
               ...FONTS.h3,
-              marginLeft: PIXEL.pixelSizeHorizontal(15),
-              width: PIXEL.pixelSizeHorizontal(270),
+              marginLeft: RESPONSIVE.pixelSizeHorizontal(15),
+              width: RESPONSIVE.pixelSizeHorizontal(270),
             }}
             onChangeText={email => setUserEmail(email)}></TextInput>
         </View>
@@ -132,21 +140,21 @@ export default function Login(props) {
             alignItems: 'center',
             borderRadius: 10,
             width: '100%',
-            marginVertical: PIXEL.pixelSizeVertical(10),
+            marginVertical: RESPONSIVE.pixelSizeVertical(10),
           }}>
           <Image
             source={ICONS.lock}
             style={{
-              width: PIXEL.pixelSizeHorizontal(24),
-              height: PIXEL.pixelSizeHorizontal(24),
+              width: RESPONSIVE.pixelSizeHorizontal(24),
+              height: RESPONSIVE.pixelSizeHorizontal(24),
               tintColor: COLORS.lightGray1,
             }}></Image>
           <TextInput
             placeholder="Mật khẩu"
             style={{
               ...FONTS.h3,
-              marginLeft: PIXEL.pixelSizeHorizontal(15),
-              width: PIXEL.pixelSizeHorizontal(270),
+              marginLeft: RESPONSIVE.pixelSizeHorizontal(15),
+              width: RESPONSIVE.pixelSizeHorizontal(270),
             }}
             secureTextEntry={showPassword ? false : true}
             maxLength={14}
@@ -160,8 +168,8 @@ export default function Login(props) {
             <Image
               source={showPassword ? ICONS.show : ICONS.hide}
               style={{
-                width: PIXEL.pixelSizeHorizontal(24),
-                height: PIXEL.pixelSizeHorizontal(24),
+                width: RESPONSIVE.pixelSizeHorizontal(24),
+                height: RESPONSIVE.pixelSizeHorizontal(24),
                 tintColor: COLORS.lightGray1,
               }}></Image>
           </TouchableOpacity>
@@ -177,7 +185,7 @@ export default function Login(props) {
           justifyContent: 'center',
           alignItems: 'center',
           width: '100%',
-          marginVertical: PIXEL.pixelSizeVertical(10),
+          marginVertical: RESPONSIVE.pixelSizeVertical(10),
         }}>
         <TouchableOpacity
           onPress={() => {
@@ -233,7 +241,7 @@ export default function Login(props) {
       <TouchableOpacity
         style={{
           position: 'absolute',
-          marginTop: PIXEL.pixelSizeVertical(630),
+          marginTop: RESPONSIVE.pixelSizeVertical(630),
         }}
         onPress={() => {
           login();

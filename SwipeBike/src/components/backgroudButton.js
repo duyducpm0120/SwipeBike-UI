@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-import {FONTS, SIZES, PIXEL, COLORS} from '../constants';
+import {FONTS, SIZES, RESPONSIVE, COLORS} from '../constants';
 
 export default function BackgroundButton(props) {
   return (
@@ -10,8 +10,8 @@ export default function BackgroundButton(props) {
         backgroundColor: COLORS.primary,
         justifyContent: 'center',
         alignItems: 'center',
-        width: PIXEL.pixelSizeHorizontal(315),
-        height: PIXEL.pixelSizeVertical(60),
+        width: RESPONSIVE.pixelSizeHorizontal(315),
+        height: RESPONSIVE.pixelSizeVertical(60),
       }}>
       <Text style={FONTS.h2Bold}>{props.text}</Text>
     </View>

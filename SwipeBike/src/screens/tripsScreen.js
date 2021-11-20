@@ -7,7 +7,15 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
+import {
+  FONTS,
+  SIZES,
+  COLORS,
+  RESPONSIVE,
+  ICONS,
+  IMAGES,
+  STYLES,
+} from '../constants';
 import {
   Trip,
   BackgroundButton,
@@ -172,8 +180,8 @@ export default function TripsScreen(props) {
           backgroundColor: COLORS.darkgray,
           justifyContent: 'center',
           alignItems: 'center',
-          width: PIXEL.pixelSizeHorizontal(315),
-          height: PIXEL.pixelSizeVertical(60),
+          width: RESPONSIVE.pixelSizeHorizontal(315),
+          height: RESPONSIVE.pixelSizeVertical(60),
         }}
         onPress={() => {
           bottomSheetRef.current.snapTo(1);
@@ -187,8 +195,8 @@ export default function TripsScreen(props) {
           backgroundColor: COLORS.darkgray,
           justifyContent: 'center',
           alignItems: 'center',
-          width: PIXEL.pixelSizeHorizontal(315),
-          height: PIXEL.pixelSizeVertical(60),
+          width: RESPONSIVE.pixelSizeHorizontal(315),
+          height: RESPONSIVE.pixelSizeVertical(60),
         }}
         onPress={() => {
           bottomSheetRef.current.snapTo(1);
@@ -308,7 +316,7 @@ export default function TripsScreen(props) {
       </Animated.ScrollView>
       <BottomSheet
         ref={bottomSheetRef}
-        snapPoints={['50%', PIXEL.pixelSizeVertical(-50)]}
+        snapPoints={['50%', RESPONSIVE.pixelSizeVertical(-50)]}
         renderContent={renderInner}
         initialSnap={1}
         callbackNode={fall}

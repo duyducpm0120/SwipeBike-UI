@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
-import {FONTS, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
+import {FONTS, COLORS, RESPONSIVE, ICONS, IMAGES, STYLES} from '../constants';
 import {
   RoundedImage,
   getVietnameseDate,
@@ -135,7 +135,7 @@ export default function Trip(props) {
             alignItems: 'center',
             flexDirection: 'row',
             width: '100%',
-            marginTop: PIXEL.pixelSizeVertical(10),
+            marginTop: RESPONSIVE.pixelSizeVertical(10),
           }}>
           {/* Time */}
           <Image
@@ -161,7 +161,7 @@ export default function Trip(props) {
             alignItems: 'center',
             flexDirection: 'row',
             width: '100%',
-            marginTop: PIXEL.pixelSizeVertical(10),
+            marginTop: RESPONSIVE.pixelSizeVertical(10),
           }}>
           <Image
             source={ICONS.calendar}
@@ -189,7 +189,7 @@ export default function Trip(props) {
             alignItems: 'flex-end',
             flexDirection: 'row',
             width: '100%',
-            marginTop: PIXEL.pixelSizeVertical(10),
+            marginTop: RESPONSIVE.pixelSizeVertical(10),
           }}>
           <Image
             source={ICONS.dot}
@@ -254,8 +254,8 @@ export default function Trip(props) {
       style={{
         justifyContent: 'flex-start',
         alignItems: 'center',
-        width: PIXEL.pixelSizeHorizontal(350),
-        height: PIXEL.pixelSizeHorizontal(350),
+        width: RESPONSIVE.pixelSizeHorizontal(350),
+        height: RESPONSIVE.pixelSizeHorizontal(350),
         padding: 20,
         borderRadius: 10,
         backgroundColor: COLORS.backGroundColor,

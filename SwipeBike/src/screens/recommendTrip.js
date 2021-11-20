@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, FlatList} from 'react-native';
-import {FONTS, STYLES, SIZES, PIXEL} from '../constants';
+import {FONTS, STYLES, SIZES, RESPONSIVE} from '../constants';
 import {BackgroundButton, Trip} from '../components';
 import {waitingTripDetail} from '../components';
 
@@ -38,27 +38,13 @@ export default function RecommendTrip(props) {
     );
   }
 
-  function renderTitle() {
-    return (
-      <View
-        style={{
-          width: '100%',
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-          marginTop: PIXEL.pixelSizeVertical(50),
-          marginBottom: PIXEL.pixelSizeVertical(20),
-        }}>
-        <Text style={{...FONTS.h2Bold}}>Chọn một chuyến đi phù hợp</Text>
-      </View>
-    );
-  }
   function renderRecommendedTrips() {
     const Item = trip => {
       return (
         <View
           style={{
             marginHorizontal:
-              (SIZES.width - PIXEL.pixelSizeHorizontal(350) - 40) / 2,
+              (SIZES.width - RESPONSIVE.pixelSizeHorizontal(350) - 40) / 2,
           }}
           key={trip.tripId}>
           <Trip
@@ -76,14 +62,14 @@ export default function RecommendTrip(props) {
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'column',
+          marginVertical: RESPONSIVE.pixelSizeVertical(20),
         }}>
         <FlatList
           data={recommendedTripList}
-          horizontal
           renderItem={({item}) => Item(item)}
           keyExtractor={item => item.tripId.toString()}
           pagingEnabled={true}
-          showsHorizontalScrollIndicator={false}></FlatList>
+          showsVerticalScrollIndicator={false}></FlatList>
       </View>
     );
   }
@@ -94,7 +80,6 @@ export default function RecommendTrip(props) {
         ...STYLES.container,
       }}>
       {renderHeader()}
-      {renderTitle()}
       {renderRecommendedTrips()}
     </View>
   );

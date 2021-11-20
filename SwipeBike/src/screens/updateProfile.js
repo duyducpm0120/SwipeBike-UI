@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
-import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES} from '../constants';
+import {FONTS, SIZES, COLORS, RESPONSIVE, ICONS, IMAGES} from '../constants';
 import {BackgroundButton, RoundedImage, getVietnameseDate} from '../components';
 import DatePicker from 'react-native-date-picker';
 import {TextInput, RadioButton} from 'react-native-paper';
@@ -90,8 +90,8 @@ export default function UpdateProfile(props) {
           backgroundColor: COLORS.darkgray,
           justifyContent: 'center',
           alignItems: 'center',
-          width: PIXEL.pixelSizeHorizontal(315),
-          height: PIXEL.pixelSizeVertical(60),
+          width: RESPONSIVE.pixelSizeHorizontal(315),
+          height: RESPONSIVE.pixelSizeVertical(60),
         }}
         onPress={() => {
           bottomSheetRef.current.snapTo(1);
@@ -104,7 +104,7 @@ export default function UpdateProfile(props) {
     return (
       <BottomSheet
         ref={bottomSheetRef}
-        snapPoints={['40%', PIXEL.pixelSizeVertical(-50)]}
+        snapPoints={['40%', RESPONSIVE.pixelSizeVertical(-50)]}
         renderContent={renderInner}
         initialSnap={1}
         callbackNode={fall}
@@ -119,8 +119,8 @@ export default function UpdateProfile(props) {
     launchImageLibrary(
       {
         mediaType: 'photo',
-        maxWidth: PIXEL.pixelSizeHorizontal(100),
-        maxHeight: PIXEL.pixelSizeHorizontal(100),
+        maxWidth: RESPONSIVE.pixelSizeHorizontal(100),
+        maxHeight: RESPONSIVE.pixelSizeHorizontal(100),
         includeBase64: true,
       },
       response => {
@@ -160,8 +160,8 @@ export default function UpdateProfile(props) {
     launchCamera(
       {
         mediaType: 'photo',
-        maxWidth: PIXEL.pixelSizeHorizontal(100),
-        maxHeight: PIXEL.pixelSizeHorizontal(100),
+        maxWidth: RESPONSIVE.pixelSizeHorizontal(100),
+        maxHeight: RESPONSIVE.pixelSizeHorizontal(100),
         includeBase64: true,
       },
       response => {
@@ -234,8 +234,8 @@ export default function UpdateProfile(props) {
           }}>
           <RoundedImage
             image={imageUri}
-            width={PIXEL.pixelSizeHorizontal(150)}
-            height={PIXEL.pixelSizeHorizontal(150)}></RoundedImage>
+            width={RESPONSIVE.pixelSizeHorizontal(150)}
+            height={RESPONSIVE.pixelSizeHorizontal(150)}></RoundedImage>
           <TouchableOpacity
             style={{
               marginTop: 5,
@@ -263,7 +263,7 @@ export default function UpdateProfile(props) {
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'column',
-          width: PIXEL.pixelSizeHorizontal(350),
+          width: RESPONSIVE.pixelSizeHorizontal(350),
         }}
         showsVerticalScrollIndicator={false}>
         {/* Name */}
@@ -273,7 +273,7 @@ export default function UpdateProfile(props) {
             justifyContent: 'center',
             alignItems: 'flex-start',
             width: '100%',
-            marginVertical: PIXEL.pixelSizeVertical(10),
+            marginVertical: RESPONSIVE.pixelSizeVertical(10),
           }}>
           <Text style={{...FONTS.h2Bold}}>Tên đại diện</Text>
           <TextInput
@@ -287,7 +287,7 @@ export default function UpdateProfile(props) {
             }}
             style={{
               width: '100%',
-              height: PIXEL.pixelSizeVertical(50),
+              height: RESPONSIVE.pixelSizeVertical(50),
               fontSize: SIZES.h3,
               paddingHorizontal: 0,
               backgroundColor: COLORS.backGroundColor,
@@ -302,7 +302,7 @@ export default function UpdateProfile(props) {
             justifyContent: 'center',
             alignItems: 'flex-start',
             width: '100%',
-            marginBottom: PIXEL.pixelSizeVertical(10),
+            marginBottom: RESPONSIVE.pixelSizeVertical(10),
           }}>
           <Text style={{...FONTS.h2Bold}}>Giới tính</Text>
           <RadioButton.Group
@@ -375,7 +375,7 @@ export default function UpdateProfile(props) {
             <Text
               style={{
                 ...FONTS.h3,
-                width: PIXEL.pixelSizeHorizontal(240),
+                width: RESPONSIVE.pixelSizeHorizontal(240),
               }}>
               {getVietnameseDate(date)}
             </Text>
@@ -383,8 +383,8 @@ export default function UpdateProfile(props) {
               <Image
                 source={ICONS.edit}
                 style={{
-                  width: PIXEL.pixelSizeHorizontal(24),
-                  height: PIXEL.pixelSizeHorizontal(24),
+                  width: RESPONSIVE.pixelSizeHorizontal(24),
+                  height: RESPONSIVE.pixelSizeHorizontal(24),
                   tintColor: COLORS.lightGray1,
                 }}></Image>
             </TouchableOpacity>
@@ -416,7 +416,7 @@ export default function UpdateProfile(props) {
             justifyContent: 'center',
             alignItems: 'flex-start',
             width: '100%',
-            marginVertical: PIXEL.pixelSizeVertical(10),
+            marginVertical: RESPONSIVE.pixelSizeVertical(10),
           }}>
           <Text style={{...FONTS.h2Bold}}>Số điện thoại</Text>
           <TextInput
@@ -430,7 +430,7 @@ export default function UpdateProfile(props) {
             }}
             style={{
               width: '100%',
-              height: PIXEL.pixelSizeVertical(50),
+              height: RESPONSIVE.pixelSizeVertical(50),
               fontSize: SIZES.h3,
               paddingHorizontal: 0,
               backgroundColor: COLORS.backGroundColor,
@@ -472,7 +472,7 @@ export default function UpdateProfile(props) {
         {renderTextField()}
         <TouchableOpacity
           style={{
-            marginTop: PIXEL.pixelSizeVertical(30),
+            marginTop: RESPONSIVE.pixelSizeVertical(30),
             width: '100%',
             justifyContent: 'center',
             alignItems: 'center',

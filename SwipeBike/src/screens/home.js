@@ -1,6 +1,14 @@
 import React, {useState} from 'react';
 import {View, Text, Image, TouchableOpacity, ScrollView} from 'react-native';
-import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
+import {
+  FONTS,
+  SIZES,
+  COLORS,
+  RESPONSIVE,
+  ICONS,
+  IMAGES,
+  STYLES,
+} from '../constants';
 import {Trip, BackgroundButton, waitingTripDetail} from '../components';
 
 import Animated from 'react-native-reanimated';
@@ -111,8 +119,8 @@ export default function Home(props) {
           backgroundColor: COLORS.darkgray,
           justifyContent: 'center',
           alignItems: 'center',
-          width: PIXEL.pixelSizeHorizontal(315),
-          height: PIXEL.pixelSizeVertical(60),
+          width: RESPONSIVE.pixelSizeHorizontal(315),
+          height: RESPONSIVE.pixelSizeVertical(60),
         }}
         onPress={() => {
           bottomSheetRef.current.snapTo(1);
@@ -126,8 +134,8 @@ export default function Home(props) {
           backgroundColor: COLORS.darkgray,
           justifyContent: 'center',
           alignItems: 'center',
-          width: PIXEL.pixelSizeHorizontal(315),
-          height: PIXEL.pixelSizeVertical(60),
+          width: RESPONSIVE.pixelSizeHorizontal(315),
+          height: RESPONSIVE.pixelSizeVertical(60),
         }}
         onPress={() => {
           bottomSheetRef.current.snapTo(1);
@@ -146,7 +154,7 @@ export default function Home(props) {
     return (
       <BottomSheet
         ref={bottomSheetRef}
-        snapPoints={['50%', PIXEL.pixelSizeVertical(-50)]}
+        snapPoints={['50%', RESPONSIVE.pixelSizeVertical(-50)]}
         renderContent={renderInner}
         initialSnap={1}
         callbackNode={fall}
@@ -243,7 +251,8 @@ export default function Home(props) {
               <View
                 style={{
                   marginHorizontal:
-                    (SIZES.width - PIXEL.pixelSizeHorizontal(350) - 40) / 2,
+                    (SIZES.width - RESPONSIVE.pixelSizeHorizontal(350) - 40) /
+                    2,
                 }}>
                 <Trip
                   tripDetail={trip.tripDetail}
@@ -291,7 +300,8 @@ export default function Home(props) {
               <View
                 style={{
                   marginHorizontal:
-                    (SIZES.width - PIXEL.pixelSizeHorizontal(350) - 40) / 2,
+                    (SIZES.width - RESPONSIVE.pixelSizeHorizontal(350) - 40) /
+                    2,
                 }}
                 key={trip.tripId}>
                 <Trip

@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, SafeAreaView, Animated, Easing, Image} from 'react-native';
 import {useEffect, useRef} from 'react';
-import {IMAGES, PIXEL, COLORS} from '../constants';
+import {IMAGES, RESPONSIVE, COLORS} from '../constants';
 
 export default function Waiting() {
   const list = [0, 1, 2, 3, 4];
@@ -64,8 +64,8 @@ export default function Waiting() {
         <Image
           source={IMAGES.swipeBike}
           style={{
-            width: PIXEL.pixelSizeHorizontal(172),
-            height: PIXEL.pixelSizeHorizontal(93),
+            width: RESPONSIVE.pixelSizeHorizontal(172),
+            height: RESPONSIVE.pixelSizeHorizontal(93),
           }}></Image>
       </View>
       <View

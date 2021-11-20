@@ -28,7 +28,7 @@ const pixelSizeVertical = size => {
 const pixelSizeHorizontal = size => {
   return widthPixel(size);
 };
-export const PIXEL = {
+export const RESPONSIVE = {
   widthPixel,
   heightPixel,
   fontPixel,
@@ -61,26 +61,26 @@ export const COLORS = {
 export const SIZES = {
   // global sizes
   radius: 40,
-  paddingHorizontal5: PIXEL.pixelSizeHorizontal(5),
-  paddingHorizontal10: PIXEL.pixelSizeHorizontal(10),
-  paddingHorizontal20: PIXEL.pixelSizeHorizontal(20),
-  marginHorizontal5: PIXEL.pixelSizeHorizontal(5),
-  marginHorizontal10: PIXEL.pixelSizeHorizontal(10),
-  marginHorizontal20: PIXEL.pixelSizeHorizontal(20),
+  paddingHorizontal5: RESPONSIVE.pixelSizeHorizontal(5),
+  paddingHorizontal10: RESPONSIVE.pixelSizeHorizontal(10),
+  paddingHorizontal20: RESPONSIVE.pixelSizeHorizontal(20),
+  marginHorizontal5: RESPONSIVE.pixelSizeHorizontal(5),
+  marginHorizontal10: RESPONSIVE.pixelSizeHorizontal(10),
+  marginHorizontal20: RESPONSIVE.pixelSizeHorizontal(20),
 
-  paddingVertical5: PIXEL.pixelSizeVertical(5),
-  paddingVertical10: PIXEL.pixelSizeVertical(10),
-  paddingVertical20: PIXEL.pixelSizeVertical(20),
-  marginVertical5: PIXEL.pixelSizeVertical(5),
-  marginVertical10: PIXEL.pixelSizeVertical(10),
-  marginVertical20: PIXEL.pixelSizeVertical(20),
+  paddingVertical5: RESPONSIVE.pixelSizeVertical(5),
+  paddingVertical10: RESPONSIVE.pixelSizeVertical(10),
+  paddingVertical20: RESPONSIVE.pixelSizeVertical(20),
+  marginVertical5: RESPONSIVE.pixelSizeVertical(5),
+  marginVertical10: RESPONSIVE.pixelSizeVertical(10),
+  marginVertical20: RESPONSIVE.pixelSizeVertical(20),
 
   // font sizes
-  title: PIXEL.fontPixel(28),
-  h1: PIXEL.fontPixel(24),
-  h2: PIXEL.fontPixel(20),
-  h3: PIXEL.fontPixel(16),
-  h4: PIXEL.fontPixel(12),
+  title: RESPONSIVE.fontPixel(28),
+  h1: RESPONSIVE.fontPixel(24),
+  h2: RESPONSIVE.fontPixel(20),
+  h3: RESPONSIVE.fontPixel(16),
+  h4: RESPONSIVE.fontPixel(12),
 
   // app dimensions
   width,
@@ -93,55 +93,55 @@ export const FONTS = {
     fontFamily: 'Roboto-Bold',
     fontSize: SIZES.title,
     color: COLORS.black,
-    //lineHeight: PIXEL.pixelSizeVertical(30),
+    //lineHeight: RESPONSIVE.pixelSizeVertical(30),
   },
   h1: {
     fontFamily: 'Roboto-Regular',
     fontSize: SIZES.h1,
     color: COLORS.black,
-    //lineHeight: PIXEL.pixelSizeVertical(20),
+    //lineHeight: RESPONSIVE.pixelSizeVertical(20),
   },
   h2: {
     fontFamily: 'Roboto-Regular',
     fontSize: SIZES.h2,
     color: COLORS.black,
-    // lineHeight: PIXEL.pixelSizeVertical(16),
+    // lineHeight: RESPONSIVE.pixelSizeVertical(16),
   },
   h3: {
     fontFamily: 'Roboto-Regular',
     fontSize: SIZES.h3,
     color: COLORS.black,
-    // lineHeight: PIXEL.pixelSizeVertical(14),
+    // lineHeight: RESPONSIVE.pixelSizeVertical(14),
   },
   h4: {
     fontFamily: 'Roboto-Regular',
     fontSize: SIZES.h4,
     color: COLORS.black,
-    // lineHeight: PIXEL.pixelSizeVertical(14),
+    // lineHeight: RESPONSIVE.pixelSizeVertical(14),
   },
   h1Bold: {
     fontFamily: 'Roboto-Black',
     fontSize: SIZES.h1,
     color: COLORS.black,
-    //lineHeight: PIXEL.pixelSizeVertical(20),
+    //lineHeight: RESPONSIVE.pixelSizeVertical(20),
   },
   h2Bold: {
     fontFamily: 'Roboto-Black',
     fontSize: SIZES.h2,
     color: COLORS.black,
-    // lineHeight: PIXEL.pixelSizeVertical(16),
+    // lineHeight: RESPONSIVE.pixelSizeVertical(16),
   },
   h3Bold: {
     fontFamily: 'Roboto-Black',
     fontSize: SIZES.h3,
     color: COLORS.black,
-    //lineHeight: PIXEL.pixelSizeVertical(14),
+    //lineHeight: RESPONSIVE.pixelSizeVertical(14),
   },
   h4Bold: {
     fontFamily: 'Roboto-Black',
     fontSize: SIZES.h4,
     color: COLORS.black,
-    //lineHeight: PIXEL.pixelSizeVertical(14),
+    //lineHeight: RESPONSIVE.pixelSizeVertical(14),
   },
 };
 
@@ -158,8 +158,8 @@ export const STYLES = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     //backgroundColor: COLORS.backGroundColor,
-    paddingTop: PIXEL.pixelSizeVertical(20),
-    paddingHorizontal: PIXEL.pixelSizeHorizontal(20),
+    paddingTop: RESPONSIVE.pixelSizeVertical(20),
+    paddingHorizontal: RESPONSIVE.pixelSizeHorizontal(20),
   },
   shadow: {
     shadowColor: '#000',
@@ -174,6 +174,6 @@ export const STYLES = StyleSheet.create({
   },
 });
 
-const appTheme = {COLORS, SIZES, FONTS, PIXEL, STYLES};
+const appTheme = {COLORS, SIZES, FONTS, RESPONSIVE, STYLES};
 
 export default appTheme;

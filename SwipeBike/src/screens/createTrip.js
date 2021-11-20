@@ -13,7 +13,7 @@ import {
   FONTS,
   SIZES,
   COLORS,
-  PIXEL,
+  RESPONSIVE,
   ICONS,
   IMAGES,
   STYLES,
@@ -672,7 +672,7 @@ export default function CreateTrip(props) {
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%',
-            height: PIXEL.pixelSizeVertical(20),
+            height: RESPONSIVE.pixelSizeVertical(20),
           }}>
           {ScrollArr.map((number, index) => {
             const w = scrollX.interpolate({
@@ -722,9 +722,9 @@ export default function CreateTrip(props) {
             backgroundColor: checkInfo() ? COLORS.primary : COLORS.lightGray0,
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: PIXEL.pixelSizeVertical(10),
-            width: PIXEL.pixelSizeHorizontal(315),
-            height: PIXEL.pixelSizeVertical(60),
+            marginTop: RESPONSIVE.pixelSizeVertical(10),
+            width: RESPONSIVE.pixelSizeHorizontal(315),
+            height: RESPONSIVE.pixelSizeVertical(60),
           }}
           onPress={() => createNewTrip()}>
           <Text style={FONTS.h2Bold}>Tạo chuyến đi</Text>
