@@ -34,7 +34,25 @@ import BottomSheet from 'reanimated-bottom-sheet';
 
 export default function GoogleMapView(props) {
   //Trip to display
-  const [tripData, setTripData] = useState({});
+  const [tripData, setTripData] = useState({
+    tripDetail: {
+      CandidateTripDriver: {
+        name: '',
+        image: null,
+      },
+      CandidateTripPassenger: null,
+      CandidateTripBike: null,
+      CandidateTripDateTime: '',
+      CandidateTripFromAddress: null,
+      CandidateTripToAddress: null,
+      CandidateTripFromLat: null,
+      CandidateTripFromLong: null,
+      CandidateTripToLat: null,
+      CandidateTripToLong: null,
+      CandidateTripMessage: null,
+    },
+    tripId: null,
+  });
   //check trip is loaded ?
   const [loaded, setLoaded] = useState(false);
 
@@ -164,10 +182,15 @@ export default function GoogleMapView(props) {
 
   function getDataRoute() {
     if (loaded != true) return;
-    getRoute(
-      tripData.tripDetail.from.coordinate,
-      tripData.tripDetail.to.coordinate,
-    ).then(route => setCoords(route));
+    const fromCoordinates = [
+      tripData.tripDetail.CandidateTripFromLat,
+      tripData.tripDetail.CandidateTripFromLong,
+    ];
+    const toCoordinates = [
+      tripData.tripDetail.CandidateTripToLat,
+      tripData.tripDetail.CandidateTripToLong,
+    ];
+    getRoute(fromCoordinates, toCoordinates).then(route => setCoords(route));
     //
   }
 
@@ -230,15 +253,16 @@ export default function GoogleMapView(props) {
         <Marker
           coordinate={{
             latitude:
-              loaded == true ? tripData.tripDetail.from.coordinate[0] : 0,
+              loaded == true ? tripData.tripDetail.CandidateTripFromLat : 0,
             longitude:
-              loaded == true ? tripData.tripDetail.from.coordinate[1] : 0,
+              loaded == true ? tripData.tripDetail.CandidateTripFromLong : 0,
           }}></Marker>
         <Marker
           coordinate={{
-            latitude: loaded == true ? tripData.tripDetail.to.coordinate[0] : 0,
+            latitude:
+              loaded == true ? tripData.tripDetail.CandidateTripToLat : 0,
             longitude:
-              loaded == true ? tripData.tripDetail.to.coordinate[1] : 0,
+              loaded == true ? tripData.tripDetail.CandidateTripToLong : 0,
           }}></Marker>
 
         <MapView.Polyline

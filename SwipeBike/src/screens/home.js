@@ -19,8 +19,8 @@ export default function Home(props) {
   const [user, setUser] = useState({
     name: 'Vuong',
   });
-  //dummy data
 
+  //dummy data
   //dummy waitingTripList
   const [waitingTripList, setWaitingTripList] = useState([
     {
@@ -226,7 +226,7 @@ export default function Home(props) {
             justifyContent: 'space-between',
             alignItems: 'center',
             flexDirection: 'row',
-            marginBottom: 10,
+            marginBottom: RESPONSIVE.pixelSizeVertical(20),
           }}>
           <Text style={{...FONTS.h2Bold}}>Đang chờ</Text>
           <TouchableOpacity
@@ -275,7 +275,7 @@ export default function Home(props) {
             justifyContent: 'space-between',
             alignItems: 'center',
             flexDirection: 'row',
-            marginBottom: 10,
+            marginBottom: RESPONSIVE.pixelSizeVertical(20),
           }}>
           <Text style={{...FONTS.h2Bold}}>Gợi ý cho bạn</Text>
           <TouchableOpacity>

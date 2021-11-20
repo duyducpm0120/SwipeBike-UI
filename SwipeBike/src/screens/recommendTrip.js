@@ -1,8 +1,17 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, FlatList} from 'react-native';
-import {FONTS, STYLES, SIZES, RESPONSIVE} from '../constants';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  Image,
+  // Animated,
+} from 'react-native';
+import {FONTS, STYLES, SIZES, RESPONSIVE, ICONS, COLORS} from '../constants';
 import {BackgroundButton, Trip} from '../components';
 import {waitingTripDetail} from '../components';
+import Animated from 'react-native-reanimated';
+import BottomSheet from 'reanimated-bottom-sheet';
 
 export default function RecommendTrip(props) {
   //dummy recommendedTripList
@@ -25,15 +34,122 @@ export default function RecommendTrip(props) {
     },
   ]);
 
+  //vars for altering bottomsheet
+  const bottomSheetRef = React.createRef(null);
+  const fall = new Animated.Value(1);
+  //Chosen clicking trip
+  const [chosenTrip, setChosenTrip] = useState({});
+  //Create components inner bottomsheet
+  const renderInner = () => (
+    <View
+      style={{
+        backgroundColor: COLORS.backGroundColor,
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        paddingHorizontal: 10,
+      }}>
+      {/* //bar signal */}
+      <View
+        style={{
+          width: '100%',
+          height: 5,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginBottom: 10,
+        }}>
+        <View
+          style={{
+            width: 40,
+            height: '100%',
+            backgroundColor: COLORS.darkgray,
+            borderRadius: 100,
+          }}></View>
+      </View>
+      <TouchableOpacity
+        style={{marginVertical: 10}}
+        onPress={() => {
+          props.navigation.navigate('GoogleMapView', {trip: chosenTrip});
+        }}>
+        <BackgroundButton text="Xem trên bản đồ"></BackgroundButton>
+      </TouchableOpacity>
+      <TouchableOpacity style={{marginVertical: 10}} onPress={() => {}}>
+        <BackgroundButton text="Chấp nhận ghép đôi"></BackgroundButton>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          marginVertical: 10,
+          borderRadius: 10,
+          backgroundColor: COLORS.darkgray,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: RESPONSIVE.pixelSizeHorizontal(315),
+          height: RESPONSIVE.pixelSizeVertical(60),
+        }}
+        onPress={() => {
+          bottomSheetRef.current.snapTo(1);
+        }}>
+        <Text style={FONTS.h2Bold}>Từ chối ghép đôi</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          marginVertical: 10,
+          borderRadius: 10,
+          backgroundColor: COLORS.darkgray,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: RESPONSIVE.pixelSizeHorizontal(315),
+          height: RESPONSIVE.pixelSizeVertical(60),
+        }}
+        onPress={() => {
+          bottomSheetRef.current.snapTo(1);
+        }}>
+        <Text style={FONTS.h2Bold}>Hủy</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  //Open options for trip
+  function openTripOptions(tripDetail) {
+    bottomSheetRef.current.snapTo(0);
+  }
+  //Trip options bottomSheet
+  const tripOptionsBottomSheet = () => {
+    return (
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={['50%', RESPONSIVE.pixelSizeVertical(-50)]}
+        renderContent={renderInner}
+        initialSnap={1}
+        callbackNode={fall}
+        enabledGestureInteraction={true}
+        borderRadius={10}
+      />
+    );
+  };
+
   function renderHeader() {
     return (
       <View
         style={{
-          justifyContent: 'center',
+          justifyContent: 'space-between',
           alignItems: 'center',
+          flexDirection: 'row',
           width: '100%',
         }}>
+        <TouchableOpacity onPress={() => props.navigation.goBack()}>
+          <Image
+            source={ICONS.leftArr1}
+            style={{tintColor: COLORS.black, width: 30, height: 30}}></Image>
+        </TouchableOpacity>
         <Text style={{...FONTS.title}}>Gợi ý cho bạn</Text>
+        <TouchableOpacity>
+          <Image
+            source={ICONS.refresh}
+            style={{tintColor: COLORS.black, width: 30, height: 30}}></Image>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -43,34 +159,35 @@ export default function RecommendTrip(props) {
       return (
         <View
           style={{
-            marginHorizontal:
-              (SIZES.width - RESPONSIVE.pixelSizeHorizontal(350) - 40) / 2,
+            marginVertical: RESPONSIVE.pixelSizeVertical(10),
+            marginHorizontal: RESPONSIVE.pixelSizeHorizontal(5),
           }}
           key={trip.tripId}>
           <Trip
             tripDetail={trip.tripDetail}
             pressTrip={() => {
-              // openTripOptions(trip.tripDetail);
+              setChosenTrip(trip);
+              openTripOptions(trip.tripDetail);
             }}></Trip>
         </View>
       );
     };
     return (
-      <View
+      <Animated.View
         style={{
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'column',
           marginVertical: RESPONSIVE.pixelSizeVertical(20),
+          opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
         }}>
         <FlatList
           data={recommendedTripList}
           renderItem={({item}) => Item(item)}
           keyExtractor={item => item.tripId.toString()}
-          pagingEnabled={true}
           showsVerticalScrollIndicator={false}></FlatList>
-      </View>
+      </Animated.View>
     );
   }
 
@@ -81,6 +198,7 @@ export default function RecommendTrip(props) {
       }}>
       {renderHeader()}
       {renderRecommendedTrips()}
+      {tripOptionsBottomSheet()}
     </View>
   );
 }
