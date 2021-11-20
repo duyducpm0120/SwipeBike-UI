@@ -1,6 +1,11 @@
 import {
   saveTokenToLocalStorage,
   loadTokenFromLocalStorage,
-} from './localStorage';
+  removeTokenFromLocalStorage,
+} from './loginToken';
 
-export {saveTokenToLocalStorage, loadTokenFromLocalStorage};
+export {
+  saveTokenToLocalStorage,
+  loadTokenFromLocalStorage,
+  removeTokenFromLocalStorage,
+};

@@ -39,6 +39,7 @@ const saveTokenToLocalStorage = async token => {
 };
 
 const loadTokenFromLocalStorage = async () => {
+  let token = null;
   await localStorage
     .load({
       key: 'loginToken',
@@ -46,7 +47,7 @@ const loadTokenFromLocalStorage = async () => {
     .then(ret => {
       // found data goes to then()
       console.log('Local storage token:', ret.token);
-      return ret.token;
+      token = ret.token;
     })
     .catch(err => {
       // any exception including data not found
@@ -61,7 +62,17 @@ const loadTokenFromLocalStorage = async () => {
           break;
       }
     });
-  return null;
+  return token;
 };
 
-export {saveTokenToLocalStorage, loadTokenFromLocalStorage};
+const removeTokenFromLocalStorage = async () => {
+  await localStorage.remove({
+    key: 'loginToken',
+  });
+};
+
+export {
+  saveTokenToLocalStorage,
+  loadTokenFromLocalStorage,
+  removeTokenFromLocalStorage,
+};

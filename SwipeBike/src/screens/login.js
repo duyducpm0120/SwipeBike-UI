@@ -10,7 +10,11 @@ import {
 import {FONTS, SIZES, COLORS, PIXEL, ICONS, IMAGES, STYLES} from '../constants';
 import {BackgroundButton} from '../components';
 import {signUpApi, loginApi} from '../api';
-import {saveTokenToLocalStorage, loadTokenFromLocalStorage} from '../storage';
+import {
+  saveTokenToLocalStorage,
+  loadTokenFromLocalStorage,
+  removeTokenFromLocalStorage,
+} from '../storage';
 
 export default function Login(props) {
   const [showPassword, setShowPassword] = useState(false);
@@ -44,7 +48,8 @@ export default function Login(props) {
         //Saving token to localStorage
         saveTokenToLocalStorage(result.data.token).then(async () => {
           const token = await loadTokenFromLocalStorage();
-          console.log('load token:', token), console.log('token saved');
+          console.log('load token:', token);
+          console.log('token saved');
           props.navigation.navigate('UpdateProfile');
         });
         //Navigation
