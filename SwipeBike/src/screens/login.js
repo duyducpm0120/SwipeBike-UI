@@ -54,12 +54,15 @@ export default function Login(props) {
       .then(result => {
         //console.log(result.data);
         //Saving token to localStorage
-        saveTokenToLocalStorage(result.data.token).then(async () => {
-          const token = await loadTokenFromLocalStorage();
-          console.log('load token:', token);
-          console.log('token saved');
-          props.navigation.navigate('UpdateProfile');
-        });
+        removeTokenFromLocalStorage().then(()=>{
+          saveTokenToLocalStorage(result.data.token).then(async () => {
+            const token = await loadTokenFromLocalStorage();
+            //console.log('load token:', token);
+            console.log('token saved: ', token);
+            props.navigation.navigate('UpdateProfile');
+          });
+        })
+       
         //Navigation
       })
       .catch(err => {

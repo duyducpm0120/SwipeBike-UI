@@ -69,6 +69,7 @@ const removeTokenFromLocalStorage = async () => {
   await localStorage.remove({
     key: 'loginToken',
   });
+  console.log("token removed");
 };
 
 export {

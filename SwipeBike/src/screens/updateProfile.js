@@ -13,14 +13,20 @@ import {updateProfile} from '../redux/slices/profileSlice';
 //Handle moment
 import 'moment/locale/vi';
 
-import {updateProfilePic} from '../api';
+import {
+  updateProfilePic,
+  setupUserProfile,
+  loadUserProfile,
+  updateUserProfile,
+} from '../api';
 import {saveTokenToLocalStorage, loadTokenFromLocalStorage} from '../storage';
 
 export default function UpdateProfile (props) {
-  //dummy token
-  const token =
-    'eyJhbGciOiJSUzI1NiIsImtpZCI6IjJlMzZhMWNiZDBiMjE2NjYxOTViZGIxZGZhMDFiNGNkYjAwNzg3OWQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc3dpcGViaWtlLTM4NzM2IiwiYXVkIjoic3dpcGViaWtlLTM4NzM2IiwiYXV0aF90aW1lIjoxNjM3NDI1NzU1LCJ1c2VyX2lkIjoickI2MGF3b1lZOFhZSU5CNDhNbVhOYnpsOXNxMSIsInN1YiI6InJCNjBhd29ZWThYWUlOQjQ4TW1YTmJ6bDlzcTEiLCJpYXQiOjE2Mzc0MjU3NTUsImV4cCI6MTYzNzQyOTM1NSwiZW1haWwiOiJ2dW9uZy52bDAwQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJ2dW9uZy52bDAwQGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.IUWaH1wZVhBZg9CbLm7IwKtGo06xmILFlnTL_9OqROl3V_-BlrpYNyxRktl8NBdZjzIsRFcEpzU8mhTNUpsUj3jkDgix93wanZUsaS991Tj1w6OET6kemyqUu21SvrokAdCyotLJyhoUWIusGlGb3nudJ_pdSQgzHyO3CS06U4DEgycs1mN6lWVxdFG1MuXG-BchUHMLd05NrAOQVzZdvkXgYWkSSTDjiAoatCdmLPJGqj5Ue7krYVwVWlJpiGjMsqIMrjnGVLuURgnuK4fwr85rmNbJZEcrdwE30D5nZCdueldizsxce9KAe1GAOHIOzYMIdkIbhQ0NSkZ-3XXTTg';
-  useEffect (() => {});
+  const [token, setToken] = useState ();
+
+  useEffect (() => {
+    loadTokenFromLocalStorage ().then (res => setToken (res));
+  }, []);
   //Redux dispatch
   const dispatch = useDispatch ();
   //Redux userProfile Slice
@@ -144,13 +150,17 @@ export default function UpdateProfile (props) {
             uri: response.assets[0].uri,
           };
 
-          console.log("response, ", response);
-          updateProfilePic(response.assets[0], token).then(result=>{
-            console.log(result.data)
-          }).catch(err=>{
-            console.log(err)
-          });
-          
+          //  console.log("response, ", response);
+
+          console.log ('token to upload', token);
+          updateProfilePic (response.assets[0], token)
+            .then (result => {
+              console.log (result.data);
+            })
+            .catch (err => {
+              console.log (err);
+            });
+
           setImageUri (source);
           //console.log(source);
         }
@@ -185,6 +195,7 @@ export default function UpdateProfile (props) {
             response.assets[0].uri.substr (0, 5) +
             response.assets[0].uri.substr (6, response.assets[0].uri.length);
           //   console.log('source', source);
+
           updateProfilePic (newUri, token)
             .then (res => console.log (res))
             .catch (error => {
@@ -198,6 +209,43 @@ export default function UpdateProfile (props) {
       }
     );
   };
+
+  function finishUpdate () {
+    updateProfileOnServer ();
+    updateProfileSlice ().then (() => {
+      console.log ('user Inside Redux', userProfileInfo);
+      props.navigation.navigate ('Home');
+    });
+  }
+  //Update profile in redux
+  async function updateProfileSlice () {
+    const user = {
+      UserFullName: name,
+      UserGender: gender,
+      UserPhone: phone,
+      UserDoB: date.toDateString (),
+    };
+    dispatch (updateProfile (user));
+  }
+  //Update profile on server
+  function updateProfileOnServer () {
+    const user = {
+      UserFullName: name,
+      UserGender: gender,
+      UserPhone: phone,
+      UserDoB: date.toDateString (),
+      
+    };
+
+    console.log (user);
+    setupUserProfile (user, token)
+      .then (result => {
+        console.log ("update response from server", result.data);
+      })
+      .catch (error => {
+        console.log (error);
+      });
+  }
 
   function renderHeader () {
     return (
@@ -463,16 +511,6 @@ export default function UpdateProfile (props) {
     );
   }
 
-  async function updateProfileSlice () {
-    const user = {
-      UserFullName: name,
-      UserGender: gender,
-      UserPhone: phone,
-      UserDoB: date.toDateString (),
-    };
-    await dispatch (updateProfile (user));
-  }
-
   return (
     <View
       style={{
@@ -501,10 +539,7 @@ export default function UpdateProfile (props) {
             alignItems: 'center',
           }}
           onPress={() => {
-            updateProfileSlice ().then (() => {
-              console.log ('user Inside Redux', userProfileInfo);
-            });
-            props.navigation.navigate ('Home');
+            finishUpdate ();
           }}
         >
           <BackgroundButton text="Xong" />

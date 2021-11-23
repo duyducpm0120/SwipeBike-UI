@@ -6,10 +6,23 @@ export function createCandidateTrip (trip, token) {
       Authorization: `Bearer ${token}`,
     },
   });
-};
-
-export function getUserTrips(UserId){
-    return axios.get('http://10.0.2.2:3001/candidatetrip/getbycreator/' + UserId);
 }
 
-export default{createCandidateTrip}
+export function getUserTrips (UserId) {
+  return axios.get (
+    'http://10.0.2.2:3001/candidatetrip/getbycreator/' + UserId
+  );
+}
+
+export const getCandidateTripRecommendations = (tripId, token) => {
+  return axios.get (
+    'http://10.0.2.2:3001/candidatetrip/recommendation/' + tripId,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export default {createCandidateTrip};

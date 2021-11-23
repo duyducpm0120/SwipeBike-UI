@@ -14,8 +14,8 @@ import messaging from '@react-native-firebase/messaging';
 import axios from 'axios';
 //Ignore Reanimated 2 WARNING
 import {LogBox} from 'react-native';
-LogBox.ignoreLogs(['Reanimated 2']);
-LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop.']);
+LogBox.ignoreLogs (['Reanimated 2']);
+LogBox.ignoreLogs (['Each child in a list should have a unique "key" prop.']);
 
 import {
   Splash,
@@ -33,76 +33,83 @@ import {STYLES} from './src/constants';
 import {Waiting} from './src/components';
 import BottomTabs from './src/navigations/bottomTabs';
 import {loadTokenFromLocalStorage} from '../SwipeBike/src/storage';
-const Stack = createStackNavigator();
+const Stack = createStackNavigator ();
 const App = () => {
+  const [token, setToken] = useState ();
+  const [isLoading, setIsLoading] = useState (true);
+ 
   //FCM Token Registration
   const sendFcmToken = async () => {
-    await messaging().registerDeviceForRemoteMessages();
-    const token = await messaging()
-      .getToken()
-      .catch(err => {
-        console.log(err);
-      });
-    console.log('Firebase token ', token);
+    await messaging ().registerDeviceForRemoteMessages ();
+    const token = await messaging ().getToken ().catch (err => {
+      console.log (err);
+    });
+    console.log ('Firebase token ', token);
     axios
-      .post('http://10.0.2.2:3001/notification/register', {token})
-      .then(result => {
+      .post ('http://10.0.2.2:3001/notification/register', {token})
+      .then (result => {
         //console.log(result);
       });
   };
 
-  useEffect(() => {
-    sendFcmToken();
+  useEffect (() => {
+    loadTokenFromLocalStorage ().then (res => setToken (res))}, []);
+  useEffect (() => {
+    sendFcmToken ();
   }, []);
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    // const fetchData = async () => {
-    //   console.log('begin');
-    //   await Promise.all([dispatch(fetchSearch()), dispatch(fetchFind())])
-    //     .catch(err => console.log(err))
-    //     .finally(() => {
-    //       setIsLoading(false);
-    //       console.log('finally' + isLoading);
-    //     });
-    // };
-    // fetchData();
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-  }, [isLoading]);
-  return isLoading ? (
-    <View
-      style={{
-        ...STYLES.container,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <Waiting />
-    </View>
-  ) : (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-        initialRouteName={'UpdateProfile'}>
-        <Stack.Screen name="Splash" component={Splash} />
-        <Stack.Screen name="Home" component={BottomTabs} />
-        <Stack.Screen name="SignUp" component={SignUp} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-        <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
-        <Stack.Screen name="TripsScreen" component={TripsScreen} />
-        <Stack.Screen name="GoogleMapView" component={GoogleMapView} />
-        <Stack.Screen name="CreateTrip" component={CreateTrip} />
-        <Stack.Screen name="TripInfo" component={TripInfo} />
-        <Stack.Screen name="RecommendTrip" component={RecommendTrip} />
-      </Stack.Navigator>
-    </NavigationContainer>
+
+  useEffect (
+    () => {
+      // const fetchData = async () => {
+      //   console.log('begin');
+      //   await Promise.all([dispatch(fetchSearch()), dispatch(fetchFind())])
+      //     .catch(err => console.log(err))
+      //     .finally(() => {
+      //       setIsLoading(false);
+      //       console.log('finally' + isLoading);
+      //     });
+      // };
+      // fetchData();
+      setTimeout (() => {
+        setIsLoading (false);
+      }, 3000);
+    },
+    [isLoading]
   );
+
+  return isLoading
+    ? <View
+        style={{
+          ...STYLES.container,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Waiting />
+      </View>
+    : <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+          initialRouteName={'Home'}
+        >
+          <Stack.Screen name="Splash" component={Splash} />
+          <Stack.Screen name="Home" component={BottomTabs} />
+          <Stack.Screen name="SignUp" component={SignUp} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+          <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+          <Stack.Screen name="TripsScreen" component={TripsScreen} />
+          <Stack.Screen name="GoogleMapView" component={GoogleMapView} />
+          <Stack.Screen name="CreateTrip" component={CreateTrip} />
+          <Stack.Screen name="TripInfo" component={TripInfo} />
+          <Stack.Screen name="RecommendTrip" component={RecommendTrip} />
+        </Stack.Navigator>
+      </NavigationContainer>;
 };
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create ({
   container: {
     flex: 1,
   },
