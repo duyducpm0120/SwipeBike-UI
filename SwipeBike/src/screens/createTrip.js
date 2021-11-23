@@ -168,6 +168,8 @@ export default function CreateTrip(props) {
     const driver = isDriver ? userInfo : null;
     const passenger = !isDriver ? userInfo : null;
     const trip = {
+      CandidateTripDriver: isDriver ? userInfo : null,
+      CandidateTripPassenger: !isDriver ? userInfo : null,
       CandidateTripDateTime: dateTime.toString(),
       CandidateTripFromAddress: fromSearchTextRef.current.getAddressText(),
       CandidateTripToAddress: toSearchTextRef.current.getAddressText(),
@@ -178,8 +180,8 @@ export default function CreateTrip(props) {
       CandidateTripBike: isDriver,
       CandidateTripMessage: null,
     };
-    console.log(trip);
-    console.log('token', token);
+    //console.log(trip);
+    //console.log('token', token);
     //Call API here
     createCandidateTrip(trip, token)
       .then(res => {
@@ -189,7 +191,7 @@ export default function CreateTrip(props) {
         console.log(error);
       });
 
-    //props.navigation.navigate('TripInfo', {trip: trip});
+    props.navigation.navigate('TripInfo', {trip: trip});
   }
   const chooseDriver = (
     <View
@@ -542,8 +544,8 @@ export default function CreateTrip(props) {
         region={{
           latitude: currentLocation.latitude,
           longitude: currentLocation.longitude,
-          latitudeDelta: 0.015,
-          longitudeDelta: 0.0121,
+          latitudeDelta: 0.03,
+          longitudeDelta: 0.03,
         }}
         showsUserLocation={true}
         followsUserLocation={true}

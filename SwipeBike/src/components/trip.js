@@ -30,7 +30,6 @@ export default function Trip(props) {
 
   function renderImage() {
     return (
-      // driver field
       <View
         style={{
           justifyContent: 'center',
@@ -38,8 +37,10 @@ export default function Trip(props) {
           flexDirection: 'row',
           width: '100%',
         }}>
+        {/* // driver field */}
         <View
           style={{
+            width: '45%',
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'column',
@@ -66,7 +67,6 @@ export default function Trip(props) {
             {tripDetail.CandidateTripDriver.name}
           </Text>
         </View>
-
         {/* Divider */}
         {tripDetail.CandidateTripPassenger != null ? (
           <View
@@ -79,13 +79,12 @@ export default function Trip(props) {
         ) : (
           <View></View>
         )}
-
         {/* passenger field */}
         {tripDetail.CandidateTripPassenger != null ? (
           <View
             style={{
               width: '45%',
-              height: '100%',
+              // height: '100%',
               justifyContent: 'center',
               alignItems: 'center',
               flexDirection: 'column',
