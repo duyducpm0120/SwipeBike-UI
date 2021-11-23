@@ -120,7 +120,11 @@ export default function TripsScreen(props) {
   ]);
 
   //trip types
-  const tripTypes = ['Đang chờ', 'Đang ghép đôi', 'Lịch sử'];
+  const tripTypes = [
+    {name: 'Đang chờ', imgUrl: ICONS.waiting},
+    {name: 'Đang ghép đôi', imgUrl: ICONS.friend},
+    {name: 'Lịch sử', imgUrl: ICONS.history},
+  ];
   //var for controlling trip type displaying
   const [tripTypeControl, setTripTypeControl] = useState('Đang chờ');
   //var for controlling displaying trip List
@@ -238,32 +242,43 @@ export default function TripsScreen(props) {
           return (
             <TouchableOpacity
               style={{
-                paddingHorizontal: 20,
+                paddingHorizontal: RESPONSIVE.widthPixel(20),
                 paddingVertical: 5,
-                margin: 10,
+                margin: 5,
                 borderRadius: 50,
                 backgroundColor:
-                  tripType == tripTypeControl
+                  tripType.name == tripTypeControl
                     ? COLORS.primaryLighter1
                     : 'transparent',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
               onPress={() => {
-                setTripTypeControl(tripType);
-                if (tripType == 'Đang chờ')
+                setTripTypeControl(tripType.name);
+                if (tripType.name == 'Đang chờ')
                   setDisplayingTripList(waitingTripList);
-                else if (tripType == 'Đang ghép đôi')
+                else if (tripType.name == 'Đang ghép đôi')
                   setDisplayingTripList(pairingTripList);
                 else setDisplayingTripList(historyTripList);
               }}>
+              <Image
+                source={tripType.imgUrl}
+                style={{
+                  width: RESPONSIVE.widthPixel(24),
+                  height: RESPONSIVE.heightPixel(24),
+                  marginRight: 10,
+                  tintColor: COLORS.black,
+                }}></Image>
               <Text
                 style={{
-                  ...FONTS.h2,
+                  ...FONTS.h2Bold,
                   color:
                     tripType == tripTypeControl
                       ? COLORS.primaryDarker1
                       : COLORS.black,
                 }}>
-                {tripType}
+                {tripType.name}
               </Text>
             </TouchableOpacity>
           );

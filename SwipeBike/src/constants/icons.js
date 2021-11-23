@@ -36,6 +36,8 @@ export const leftArr1 = require('../assets/icons/Light/left1.png');
 export const leftArr2 = require('../assets/icons/Light/left2.png');
 export const dot2 = require('../assets/icons/Light/dot2.png');
 export const refresh = require('../assets/icons/Light/refresh.png');
+export const waiting = require('../assets/icons/Light/waiting.png');
+export const history = require('../assets/icons/Light/history.png');
 
 export default {
   cameraBold,
@@ -78,4 +80,6 @@ export default {
   leftArr2,
   dot2,
   refresh,
+  waiting,
+  history,
 };

@@ -198,22 +198,53 @@ export default function Home(props) {
           flexDirection: 'column',
           marginVertical: 20,
           width: SIZES.width - 40,
+
           //width: '100%', //width size bug but I don't know why
         }}>
-        <Image source={IMAGES.cuteDriver}></Image>
-        <TouchableOpacity
+        <View
           style={{
-            width: '100%',
-            height: 50,
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             alignItems: 'center',
-            backgroundColor: COLORS.primaryLighter1,
-            borderRadius: 10,
-            marginTop: 10,
-          }}
-          onPress={() => props.navigation.navigate('CreateTrip')}>
-          <Text style={FONTS.h3Bold}>Tạo chuyến đi mới</Text>
-        </TouchableOpacity>
+            flexDirection: 'row',
+            width: '100%',
+            marginBottom: RESPONSIVE.pixelSizeVertical(20),
+          }}>
+          <Text style={{...FONTS.h2Bold}}>Tạo chuyến đi của bạn</Text>
+        </View>
+        <View
+          style={{
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            flexDirection: 'row',
+            width: '90%',
+            //marginBottom: RESPONSIVE.pixelSizeVertical(20),
+          }}>
+          <Image
+            source={IMAGES.cuteDriver}
+            style={{
+              width: RESPONSIVE.pixelSizeHorizontal(150),
+              height: RESPONSIVE.pixelSizeVertical(125),
+            }}></Image>
+          <TouchableOpacity
+            style={{
+              width: RESPONSIVE.pixelSizeHorizontal(140),
+              height: RESPONSIVE.pixelSizeVertical(50),
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              flexDirection: 'row',
+              paddingHorizontal: RESPONSIVE.pixelSizeHorizontal(10),
+              backgroundColor: COLORS.primaryLighter1,
+              borderRadius: 50,
+              marginTop: 10,
+              ...STYLES.shadow,
+            }}
+            onPress={() => props.navigation.navigate('CreateTrip')}>
+            <Text style={FONTS.h3Bold}>Tạo ngay</Text>
+            <Image
+              source={ICONS.rightArr2}
+              style={{tintColor: COLORS.black}}></Image>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -267,56 +298,6 @@ export default function Home(props) {
     );
   }
 
-  function renderRecommendedTrip() {
-    return (
-      <View style={{marginTop: 20, height: 400}}>
-        <View
-          style={{
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexDirection: 'row',
-            marginBottom: RESPONSIVE.pixelSizeVertical(20),
-          }}>
-          <Text style={{...FONTS.h2Bold}}>Gợi ý cho bạn</Text>
-          <TouchableOpacity>
-            <Text
-              style={{
-                ...FONTS.h3,
-                color: COLORS.primary,
-                textDecorationLine: 'underline',
-              }}
-              onPress={() => props.navigation.navigate('RecommendTrip')}>
-              Xem thêm
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          scrollEventThrottle={1}>
-          {recommendedTripList.map(trip => {
-            return (
-              <View
-                style={{
-                  marginHorizontal:
-                    (SIZES.width - RESPONSIVE.pixelSizeHorizontal(350) - 40) /
-                    2,
-                }}
-                key={trip.tripId}>
-                <Trip
-                  tripDetail={trip.tripDetail}
-                  pressTrip={() => {
-                    openTripOptions(trip.tripDetail);
-                  }}></Trip>
-              </View>
-            );
-          })}
-        </ScrollView>
-      </View>
-    );
-  }
-
   return (
     <View
       style={{
@@ -334,7 +315,7 @@ export default function Home(props) {
         {renderHeader()}
         {renderCreateTrip()}
         {renderWaitingTripList()}
-        {renderRecommendedTrip()}
+        {/* {renderRecommendedTrip()} */}
       </Animated.ScrollView>
       {tripOptionsBottomSheet()}
     </View>
