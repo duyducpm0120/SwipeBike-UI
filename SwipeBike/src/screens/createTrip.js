@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useReducer} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -27,12 +27,13 @@ import {MAPS_API_KEY} from '../../key';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {createCandidateTrip} from '../api';
 import {loadTokenFromLocalStorage} from '../storage';
+import {useSelector} from 'react-redux';
 //For places search
 navigator.geolocation = require('react-native-geolocation-service');
 
 export default function CreateTrip(props) {
   //Local token
-  const token = useReducer(state => state.loginToken);
+  const token = useSelector(state => state.loginToken.token);
   //Dummy user info
   const userInfo = {
     name: 'Vuong',
@@ -165,11 +166,9 @@ export default function CreateTrip(props) {
       ]);
       return;
     }
-    const driver = isDriver ? userInfo : null;
-    const passenger = !isDriver ? userInfo : null;
+
     const trip = {
-      CandidateTripDriver: isDriver ? userInfo : null,
-      CandidateTripPassenger: !isDriver ? userInfo : null,
+      CreatorId: 8,
       CandidateTripDateTime: dateTime.toString(),
       CandidateTripFromAddress: fromSearchTextRef.current.getAddressText(),
       CandidateTripToAddress: toSearchTextRef.current.getAddressText(),
@@ -180,8 +179,10 @@ export default function CreateTrip(props) {
       CandidateTripBike: isDriver,
       CandidateTripMessage: null,
     };
-    //console.log(trip);
+
+    console.log(trip);
     //console.log('token', token);
+
     //Call API here
     createCandidateTrip(trip, token)
       .then(res => {
@@ -191,7 +192,7 @@ export default function CreateTrip(props) {
         console.log(error);
       });
 
-    props.navigation.navigate('TripInfo', {trip: trip});
+    // props.navigation.navigate('TripInfo', {trip: trip});
   }
   const chooseDriver = (
     <View
@@ -442,7 +443,7 @@ export default function CreateTrip(props) {
         fetchDetails={true}
         placeholder="Tìm điểm xuất phát"
         onPress={(data, details = null) => {
-          console.log(data, details);
+          // console.log(data, details);
           fromSearchTextRef.current.setAddressText(
             data.structured_formatting.main_text,
           );
@@ -728,7 +729,10 @@ export default function CreateTrip(props) {
             width: RESPONSIVE.pixelSizeHorizontal(315),
             height: RESPONSIVE.pixelSizeVertical(60),
           }}
-          onPress={() => createNewTrip()}>
+          onPress={() => {
+            createNewTrip();
+            console.log(token);
+          }}>
           <Text style={FONTS.h2Bold}>Tạo chuyến đi</Text>
         </TouchableOpacity>
       </View>

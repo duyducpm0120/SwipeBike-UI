@@ -13,13 +13,13 @@ import {Trip, BackgroundButton, waitingTripDetail} from '../components';
 
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
+import {useSelector} from 'react-redux';
 
 export default function Home(props) {
   //the user
-  const [user, setUser] = useState({
-    name: 'Vuong',
-  });
+  const [user, setUser] = useState({});
 
+  const userProfile = useSelector(state => state.userProfile.userProfile);
   //dummy data
   //dummy waitingTripList
   const [waitingTripList, setWaitingTripList] = useState([
@@ -261,7 +261,10 @@ export default function Home(props) {
           }}>
           <Text style={{...FONTS.h2Bold}}>Đang chờ</Text>
           <TouchableOpacity
-            onPress={() => props.navigation.jumpTo('TripsScreen')}>
+            onPress={() => {
+              console.log(userProfile);
+              //props.navigation.jumpTo('TripsScreen');
+            }}>
             <Text
               style={{
                 ...FONTS.h3,

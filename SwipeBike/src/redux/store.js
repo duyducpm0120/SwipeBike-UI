@@ -4,7 +4,7 @@ import loginTokenReducer from './slices/loginTokenSlice';
 export default configureStore({
   reducer: {
     userProfile: profileReducer,
-    token: loginTokenReducer,
+    loginToken: loginTokenReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

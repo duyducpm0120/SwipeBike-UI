@@ -16,7 +16,6 @@ import axios from 'axios';
 import {LogBox} from 'react-native';
 LogBox.ignoreLogs(['Reanimated 2']);
 LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop.']);
-
 import {
   Splash,
   SignUp,
@@ -35,6 +34,7 @@ import BottomTabs from './src/navigations/bottomTabs';
 import {loadTokenFromLocalStorage} from '../SwipeBike/src/storage';
 import {useDispatch} from 'react-redux';
 import {updateToken} from './src/redux/slices/loginTokenSlice';
+import {fetchProfile} from './src/redux/slices/profileSlice';
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -65,25 +65,31 @@ const App = () => {
       dispatch(updateToken(res));
     });
   }, []);
+
+  ///FCM token
   useEffect(() => {
     sendFcmToken();
   }, []);
 
+  ///Fetch Redux data
   useEffect(() => {
-    // const fetchData = async () => {
-    //   console.log('begin');
-    //   await Promise.all([dispatch(fetchSearch()), dispatch(fetchFind())])
-    //     .catch(err => console.log(err))
-    //     .finally(() => {
-    //       setIsLoading(false);
-    //       console.log('finally' + isLoading);
-    //     });
-    // };
-    // fetchData();
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-  }, [isLoading]);
+    if (token) {
+      const fetchData = async () => {
+        console.log('begin');
+        await Promise.all([dispatch(fetchProfile(token))])
+          .then(res => console.log(res))
+          .catch(err => console.log(err))
+          .finally(() => {
+            setIsLoading(false);
+            console.log('finally' + isLoading);
+          });
+      };
+      fetchData();
+    }
+    // setTimeout(() => {
+    //   setIsLoading(false);
+    // }, 3000);
+  }, [token]);
 
   return isLoading ? (
     <View
