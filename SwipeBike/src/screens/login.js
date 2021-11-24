@@ -24,7 +24,13 @@ import {
   removeTokenFromLocalStorage,
 } from '../storage';
 
+//Redux
+import {useDispatch} from 'react-redux';
+import {updateToken} from '../redux/slices/loginTokenSlice';
+
 export default function Login(props) {
+  const dispatch = useDispatch();
+
   const [showPassword, setShowPassword] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
@@ -54,15 +60,16 @@ export default function Login(props) {
       .then(result => {
         //console.log(result.data);
         //Saving token to localStorage
-        removeTokenFromLocalStorage().then(()=>{
+        removeTokenFromLocalStorage().then(() => {
           saveTokenToLocalStorage(result.data.token).then(async () => {
             const token = await loadTokenFromLocalStorage();
             //console.log('load token:', token);
             console.log('token saved: ', token);
+            dispatch(updateToken(result.data.token));
             props.navigation.navigate('UpdateProfile');
           });
-        })
-       
+        });
+
         //Navigation
       })
       .catch(err => {

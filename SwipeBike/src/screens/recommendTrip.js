@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useReducer} from 'react';
 import {
   View,
   Text,
@@ -15,10 +15,10 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import {getCandidateTripRecommendations, getUserTrips} from '../api';
 import {loadTokenFromLocalStorage} from '../storage';
 
-export default function RecommendTrip (props) {
-  const [token, setToken] = useState ();
+export default function RecommendTrip(props) {
+  const [token, setToken] = useReducer(state => state.loginToken);
   //dummy recommendedTripList
-  const [recommendedTripList, setRecommendedTripList] = useState ([
+  const [recommendedTripList, setRecommendedTripList] = useState([
     {
       tripId: 0,
       tripDetail: waitingTripDetail,
@@ -37,13 +37,13 @@ export default function RecommendTrip (props) {
     },
   ]);
   // trip to recommend
-  const [currentTrip, setCurrentTrip] = useState ();
+  const [currentTrip, setCurrentTrip] = useState();
 
   //vars for altering bottomsheet
-  const bottomSheetRef = React.createRef (null);
-  const fall = new Animated.Value (1);
+  const bottomSheetRef = React.createRef(null);
+  const fall = new Animated.Value(1);
   //Chosen clicking trip
-  const [chosenTrip, setChosenTrip] = useState ({});
+  const [chosenTrip, setChosenTrip] = useState({});
   //Create components inner bottomsheet
   const renderInner = () => (
     <View
@@ -55,8 +55,7 @@ export default function RecommendTrip (props) {
         alignItems: 'center',
         flexDirection: 'column',
         paddingHorizontal: 10,
-      }}
-    >
+      }}>
       {/* //bar signal */}
       <View
         style={{
@@ -65,8 +64,7 @@ export default function RecommendTrip (props) {
           justifyContent: 'center',
           alignItems: 'center',
           marginBottom: 10,
-        }}
-      >
+        }}>
         <View
           style={{
             width: 40,
@@ -79,9 +77,8 @@ export default function RecommendTrip (props) {
       <TouchableOpacity
         style={{marginVertical: 10}}
         onPress={() => {
-          props.navigation.navigate ('GoogleMapView', {trip: chosenTrip});
-        }}
-      >
+          props.navigation.navigate('GoogleMapView', {trip: chosenTrip});
+        }}>
         <BackgroundButton text="Xem trên bản đồ" />
       </TouchableOpacity>
       <TouchableOpacity style={{marginVertical: 10}} onPress={() => {}}>
@@ -94,13 +91,12 @@ export default function RecommendTrip (props) {
           backgroundColor: COLORS.darkgray,
           justifyContent: 'center',
           alignItems: 'center',
-          width: RESPONSIVE.pixelSizeHorizontal (315),
-          height: RESPONSIVE.pixelSizeVertical (60),
+          width: RESPONSIVE.pixelSizeHorizontal(315),
+          height: RESPONSIVE.pixelSizeVertical(60),
         }}
         onPress={() => {
-          bottomSheetRef.current.snapTo (1);
-        }}
-      >
+          bottomSheetRef.current.snapTo(1);
+        }}>
         <Text style={FONTS.h2Bold}>Từ chối ghép đôi</Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -110,28 +106,27 @@ export default function RecommendTrip (props) {
           backgroundColor: COLORS.darkgray,
           justifyContent: 'center',
           alignItems: 'center',
-          width: RESPONSIVE.pixelSizeHorizontal (315),
-          height: RESPONSIVE.pixelSizeVertical (60),
+          width: RESPONSIVE.pixelSizeHorizontal(315),
+          height: RESPONSIVE.pixelSizeVertical(60),
         }}
         onPress={() => {
-          bottomSheetRef.current.snapTo (1);
-        }}
-      >
+          bottomSheetRef.current.snapTo(1);
+        }}>
         <Text style={FONTS.h2Bold}>Hủy</Text>
       </TouchableOpacity>
     </View>
   );
 
   //Open options for trip
-  function openTripOptions (tripDetail) {
-    bottomSheetRef.current.snapTo (0);
+  function openTripOptions(tripDetail) {
+    bottomSheetRef.current.snapTo(0);
   }
   //Trip options bottomSheet
   const tripOptionsBottomSheet = () => {
     return (
       <BottomSheet
         ref={bottomSheetRef}
-        snapPoints={['50%', RESPONSIVE.pixelSizeVertical (-50)]}
+        snapPoints={['50%', RESPONSIVE.pixelSizeVertical(-50)]}
         renderContent={renderInner}
         initialSnap={1}
         callbackNode={fall}
@@ -141,7 +136,7 @@ export default function RecommendTrip (props) {
     );
   };
 
-  function renderHeader () {
+  function renderHeader() {
     return (
       <View
         style={{
@@ -149,9 +144,8 @@ export default function RecommendTrip (props) {
           alignItems: 'center',
           flexDirection: 'row',
           width: '100%',
-        }}
-      >
-        <TouchableOpacity onPress={() => props.navigation.goBack ()}>
+        }}>
+        <TouchableOpacity onPress={() => props.navigation.goBack()}>
           <Image
             source={ICONS.leftArr1}
             style={{tintColor: COLORS.black, width: 30, height: 30}}
@@ -168,21 +162,20 @@ export default function RecommendTrip (props) {
     );
   }
 
-  function renderRecommendedTrips () {
+  function renderRecommendedTrips() {
     const Item = trip => {
       return (
         <View
           style={{
-            marginVertical: RESPONSIVE.pixelSizeVertical (10),
-            marginHorizontal: RESPONSIVE.pixelSizeHorizontal (5),
+            marginVertical: RESPONSIVE.pixelSizeVertical(10),
+            marginHorizontal: RESPONSIVE.pixelSizeHorizontal(5),
           }}
-          key={trip.tripId}
-        >
+          key={trip.tripId}>
           <Trip
             tripDetail={trip.tripDetail}
             pressTrip={() => {
-              setChosenTrip (trip);
-              openTripOptions (trip.tripDetail);
+              setChosenTrip(trip);
+              openTripOptions(trip.tripDetail);
             }}
           />
         </View>
@@ -195,48 +188,40 @@ export default function RecommendTrip (props) {
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'column',
-          marginVertical: RESPONSIVE.pixelSizeVertical (20),
-          opacity: Animated.add (0.3, Animated.multiply (fall, 1.0)),
-        }}
-      >
+          marginVertical: RESPONSIVE.pixelSizeVertical(20),
+          opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
+        }}>
         <FlatList
           data={recommendedTripList}
-          renderItem={({item}) => Item (item)}
-          keyExtractor={item => item.tripId.toString ()}
+          renderItem={({item}) => Item(item)}
+          keyExtractor={item => item.tripId.toString()}
           showsVerticalScrollIndicator={false}
         />
       </Animated.View>
     );
   }
 
-  useEffect (() => {
-    loadTokenFromLocalStorage ().then (res => setToken (res.data));
-  }, []);
-  useEffect (() => {
-    setCurrentTrip (props.route.params.trip);
+  useEffect(() => {
+    setCurrentTrip(props.route.params.trip);
   }, []);
 
   // fetch trips here
-  useEffect (
-    () => {
-      if (token) {
-        getCandidateTripRecommendations (9, token)
-          .then (res => console.log (res))
-          .catch (err => console.log (err));
-      }
-    },
-    [token]
-  );
+  useEffect(() => {
+    if (token) {
+      getCandidateTripRecommendations(9, token)
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+    }
+  }, [token]);
 
   return (
     <View
       style={{
         ...STYLES.container,
-      }}
-    >
-      {renderHeader ()}
-      {renderRecommendedTrips ()}
-      {tripOptionsBottomSheet ()}
+      }}>
+      {renderHeader()}
+      {renderRecommendedTrips()}
+      {tripOptionsBottomSheet()}
     </View>
   );
 }

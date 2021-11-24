@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useReducer} from 'react';
 import {
   View,
   Text,
@@ -32,7 +32,7 @@ navigator.geolocation = require('react-native-geolocation-service');
 
 export default function CreateTrip(props) {
   //Local token
-  const token = loadTokenFromLocalStorage();
+  const token = useReducer(state => state.loginToken);
   //Dummy user info
   const userInfo = {
     name: 'Vuong',

@@ -18,12 +18,53 @@ import {
 } from '../constants';
 import {BackgroundButton} from '../components';
 import {signUpApi, loginApi} from '../api';
+import {Button, Snackbar} from 'react-native-paper';
 
 export default function SignUp(props) {
   const [showPassword, setShowPassword] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
+
+  //Snackbar field
+  const [snackBarVisible, setSnackBarVisible] = React.useState(false);
+  const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible);
+  const onDismissSnackBar = () => setSnackBarVisible(false);
+
+  function SignUp() {
+    //validate inputs
+    if (!ValidateEmail(userEmail)) {
+      console.log('invalid email');
+      Alert.alert('Email không hợp lệ', '', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+      return;
+    }
+    if (!ValidatePassword(userPassword)) {
+      console.log('invalid password');
+      //Mật khẩu có 7 đến 16 ký tự chỉ chứa các ký tự, chữ số, dấu gạch dưới và ký tự đầu tiên phải là một chữ cái
+      Alert.alert(
+        'Mật khẩu không hợp lệ',
+        'Mật khẩu có 7 đến 16 ký tự chỉ chứa các ký tự, chữ số, dấu gạch dưới và ký tự đầu tiên phải là một chữ cái',
+        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+      );
+      return;
+    }
+    if (userPassword != repeatPassword) {
+      console.log('invalid repeat password');
+      Alert.alert('Nhập lại mật khẩu không khớp', '', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+      return;
+    }
+    //signUp
+    signUpApi(userEmail, userPassword)
+      .catch(err => console.log(err))
+      .then(result => {
+        console.log(result.data);
+        onToggleSnackBar();
+      });
+  }
   function ValidateEmail(email) {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       return true;
@@ -217,40 +258,23 @@ export default function SignUp(props) {
           marginTop: RESPONSIVE.pixelSizeVertical(630),
         }}
         onPress={() => {
-          //validate inputs
-          if (!ValidateEmail(userEmail)) {
-            console.log('invalid email');
-            Alert.alert('Email không hợp lệ', '', [
-              {text: 'OK', onPress: () => console.log('OK Pressed')},
-            ]);
-            return;
-          }
-          if (!ValidatePassword(userPassword)) {
-            console.log('invalid password');
-            //Mật khẩu có 7 đến 16 ký tự chỉ chứa các ký tự, chữ số, dấu gạch dưới và ký tự đầu tiên phải là một chữ cái
-            Alert.alert(
-              'Mật khẩu không hợp lệ',
-              'Mật khẩu có 7 đến 16 ký tự chỉ chứa các ký tự, chữ số, dấu gạch dưới và ký tự đầu tiên phải là một chữ cái',
-              [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-            );
-            return;
-          }
-          if (userPassword != repeatPassword) {
-            console.log('invalid repeat password');
-            Alert.alert('Nhập lại mật khẩu không khớp', '', [
-              {text: 'OK', onPress: () => console.log('OK Pressed')},
-            ]);
-            return;
-          }
-          //signUp
-          signUpApi(userEmail, userPassword)
-            .catch(err => console.log(err))
-            .then(result => {
-              console.log(result.data);
-            });
+          SignUp();
         }}>
         <BackgroundButton text="Đăng ký"></BackgroundButton>
       </TouchableOpacity>
+      <Snackbar
+        visible={snackBarVisible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: 'OK',
+          onPress: () => {
+            // Do something
+            onDismissSnackBar();
+            props.navigation.navigate('Login');
+          },
+        }}>
+        Đăng ký thành công
+      </Snackbar>
     </View>
   );
 }
