@@ -9,6 +9,7 @@ import GoogleMapView from './googleMapView';
 import CreateTrip from './createTrip';
 import TripInfo from './tripInfo';
 import RecommendTrip from './recommendTrip';
+import Profile from './profile';
 
 export {
   Splash,
@@ -22,4 +23,5 @@ export {
   CreateTrip,
   TripInfo,
   RecommendTrip,
+  Profile,
 };

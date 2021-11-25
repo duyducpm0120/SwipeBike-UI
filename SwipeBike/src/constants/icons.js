@@ -38,6 +38,7 @@ export const dot2 = require('../assets/icons/Light/dot2.png');
 export const refresh = require('../assets/icons/Light/refresh.png');
 export const waiting = require('../assets/icons/Light/waiting.png');
 export const history = require('../assets/icons/Light/history.png');
+export const setting = require('../assets/icons/Light/setting.png');
 
 export default {
   cameraBold,
@@ -82,4 +83,5 @@ export default {
   refresh,
   waiting,
   history,
+  setting,
 };

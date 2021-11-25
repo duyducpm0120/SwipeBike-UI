@@ -27,6 +27,7 @@ import {
   CreateTrip,
   TripInfo,
   RecommendTrip,
+  Profile,
 } from './src/screens';
 import {STYLES} from './src/constants';
 import {Waiting} from './src/components';
@@ -102,7 +103,7 @@ const App = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={token ? 'Home' : 'Login'}>
+        initialRouteName={'Login'}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Home" component={BottomTabs} />
         <Stack.Screen name="SignUp" component={SignUp} />
@@ -114,6 +115,7 @@ const App = () => {
         <Stack.Screen name="CreateTrip" component={CreateTrip} />
         <Stack.Screen name="TripInfo" component={TripInfo} />
         <Stack.Screen name="RecommendTrip" component={RecommendTrip} />
+        <Stack.Screen name="Profile" component={Profile} />
       </Stack.Navigator>
     </NavigationContainer>
   );

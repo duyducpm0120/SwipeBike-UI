@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 import {FONTS, SIZES, COLORS, RESPONSIVE, ICONS, IMAGES} from '../constants';
 import {BackgroundButton, RoundedImage, getVietnameseDate} from '../components';
@@ -9,43 +9,35 @@ import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 //redux Field
 import {useSelector, useDispatch} from 'react-redux';
-import {updateProfile} from '../redux/slices/profileSlice';
+import {fetchProfile} from '../redux/slices/profileSlice';
 //Handle moment
 import 'moment/locale/vi';
 
-import {
-  updateProfilePic,
-  setupUserProfile,
-  loadUserProfile,
-  updateUserProfile,
-} from '../api';
-import {saveTokenToLocalStorage, loadTokenFromLocalStorage} from '../storage';
+import {updateProfilePic, setupUserProfile} from '../api';
 
-export default function UpdateProfile (props) {
-  const [token, setToken] = useState ();
-
-  useEffect (() => {
-    loadTokenFromLocalStorage ().then (res => setToken (res));
-  }, []);
-  //Redux dispatch
-  const dispatch = useDispatch ();
+export default function UpdateProfile(props) {
+  const token = useSelector(state => state.loginToken.token);
   //Redux userProfile Slice
-  const userProfileInfo = useSelector (state => state.userProfile);
+  const userProfile = useSelector(state => state.userProfile.userProfile);
+
+  //Redux dispatch
+  const dispatch = useDispatch();
+
   //User info
-  const [name, setName] = useState ('');
-  const [gender, setGender] = useState ('');
-  const [date, setDate] = useState (new Date ());
-  const [imageUri, setImageUri] = useState (IMAGES.updateImage);
+  const [name, setName] = useState(userProfile.UserFullName);
+  const [gender, setGender] = useState(userProfile.UserGender);
+  const [date, setDate] = useState(new Date(userProfile.UserDoB));
+  const [imageUri, setImageUri] = useState(IMAGES.updateImage);
   //const [university, setUniversity] = useState();
-  const [phone, setPhone] = useState ('0');
+  const [phone, setPhone] = useState(userProfile.UserPhone);
 
   //DatePicker Field
-  const [openDatePicker, setOpenDatePicker] = useState (false);
+  const [openDatePicker, setOpenDatePicker] = useState(false);
   //Use moment to convert to Vietnamese Datetime
 
   //vars for altering bottomsheet
-  const bottomSheetRef = React.createRef (null);
-  const fall = new Animated.Value (1);
+  const bottomSheetRef = React.createRef(null);
+  const fall = new Animated.Value(1);
 
   //Create components inner bottomsheet
   const renderInner = () => (
@@ -58,8 +50,7 @@ export default function UpdateProfile (props) {
         alignItems: 'center',
         flexDirection: 'column',
         paddingHorizontal: 10,
-      }}
-    >
+      }}>
       {/* //bar signal */}
       <View
         style={{
@@ -68,8 +59,7 @@ export default function UpdateProfile (props) {
           justifyContent: 'center',
           alignItems: 'center',
           marginBottom: 10,
-        }}
-      >
+        }}>
         <View
           style={{
             width: 40,
@@ -82,17 +72,15 @@ export default function UpdateProfile (props) {
       <TouchableOpacity
         style={{marginVertical: 10}}
         onPress={() => {
-          openCamera ();
-        }}
-      >
+          openCamera();
+        }}>
         <BackgroundButton text="Chụp ảnh" />
       </TouchableOpacity>
       <TouchableOpacity
         style={{marginVertical: 10}}
         onPress={() => {
-          openImagePicker ();
-        }}
-      >
+          openImagePicker();
+        }}>
         <BackgroundButton text="Chọn từ thư viện" />
       </TouchableOpacity>
       <TouchableOpacity
@@ -102,13 +90,12 @@ export default function UpdateProfile (props) {
           backgroundColor: COLORS.darkgray,
           justifyContent: 'center',
           alignItems: 'center',
-          width: RESPONSIVE.pixelSizeHorizontal (315),
-          height: RESPONSIVE.pixelSizeVertical (60),
+          width: RESPONSIVE.pixelSizeHorizontal(315),
+          height: RESPONSIVE.pixelSizeVertical(60),
         }}
         onPress={() => {
-          bottomSheetRef.current.snapTo (1);
-        }}
-      >
+          bottomSheetRef.current.snapTo(1);
+        }}>
         <Text style={FONTS.h2Bold}>Hủy</Text>
       </TouchableOpacity>
     </View>
@@ -117,7 +104,7 @@ export default function UpdateProfile (props) {
     return (
       <BottomSheet
         ref={bottomSheetRef}
-        snapPoints={['40%', RESPONSIVE.pixelSizeVertical (-50)]}
+        snapPoints={['40%', RESPONSIVE.pixelSizeVertical(-50)]}
         renderContent={renderInner}
         initialSnap={1}
         callbackNode={fall}
@@ -129,22 +116,22 @@ export default function UpdateProfile (props) {
 
   //Open Phone Library
   const openImagePicker = () => {
-    launchImageLibrary (
+    launchImageLibrary(
       {
         mediaType: 'photo',
-        maxWidth: RESPONSIVE.pixelSizeHorizontal (100),
-        maxHeight: RESPONSIVE.pixelSizeHorizontal (100),
+        maxWidth: RESPONSIVE.pixelSizeHorizontal(100),
+        maxHeight: RESPONSIVE.pixelSizeHorizontal(100),
         includeBase64: false,
       },
       response => {
         //close bottomsheet
-        bottomSheetRef.current.snapTo (1);
+        bottomSheetRef.current.snapTo(1);
         if (response.didCancel) {
-          console.log ('User canceled image picker');
+          console.log('User canceled image picker');
         } else if (response.errorMessage) {
-          console.log ('Image picker error', response.errorMessage);
+          console.log('Image picker error', response.errorMessage);
         } else if (response.errorCode) {
-          console.log ('Error code ', response.errorCode);
+          console.log('Error code ', response.errorCode);
         } else {
           const source = {
             uri: response.assets[0].uri,
@@ -152,102 +139,86 @@ export default function UpdateProfile (props) {
 
           //  console.log("response, ", response);
 
-          console.log ('token to upload', token);
-          updateProfilePic (response.assets[0], token)
-            .then (result => {
-              console.log (result.data);
+          console.log('token to upload', token);
+          updateProfilePic(response.assets[0], token)
+            .then(result => {
+              console.log(result.data);
             })
-            .catch (err => {
-              console.log (err);
+            .catch(err => {
+              console.log(err);
             });
 
-          setImageUri (source);
+          setImageUri(source);
           //console.log(source);
         }
-      }
+      },
     );
   };
 
   //Open Camera
   const openCamera = () => {
-    launchCamera (
+    launchCamera(
       {
         mediaType: 'photo',
-        maxWidth: RESPONSIVE.pixelSizeHorizontal (100),
-        maxHeight: RESPONSIVE.pixelSizeHorizontal (100),
+        maxWidth: RESPONSIVE.pixelSizeHorizontal(100),
+        maxHeight: RESPONSIVE.pixelSizeHorizontal(100),
         includeBase64: true,
       },
       response => {
         //close bottomsheet
-        bottomSheetRef.current.snapTo (1);
+        bottomSheetRef.current.snapTo(1);
         if (response.didCancel) {
-          console.log ('User canceled image picker');
+          console.log('User canceled image picker');
         } else if (response.errorMessage) {
-          console.log ('Image picker error', response.errorMessage);
+          console.log('Image picker error', response.errorMessage);
         } else if (response.errorCode) {
-          console.log ('Error code ', response.errorCode);
+          console.log('Error code ', response.errorCode);
         } else {
           const source = {
             uri: response.assets[0].uri,
           };
 
           const newUri =
-            response.assets[0].uri.substr (0, 5) +
-            response.assets[0].uri.substr (6, response.assets[0].uri.length);
+            response.assets[0].uri.substr(0, 5) +
+            response.assets[0].uri.substr(6, response.assets[0].uri.length);
           //   console.log('source', source);
 
-          updateProfilePic (newUri, token)
-            .then (res => console.log (res))
-            .catch (error => {
-              console.log (JSON.stringify (error));
-              console.log (error.status);
+          updateProfilePic(newUri, token)
+            .then(res => console.log(res))
+            .catch(error => {
+              console.log(JSON.stringify(error));
+              console.log(error.status);
             });
-          setImageUri (source);
+          setImageUri(source);
           //console.log(source);
           //close bottomsheet
         }
-      }
+      },
     );
   };
 
-  function finishUpdate () {
-    updateProfileOnServer ();
-    updateProfileSlice ().then (() => {
-      console.log ('user Inside Redux', userProfileInfo);
-      props.navigation.navigate ('Home');
-    });
-  }
-  //Update profile in redux
-  async function updateProfileSlice () {
-    const user = {
-      UserFullName: name,
-      UserGender: gender,
-      UserPhone: phone,
-      UserDoB: date.toDateString (),
-    };
-    dispatch (updateProfile (user));
-  }
   //Update profile on server
-  function updateProfileOnServer () {
+  function updateProfile() {
     const user = {
       UserFullName: name,
       UserGender: gender,
       UserPhone: phone,
-      UserDoB: date.toDateString (),
-      
+      UserDoB: date.toDateString(),
     };
 
-    console.log (user);
-    setupUserProfile (user, token)
-      .then (result => {
-        console.log ("update response from server", result.data);
+    console.log(user);
+    setupUserProfile(user, token)
+      .then(result => {
+        //then in Redux
+        dispatch(fetchProfile(token));
+        props.navigation.navigate('Home');
       })
-      .catch (error => {
-        console.log (error);
+      .catch(error => {
+        console.log(error);
       });
   }
 
-  function renderHeader () {
+  function renderHeader() {
     return (
       <View
         style={{
@@ -255,14 +226,12 @@ export default function UpdateProfile (props) {
           justifyContent: 'center',
           alignItems: 'center',
           width: '100%',
-        }}
-      >
+        }}>
         <Text
           style={{
             ...FONTS.title,
             textAlign: 'center',
-          }}
-        >
+          }}>
           Cập nhật hồ sơ
         </Text>
         <Text style={{...FONTS.h3, textAlign: 'center'}}>
@@ -271,7 +240,7 @@ export default function UpdateProfile (props) {
       </View>
     );
   }
-  function renderImagePicker () {
+  function renderImagePicker() {
     return (
       <View
         style={{
@@ -279,34 +248,32 @@ export default function UpdateProfile (props) {
           alignItems: 'center',
           flexDirection: 'column',
           width: '100%',
-        }}
-      >
+        }}>
         <View
           style={{
             justifyContent: 'center',
             alignItems: 'center',
-          }}
-        >
+          }}>
           <RoundedImage
-            image={imageUri}
-            width={RESPONSIVE.pixelSizeHorizontal (150)}
-            height={RESPONSIVE.pixelSizeHorizontal (150)}
+            image={{
+              uri: userProfile.UserProfilePic,
+            }}
+            width={RESPONSIVE.pixelSizeHorizontal(150)}
+            height={RESPONSIVE.pixelSizeHorizontal(150)}
           />
           <TouchableOpacity
             style={{
               marginTop: 5,
             }}
             onPress={() => {
-              bottomSheetRef.current.snapTo (0);
-            }}
-          >
+              bottomSheetRef.current.snapTo(0);
+            }}>
             <Text
               style={{
                 ...FONTS.h3,
                 color: COLORS.primary,
                 textDecorationLine: 'underline',
-              }}
-            >
+              }}>
               Thay đổi ảnh đại diện
             </Text>
           </TouchableOpacity>
@@ -314,17 +281,16 @@ export default function UpdateProfile (props) {
       </View>
     );
   }
-  function renderTextField () {
+  function renderTextField() {
     return (
       <View
         style={{
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'column',
-          width: RESPONSIVE.pixelSizeHorizontal (350),
+          width: RESPONSIVE.pixelSizeHorizontal(350),
         }}
-        showsVerticalScrollIndicator={false}
-      >
+        showsVerticalScrollIndicator={false}>
         {/* Name */}
         <View
           style={{
@@ -332,9 +298,8 @@ export default function UpdateProfile (props) {
             justifyContent: 'center',
             alignItems: 'flex-start',
             width: '100%',
-            marginVertical: RESPONSIVE.pixelSizeVertical (10),
-          }}
-        >
+            marginVertical: RESPONSIVE.pixelSizeVertical(10),
+          }}>
           <Text style={{...FONTS.h2Bold}}>Tên đại diện</Text>
           <TextInput
             //mode="outlined"
@@ -347,12 +312,12 @@ export default function UpdateProfile (props) {
             }}
             style={{
               width: '100%',
-              height: RESPONSIVE.pixelSizeVertical (50),
+              height: RESPONSIVE.pixelSizeVertical(50),
               fontSize: SIZES.h3,
               paddingHorizontal: 0,
               backgroundColor: COLORS.backGroundColor,
             }}
-            onChangeText={name => setName (name)}
+            onChangeText={name => setName(name)}
           />
         </View>
 
@@ -363,18 +328,16 @@ export default function UpdateProfile (props) {
             justifyContent: 'center',
             alignItems: 'flex-start',
             width: '100%',
-            marginBottom: RESPONSIVE.pixelSizeVertical (10),
-          }}
-        >
+            marginBottom: RESPONSIVE.pixelSizeVertical(10),
+          }}>
           <Text style={{...FONTS.h2Bold}}>Giới tính</Text>
           <RadioButton.Group
-            onValueChange={value => setGender (value)}
+            onValueChange={value => setGender(value)}
             value={gender}
             style={{
               width: '100%',
               paddingHorizontal: 0,
-            }}
-          >
+            }}>
             <RadioButton.Item
               label="Nam"
               labelStyle={{
@@ -426,8 +389,7 @@ export default function UpdateProfile (props) {
             justifyContent: 'center',
             alignItems: 'flex-start',
             width: '100%',
-          }}
-        >
+          }}>
           <Text style={{...FONTS.h2Bold}}>Ngày sinh</Text>
           <View
             style={{
@@ -435,22 +397,20 @@ export default function UpdateProfile (props) {
               justifyContent: 'space-between',
               alignItems: 'center',
               flexDirection: 'row',
-            }}
-          >
+            }}>
             <Text
               style={{
                 ...FONTS.h3,
-                width: RESPONSIVE.pixelSizeHorizontal (240),
-              }}
-            >
-              {getVietnameseDate (date)}
+                width: RESPONSIVE.pixelSizeHorizontal(240),
+              }}>
+              {getVietnameseDate(date)}
             </Text>
-            <TouchableOpacity onPress={() => setOpenDatePicker (true)}>
+            <TouchableOpacity onPress={() => setOpenDatePicker(true)}>
               <Image
                 source={ICONS.edit}
                 style={{
-                  width: RESPONSIVE.pixelSizeHorizontal (24),
-                  height: RESPONSIVE.pixelSizeHorizontal (24),
+                  width: RESPONSIVE.pixelSizeHorizontal(24),
+                  height: RESPONSIVE.pixelSizeHorizontal(24),
                   tintColor: COLORS.lightGray1,
                 }}
               />
@@ -467,11 +427,11 @@ export default function UpdateProfile (props) {
             open={openDatePicker}
             date={date}
             onConfirm={date => {
-              setOpenDatePicker (false);
-              setDate (date);
+              setOpenDatePicker(false);
+              setDate(date);
             }}
             onCancel={() => {
-              setOpenDatePicker (false);
+              setOpenDatePicker(false);
             }}
           />
         </View>
@@ -483,9 +443,8 @@ export default function UpdateProfile (props) {
             justifyContent: 'center',
             alignItems: 'flex-start',
             width: '100%',
-            marginVertical: RESPONSIVE.pixelSizeVertical (10),
-          }}
-        >
+            marginVertical: RESPONSIVE.pixelSizeVertical(10),
+          }}>
           <Text style={{...FONTS.h2Bold}}>Số điện thoại</Text>
           <TextInput
             //mode="outlined"
@@ -498,13 +457,13 @@ export default function UpdateProfile (props) {
             }}
             style={{
               width: '100%',
-              height: RESPONSIVE.pixelSizeVertical (50),
+              height: RESPONSIVE.pixelSizeVertical(50),
               fontSize: SIZES.h3,
               paddingHorizontal: 0,
               backgroundColor: COLORS.backGroundColor,
               marginVertical: 0,
             }}
-            onChangeText={phone => setPhone (phone)}
+            onChangeText={phone => setPhone(phone)}
           />
         </View>
       </View>
@@ -518,34 +477,31 @@ export default function UpdateProfile (props) {
         paddingHorizontal: 20,
         justifyContent: 'flex-start',
         alignItems: 'center',
-      }}
-    >
+      }}>
       <Animated.ScrollView
-        style={{opacity: Animated.add (0.3, Animated.multiply (fall, 1.0))}}
+        style={{opacity: Animated.add(0.3, Animated.multiply(fall, 1.0))}}
         contentContainerStyle={{
           justifyContent: 'center',
           alignItems: 'flex-start',
         }}
-        showsVerticalScrollIndicator={false}
-      >
-        {renderHeader ()}
-        {renderImagePicker ()}
-        {renderTextField ()}
+        showsVerticalScrollIndicator={false}>
+        {renderHeader()}
+        {renderImagePicker()}
+        {renderTextField()}
         <TouchableOpacity
           style={{
-            marginTop: RESPONSIVE.pixelSizeVertical (30),
+            marginTop: RESPONSIVE.pixelSizeVertical(30),
             width: '100%',
             justifyContent: 'center',
             alignItems: 'center',
           }}
           onPress={() => {
-            finishUpdate ();
-          }}
-        >
+            updateProfile();
+          }}>
           <BackgroundButton text="Xong" />
         </TouchableOpacity>
       </Animated.ScrollView>
-      {updatePhotoBottomSheet ()}
+      {updatePhotoBottomSheet()}
     </View>
   );
 }

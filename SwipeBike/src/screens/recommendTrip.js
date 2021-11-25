@@ -16,7 +16,7 @@ import {getCandidateTripRecommendations, getUserTrips} from '../api';
 import {loadTokenFromLocalStorage} from '../storage';
 
 export default function RecommendTrip(props) {
-  const [token, setToken] = useReducer(state => state.loginToken);
+  const [token, setToken] = useSelector(state => state.loginToken);
   //dummy recommendedTripList
   const [recommendedTripList, setRecommendedTripList] = useState([
     {
