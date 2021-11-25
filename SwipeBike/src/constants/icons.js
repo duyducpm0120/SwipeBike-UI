@@ -39,6 +39,10 @@ export const refresh = require('../assets/icons/Light/refresh.png');
 export const waiting = require('../assets/icons/Light/waiting.png');
 export const history = require('../assets/icons/Light/history.png');
 export const setting = require('../assets/icons/Light/setting.png');
+export const phone = require('../assets/icons/Light/phone.png');
+export const badBold = require('../assets/icons/Bold/bad.png');
+export const heartBold = require('../assets/icons/Bold/heart.png');
+export const finishBold = require('../assets/icons/Bold/finish.png');
 
 export default {
   cameraBold,
@@ -84,4 +88,8 @@ export default {
   waiting,
   history,
   setting,
+  phone,
+  badBold,
+  heartBold,
+  finishBold,
 };
