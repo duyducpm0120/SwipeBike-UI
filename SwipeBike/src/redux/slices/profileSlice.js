@@ -1,4 +1,4 @@
-import {createSlice, nanoid, createAsyncThunk} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {loadUserProfile} from '../../api/profile';
 
 export const fetchProfile = createAsyncThunk(

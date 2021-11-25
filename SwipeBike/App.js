@@ -35,6 +35,7 @@ import {loadTokenFromLocalStorage} from '../SwipeBike/src/storage';
 import {useDispatch} from 'react-redux';
 import {updateToken} from './src/redux/slices/loginTokenSlice';
 import {fetchProfile} from './src/redux/slices/profileSlice';
+import {fetchLoginToken} from './src/redux/slices/loginTokenSlice';
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -57,14 +58,6 @@ const App = () => {
         //console.log(result);
       });
   };
-
-  useEffect(() => {
-    loadTokenFromLocalStorage().then(res => {
-      setToken(res);
-      //save token to redux
-      dispatch(updateToken(res));
-    });
-  }, []);
 
   ///FCM token
   useEffect(() => {
@@ -90,6 +83,12 @@ const App = () => {
     //   setIsLoading(false);
     // }, 3000);
   }, [token]);
+
+  useEffect(() => {
+    loadTokenFromLocalStorage().then(res => setToken(res));
+    //fetch token to redux
+    dispatch(fetchLoginToken());
+  }, []);
 
   return isLoading ? (
     <View

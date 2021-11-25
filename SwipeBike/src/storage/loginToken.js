@@ -46,7 +46,7 @@ const loadTokenFromLocalStorage = async () => {
     })
     .then(ret => {
       // found data goes to then()
-      console.log('Local storage token:', ret.token);
+      console.log('Local storage token loaded');
       token = ret.token;
     })
     .catch(err => {
@@ -69,7 +69,7 @@ const removeTokenFromLocalStorage = async () => {
   await localStorage.remove({
     key: 'loginToken',
   });
-  console.log("token removed");
+  console.log('token removed');
 };
 
 export {
