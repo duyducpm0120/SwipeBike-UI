@@ -7,7 +7,7 @@ import {
   getVietnameseTime,
 } from '../components';
 
-export default function Trip(props) {
+export default function CandidateTrip(props) {
   const [tripDetail, setTripDetail] = useState({
     CandidateTripDriver: {
       name: '',
@@ -254,7 +254,7 @@ export default function Trip(props) {
         justifyContent: 'flex-start',
         alignItems: 'center',
         width: RESPONSIVE.pixelSizeHorizontal(350),
-        height: RESPONSIVE.pixelSizeVertical(350),
+        height: RESPONSIVE.pixelSizeHorizontal(350),
         padding: 20,
         borderRadius: 10,
         backgroundColor: COLORS.backGroundColor,

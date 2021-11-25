@@ -233,7 +233,7 @@ export default function Home(props) {
               alignItems: 'center',
               flexDirection: 'row',
               paddingHorizontal: RESPONSIVE.pixelSizeHorizontal(10),
-              backgroundColor: COLORS.primaryLighter1,
+              backgroundColor: COLORS.primary,
               borderRadius: 50,
               marginTop: 10,
               ...STYLES.shadow,
@@ -251,52 +251,75 @@ export default function Home(props) {
 
   function renderWaitingTripList() {
     return (
-      <View style={{marginTop: 20, height: 400}}>
+      <View
+        style={{
+          marginVertical: 20,
+          //height: RESPONSIVE.pixelSizeVertical(900),
+          justifyContent: 'flex-start',
+        }}>
         <View
           style={{
-            justifyContent: 'space-between',
+            justifyContent: 'flex-start',
             alignItems: 'center',
             flexDirection: 'row',
-            marginBottom: RESPONSIVE.pixelSizeVertical(20),
+            //marginBottom: RESPONSIVE.pixelSizeVertical(10),
           }}>
           <Text style={{...FONTS.h2Bold}}>Đang chờ</Text>
-          <TouchableOpacity
-            onPress={() => {
-              console.log(userProfile);
-              //props.navigation.jumpTo('TripsScreen');
+        </View>
+        <View
+          style={{
+            height: RESPONSIVE.pixelSizeVertical(370),
+          }}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            pagingEnabled
+            scrollEventThrottle={1}
+            contentContainerStyle={{
+              paddingVertical: RESPONSIVE.pixelSizeVertical(10),
             }}>
-            <Text
-              style={{
-                ...FONTS.h3,
-                color: COLORS.primary,
-                textDecorationLine: 'underline',
-              }}>
-              Xem thêm
-            </Text>
+            {waitingTripList.map(trip => {
+              return (
+                <View
+                  style={{
+                    marginHorizontal:
+                      (SIZES.width - RESPONSIVE.pixelSizeHorizontal(350) - 40) /
+                      2,
+                  }}>
+                  <Trip
+                    tripDetail={trip.tripDetail}
+                    pressTrip={() => {
+                      openTripOptions(trip.tripDetail);
+                    }}></Trip>
+                </View>
+              );
+            })}
+          </ScrollView>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+          }}>
+          <TouchableOpacity
+            style={{
+              width: RESPONSIVE.pixelSizeHorizontal(200),
+              height: RESPONSIVE.pixelSizeVertical(50),
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              flexDirection: 'row',
+              paddingHorizontal: RESPONSIVE.pixelSizeHorizontal(10),
+              backgroundColor: COLORS.primary,
+              borderRadius: 50,
+              marginTop: 10,
+              ...STYLES.shadow,
+            }}
+            onPress={() => props.navigation.jumpTo('TripsScreen')}>
+            <Text style={FONTS.h3Bold}>Xem thêm</Text>
           </TouchableOpacity>
         </View>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          scrollEventThrottle={1}>
-          {waitingTripList.map(trip => {
-            return (
-              <View
-                style={{
-                  marginHorizontal:
-                    (SIZES.width - RESPONSIVE.pixelSizeHorizontal(350) - 40) /
-                    2,
-                }}>
-                <Trip
-                  tripDetail={trip.tripDetail}
-                  pressTrip={() => {
-                    openTripOptions(trip.tripDetail);
-                  }}></Trip>
-              </View>
-            );
-          })}
-        </ScrollView>
       </View>
     );
   }

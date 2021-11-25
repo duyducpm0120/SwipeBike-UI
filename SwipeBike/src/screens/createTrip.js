@@ -35,10 +35,7 @@ export default function CreateTrip(props) {
   //Local token
   const token = useSelector(state => state.loginToken.token);
   //Dummy user info
-  const userInfo = {
-    name: 'Vuong',
-    image: IMAGES.cuteDriver,
-  };
+  const userProfile = useSelector(state => state.userProfile.userProfile);
   //Search Text
   const fromSearchTextRef = useRef();
   const toSearchTextRef = useRef();
@@ -126,7 +123,7 @@ export default function CreateTrip(props) {
             longitude: position.coords.longitude,
           }),
         });
-        console.log('get current location!');
+        //console.log('get current location!');
       },
       error => {
         //Alert.alert(error.message.toString());
@@ -168,7 +165,7 @@ export default function CreateTrip(props) {
     }
 
     const trip = {
-      CreatorId: 8,
+      CreatorId: userProfile.UserId,
       CandidateTripDateTime: dateTime.toString(),
       CandidateTripFromAddress: fromSearchTextRef.current.getAddressText(),
       CandidateTripToAddress: toSearchTextRef.current.getAddressText(),
@@ -180,19 +177,19 @@ export default function CreateTrip(props) {
       CandidateTripMessage: null,
     };
 
-    console.log(trip);
+    //console.log(trip);
     //console.log('token', token);
 
     //Call API here
     createCandidateTrip(trip, token)
       .then(res => {
-        console.log(res);
+        console.log('Created new candidateTrip');
       })
       .catch(error => {
         console.log(error);
       });
 
-    // props.navigation.navigate('TripInfo', {trip: trip});
+    //props.navigation.navigate('TripInfo', {trip: trip});
   }
   const chooseDriver = (
     <View
@@ -455,7 +452,7 @@ export default function CreateTrip(props) {
               details.geometry.location.lng,
             ],
           };
-          console.log('fromLocation', location);
+          //console.log('fromLocation', location);
           setFromLocation(location);
         }}
         query={{
@@ -504,7 +501,7 @@ export default function CreateTrip(props) {
               details.geometry.location.lng,
             ],
           };
-          console.log('toLocation', location);
+          //console.log('toLocation', location);
           setToLocation(location);
         }}
         query={{
@@ -743,11 +740,11 @@ export default function CreateTrip(props) {
   useEffect(() => {
     getCurrentLocation();
   });
-
   //updating route
   useEffect(() => {
     getDataRoute();
   }, [fromLocation, toLocation]);
+
   return (
     <View
       style={{

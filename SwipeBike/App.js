@@ -64,7 +64,7 @@ const App = () => {
     sendFcmToken();
   }, []);
 
-  ///Fetch Redux data
+  ///Fetch Redux data when token loaded
   useEffect(() => {
     if (token) {
       const fetchData = async () => {
@@ -79,9 +79,6 @@ const App = () => {
       };
       fetchData();
     }
-    // setTimeout(() => {
-    //   setIsLoading(false);
-    // }, 3000);
   }, [token]);
 
   useEffect(() => {
