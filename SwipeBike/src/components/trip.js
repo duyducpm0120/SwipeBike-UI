@@ -238,7 +238,7 @@ export default function Trip(props) {
         justifyContent: 'center',
         alignItems: 'center',
         width: RESPONSIVE.pixelSizeHorizontal(350),
-        height: RESPONSIVE.pixelSizeVertical(350),
+        height: RESPONSIVE.pixelSizeVertical(400),
         padding: 20,
         borderRadius: 10,
         backgroundColor: COLORS.backGroundColor,

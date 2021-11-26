@@ -41,18 +41,18 @@ export default function CandidateTrip(props) {
         {/* // driver field */}
         <View
           style={{
-            width: '45%',
+            width: '100%',
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'column',
           }}>
           <RoundedImage
             image={{uri: tripDetail.CandidateTripCreator.UserProfilePic}}
-            width={60}
-            height={60}></RoundedImage>
+            width={80}
+            height={80}></RoundedImage>
           <Text
             style={{
-              ...FONTS.h3Bold,
+              ...FONTS.h2Bold,
               width: '90%',
               textAlign: 'center',
             }}>
@@ -192,13 +192,54 @@ export default function CandidateTrip(props) {
     );
   }
 
+  function renderButton() {
+    return (
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          marginTop: RESPONSIVE.pixelSizeVertical(10),
+        }}>
+        <TouchableOpacity
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: RESPONSIVE.pixelSizeHorizontal(300),
+            height: RESPONSIVE.pixelSizeVertical(40),
+            backgroundColor: COLORS.primaryLighter1,
+            borderRadius: 5,
+            marginVertical: 5,
+          }}>
+          <Text style={{...FONTS.h3Bold, color: COLORS.primaryDarker1}}>
+            Xem gợi ý
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: RESPONSIVE.pixelSizeHorizontal(300),
+            height: RESPONSIVE.pixelSizeVertical(40),
+            backgroundColor: COLORS.lightGray0,
+            borderRadius: 5,
+            marginVertical: 5,
+          }}>
+          <Text style={{...FONTS.h3Bold, color: COLORS.black}}>
+            Xóa chuyến đi này
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <TouchableOpacity
       style={{
         justifyContent: 'center',
         alignItems: 'center',
         width: RESPONSIVE.pixelSizeHorizontal(350),
-        height: RESPONSIVE.pixelSizeHorizontal(350),
+        height: RESPONSIVE.pixelSizeHorizontal(450),
         padding: 20,
         borderRadius: 10,
         backgroundColor: COLORS.backGroundColor,
@@ -207,6 +248,7 @@ export default function CandidateTrip(props) {
       onPress={() => (props.pressTrip ? props.pressTrip(tripDetail) : null)}>
       {renderImage()}
       {renderDetail()}
+      {renderButton()}
     </TouchableOpacity>
   );
 }
