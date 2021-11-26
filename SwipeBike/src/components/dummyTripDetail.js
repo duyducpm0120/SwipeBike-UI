@@ -1,11 +1,8 @@
 import {IMAGES} from '../constants';
 
 export const waitingTripDetail = {
-  CandidateTripDriver: {
-    name: 'Duong Thanh Vuong',
-    image: IMAGES.cuteDriver,
-  },
-  CandidateTripPassenger: null,
+  TripType: 1,
+  CreatorId: 7,
   CandidateTripBike: true,
   CandidateTripDateTime: '3 Nov 2021 7:00:00',
   CandidateTripFromAddress: 'Nhan van',
@@ -15,16 +12,26 @@ export const waitingTripDetail = {
   CandidateTripToLat: 10.8697981,
   CandidateTripToLong: 106.8028301,
   CandidateTripMessage: null,
+  CandidateTripCreator: {
+    UserFullName: 'Phan Duy Đức',
+    UserProfilePic:
+      'https://storage.googleapis.com/swipebike-38736.appspot.com/user_7_pic_2021-11-25T03:25:18.505Z',
+  },
 };
 
 export const pairingTripDetail = {
+  TripType: 3,
+  TripDriverId: 7,
+  TripPassengerId: 8,
   CandidateTripDriver: {
-    name: 'Duong Thanh Vuong',
-    image: IMAGES.cuteDriver,
+    UserFullName: 'Phan Duy Đức',
+    UserProfilePic:
+      'https://storage.googleapis.com/swipebike-38736.appspot.com/user_7_pic_2021-11-25T03:25:18.505Z',
   },
   CandidateTripPassenger: {
-    name: 'Oanhhhhhhhhhhhhhhhhh',
-    image: IMAGES.swipeBike,
+    UserFullName: 'Meo',
+    UserProfilePic:
+      'https://fridaycat.com.vn/wp-content/uploads/2021/04/meo-muop-giong-meo-pho-bien-tren-the-gioi.jpg',
   },
   CandidateTripBike: true,
   CandidateTripDateTime: '3 Nov 2021 7:00:00',

@@ -22,48 +22,7 @@ export default function Home(props) {
   const userProfile = useSelector(state => state.userProfile.userProfile);
   //dummy data
   //dummy waitingTripList
-  const [waitingTripList, setWaitingTripList] = useState([
-    {
-      tripId: 0,
-      tripDetail: waitingTripDetail,
-    },
-    {
-      tripId: 1,
-      tripDetail: waitingTripDetail,
-    },
-    {
-      tripId: 2,
-      tripDetail: waitingTripDetail,
-    },
-    {
-      tripId: 3,
-      tripDetail: waitingTripDetail,
-    },
-    {
-      tripId: 4,
-      tripDetail: waitingTripDetail,
-    },
-  ]);
-
-  //dummy recommendedTripList
-  const [recommendedTripList, setRecommendedTripList] = useState([
-    {
-      tripId: 0,
-      tripDetail: waitingTripDetail,
-    },
-    {
-      tripId: 1,
-      tripDetail: waitingTripDetail,
-    },
-    {
-      tripId: 2,
-      tripDetail: waitingTripDetail,
-    },
-    {
-      tripId: 3,
-      tripDetail: waitingTripDetail,
-    },
-  ]);
+  const [waitingTripList, setWaitingTripList] = useState([]);
 
   //vars for altering bottomsheet
   const bottomSheetRef = React.createRef(null);

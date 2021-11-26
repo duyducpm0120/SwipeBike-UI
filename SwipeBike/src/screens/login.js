@@ -66,7 +66,7 @@ export default function Login(props) {
             //console.log('load token:', token);
             console.log('token saved: ', token);
             dispatch(updateToken(result.data.token));
-            props.navigation.navigate('UpdateProfile');
+            props.navigation.navigate('Home');
           });
         });
 

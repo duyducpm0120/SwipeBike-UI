@@ -9,10 +9,11 @@ import {
 
 export default function CandidateTrip(props) {
   const [tripDetail, setTripDetail] = useState({
-    CandidateTripDriver: {
-      name: '',
-      image: null,
+    CandidateTripCreator: {
+      UserFullName: null,
+      UserProfilePic: null,
     },
+    CreatorId: 7,
     CandidateTripPassenger: null,
     CandidateTripBike: true,
     CandidateTripDateTime: '',
@@ -46,75 +47,18 @@ export default function CandidateTrip(props) {
             flexDirection: 'column',
           }}>
           <RoundedImage
-            image={tripDetail.CandidateTripDriver.image}
+            image={{uri: tripDetail.CandidateTripCreator.UserProfilePic}}
             width={60}
             height={60}></RoundedImage>
-          <Image
-            source={ICONS.driver}
-            style={{
-              width: 20,
-              height: 20,
-              top: -20,
-              right: -20,
-            }}></Image>
           <Text
             style={{
               ...FONTS.h3Bold,
               width: '90%',
               textAlign: 'center',
-              marginTop: -15,
             }}>
-            {tripDetail.CandidateTripDriver.name}
+            {tripDetail.CandidateTripCreator.UserFullName}
           </Text>
         </View>
-        {/* Divider */}
-        {tripDetail.CandidateTripPassenger != null ? (
-          <View
-            style={{
-              marginHorizontal: '3%',
-              backgroundColor: COLORS.darkgray,
-              height: 40,
-              width: 1,
-            }}></View>
-        ) : (
-          <View></View>
-        )}
-        {/* passenger field */}
-        {tripDetail.CandidateTripPassenger != null ? (
-          <View
-            style={{
-              width: '45%',
-              // height: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'column',
-            }}>
-            <RoundedImage
-              image={tripDetail.CandidateTripPassenger.image}
-              width={60}
-              height={60}></RoundedImage>
-            <Image
-              source={ICONS.hitchHiker}
-              style={{
-                width: 20,
-                height: 20,
-                top: -20,
-                right: -20,
-              }}></Image>
-            <Text
-              style={{
-                ...FONTS.h3Bold,
-
-                width: '90%',
-                textAlign: 'center',
-                marginTop: -15,
-              }}>
-              {tripDetail.CandidateTripPassenger.name}
-            </Text>
-          </View>
-        ) : (
-          <View></View>
-        )}
       </View>
     );
   }
@@ -251,7 +195,7 @@ export default function CandidateTrip(props) {
   return (
     <TouchableOpacity
       style={{
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         alignItems: 'center',
         width: RESPONSIVE.pixelSizeHorizontal(350),
         height: RESPONSIVE.pixelSizeHorizontal(350),
