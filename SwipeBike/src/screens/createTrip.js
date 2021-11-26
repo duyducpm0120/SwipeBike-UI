@@ -32,9 +32,9 @@ import {useSelector} from 'react-redux';
 navigator.geolocation = require('react-native-geolocation-service');
 
 export default function CreateTrip(props) {
-  //Local token
+  //Local token from redux
   const token = useSelector(state => state.loginToken.token);
-  //Dummy user info
+  //Load user info from redux
   const userProfile = useSelector(state => state.userProfile.userProfile);
   //Search Text
   const fromSearchTextRef = useRef();

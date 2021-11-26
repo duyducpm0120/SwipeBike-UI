@@ -7,7 +7,10 @@ import {
   getVietnameseTime,
 } from '../components';
 
+import {useSelector} from 'react-redux';
+
 export default function CandidateTrip(props) {
+  const token = useSelector(state => state.loginToken.token);
   const [tripDetail, setTripDetail] = useState({
     CandidateTripCreator: {
       UserFullName: null,
@@ -24,6 +27,7 @@ export default function CandidateTrip(props) {
     CandidateTripToLat: null,
     CandidateTripToLong: null,
     CandidateTripMessage: null,
+    CandidateTripId: null,
   });
   useEffect(() => {
     setTripDetail(props.tripDetail); //The details of trip
@@ -149,7 +153,9 @@ export default function CandidateTrip(props) {
               marginLeft: 10,
               width: '90%',
             }}>
-            {tripDetail.CandidateTripFromAddress}
+            {tripDetail.CandidateTripFromAddress.length < 28
+              ? `${tripDetail.CandidateTripFromAddress}`
+              : `${tripDetail.CandidateTripFromAddress.substring(0, 25)}...`}
           </Text>
         </View>
         <View
@@ -185,7 +191,9 @@ export default function CandidateTrip(props) {
               marginLeft: 10,
               width: '90%',
             }}>
-            {tripDetail.CandidateTripToAddress}
+            {tripDetail.CandidateTripToAddress.length < 28
+              ? `${tripDetail.CandidateTripToAddress}`
+              : `${tripDetail.CandidateTripToAddress.substring(0, 25)}...`}
           </Text>
         </View>
       </View>
@@ -210,6 +218,9 @@ export default function CandidateTrip(props) {
             backgroundColor: COLORS.primaryLighter1,
             borderRadius: 5,
             marginVertical: 5,
+          }}
+          onPress={() => {
+            props.pressTrip();
           }}>
           <Text style={{...FONTS.h3Bold, color: COLORS.primaryDarker1}}>
             Xem gợi ý
@@ -226,7 +237,7 @@ export default function CandidateTrip(props) {
             marginVertical: 5,
           }}>
           <Text style={{...FONTS.h3Bold, color: COLORS.black}}>
-            Xóa chuyến đi này
+            Xóa chuyến đi
           </Text>
         </TouchableOpacity>
       </View>

@@ -27,8 +27,14 @@ import {
 
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
+import {getUserTrips, getCandidateTripRecommendations} from '../api';
+import {useSelector} from 'react-redux';
 
 export default function TripsScreen(props) {
+  //Local token
+  const token = useSelector(state => state.loginToken.token);
+  //Load user info from redux
+  const userProfile = useSelector(state => state.userProfile.userProfile);
   //dummy waitingTripList
   const [waitingTripList, setWaitingTripList] = useState([
     {
@@ -128,27 +134,49 @@ export default function TripsScreen(props) {
   //var for controlling displaying trip List
   const [displayingTripList, setDisplayingTripList] = useState(waitingTripList);
 
+  function callRecommendTrips(trip) {
+    getCandidateTripRecommendations(trip.CandidateTripId, token).then(res => {
+      console.log(res.data);
+      props.navigation.navigate('RecommendTrip', {
+        //console.log("list to be params",res.data.recommendation );
+        recommendedTripList: res.data.recommendation,
+      });
+    });
+    //console.log('trip', trip);
+  }
+
   function renderTrip(trip) {
-    if (trip.tripDetail.TripType == 1)
+    if (trip.TripType == 1)
       return (
         <View
           style={{
             marginVertical: RESPONSIVE.pixelSizeVertical(10),
             paddingHorizontal: RESPONSIVE.pixelSizeHorizontal(5),
           }}
-          key={trip.tripId}>
-          <CandidateTrip tripDetail={trip.tripDetail} pressTrip={() => {}} />
+          key={trip.CandidateTripId}>
+          <CandidateTrip
+            tripDetail={trip}
+            pressTrip={() => {
+              callRecommendTrips(trip);
+              //console.log(trip);
+            }}
+          />
         </View>
       );
-    else if (trip.tripDetail.TripType == 3)
+    else if (trip.TripType == 3)
       return (
         <View
           style={{
             marginVertical: RESPONSIVE.pixelSizeVertical(10),
             paddingHorizontal: RESPONSIVE.pixelSizeHorizontal(5),
           }}
-          key={trip.tripId}>
-          <Trip tripDetail={trip.tripDetail} pressTrip={() => {}} />
+          key={trip.CandidateTripId}>
+          <Trip
+            tripDetail={trip}
+            pressTrip={trip => {
+              callRecommendTrips(trip);
+            }}
+          />
         </View>
       );
   }
@@ -255,6 +283,20 @@ export default function TripsScreen(props) {
       </View>
     );
   }
+
+  useEffect(() => {
+    getUserTrips(userProfile.UserId, token)
+      .then(res => {
+        console.log('get user trips', res.data);
+        var trips = res.data.trips.map(trip => {
+          trip.TripType = 1;
+          return trip;
+        });
+        setWaitingTripList(trips);
+        //setDisplayingTripList(res.data.trips);
+      })
+      .catch(err => console.log('err', err));
+  }, []);
 
   return (
     <View

@@ -232,6 +232,32 @@ export default function Trip(props) {
     );
   }
 
+  function renderButton() {
+    return (
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          marginTop: RESPONSIVE.pixelSizeVertical(10),
+        }}>
+        <TouchableOpacity
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: RESPONSIVE.pixelSizeHorizontal(300),
+            height: RESPONSIVE.pixelSizeVertical(40),
+            backgroundColor: COLORS.lightGray0,
+            borderRadius: 5,
+            marginVertical: 5,
+          }}>
+          <Text style={{...FONTS.h3Bold, color: COLORS.black}}>
+            Hủy chuyến đi
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
   return (
     <TouchableOpacity
       style={{
@@ -247,6 +273,7 @@ export default function Trip(props) {
       onPress={() => (props.pressTrip ? props.pressTrip(tripDetail) : null)}>
       {renderImage()}
       {renderDetail()}
+      {renderButton()}
     </TouchableOpacity>
   );
 }

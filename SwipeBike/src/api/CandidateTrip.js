@@ -8,8 +8,15 @@ export function createCandidateTrip(trip, token) {
   });
 }
 
-export function getUserTrips(UserId) {
-  return axios.get('http://10.0.2.2:3001/candidatetrip/getbycreator/' + UserId);
+export function getUserTrips(UserId, token) {
+  return axios.get(
+    'http://10.0.2.2:3001/candidatetrip/getbycreator/' + UserId,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
 }
 
 export const getCandidateTripRecommendations = (tripId, token) => {

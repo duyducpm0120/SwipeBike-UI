@@ -1,140 +1,57 @@
-import React, {useState, useEffect, useReducer} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
-  FlatList,
   Image,
+  FlatList,
   // Animated,
 } from 'react-native';
-import {FONTS, STYLES, SIZES, RESPONSIVE, ICONS, COLORS} from '../constants';
-import {BackgroundButton, Trip} from '../components';
-import {waitingTripDetail} from '../components';
-import Animated from 'react-native-reanimated';
-import BottomSheet from 'reanimated-bottom-sheet';
-import {getCandidateTripRecommendations, getUserTrips} from '../api';
-import {loadTokenFromLocalStorage} from '../storage';
+import {FONTS, STYLES, RESPONSIVE, ICONS, COLORS} from '../constants';
+import {CandidateTrip} from '../components';
 
 export default function RecommendTrip(props) {
-  const [token, setToken] = useSelector(state => state.loginToken);
   //dummy recommendedTripList
   const [recommendedTripList, setRecommendedTripList] = useState([
     {
-      tripId: 0,
-      tripDetail: waitingTripDetail,
+      CandidateTripBike: true,
+      CandidateTripCreator: [Object],
+      CandidateTripDateTime: 'Thu Nov 25 2021 10:47:13 GMT+0700 (+07)',
+      CandidateTripFromAddress:
+        'Đại học Khoa học Xã hội và Nhân văn - ĐHQG TP.HCM',
+      CandidateTripFromLat: 10.8722574,
+      CandidateTripFromLong: 106.8020436,
+      CandidateTripGenderDesired: null,
+      CandidateTripId: 39,
+      CandidateTripMessage: null,
+      CandidateTripToAddress:
+        'Phòng thí nghiệm An toàn Thông tin - UIT InSecLab',
+      CandidateTripToLat: 10.8697981,
+      CandidateTripToLong: 106.8028301,
+      CreatorId: 7,
+      TripStatusId: 1,
+      desDistance: [Array],
+      originDistance: [Array],
     },
     {
-      tripId: 1,
-      tripDetail: waitingTripDetail,
-    },
-    {
-      tripId: 2,
-      tripDetail: waitingTripDetail,
-    },
-    {
-      tripId: 3,
-      tripDetail: waitingTripDetail,
+      CandidateTripBike: true,
+      CandidateTripCreator: [Object],
+      CandidateTripDateTime: 'Fri Nov 26 2021 14:23:41 GMT+0700 (+07)',
+      CandidateTripFromAddress: 'AEON Mall Hà Đông',
+      CandidateTripFromLat: 20.9897037,
+      CandidateTripFromLong: 105.7517169,
+      CandidateTripGenderDesired: null,
+      CandidateTripId: 40,
+      CandidateTripMessage: null,
+      CandidateTripToAddress: 'Bắc Ninh',
+      CandidateTripToLat: 21.1781766,
+      CandidateTripToLong: 106.0710255,
+      CreatorId: 7,
+      TripStatusId: 1,
+      desDistance: [Array],
+      originDistance: [Array],
     },
   ]);
-  // trip to recommend
-  const [currentTrip, setCurrentTrip] = useState();
-
-  //vars for altering bottomsheet
-  const bottomSheetRef = React.createRef(null);
-  const fall = new Animated.Value(1);
-  //Chosen clicking trip
-  const [chosenTrip, setChosenTrip] = useState({});
-  //Create components inner bottomsheet
-  const renderInner = () => (
-    <View
-      style={{
-        backgroundColor: COLORS.backGroundColor,
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        paddingHorizontal: 10,
-      }}>
-      {/* //bar signal */}
-      <View
-        style={{
-          width: '100%',
-          height: 5,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: 10,
-        }}>
-        <View
-          style={{
-            width: 40,
-            height: '100%',
-            backgroundColor: COLORS.darkgray,
-            borderRadius: 100,
-          }}
-        />
-      </View>
-      <TouchableOpacity
-        style={{marginVertical: 10}}
-        onPress={() => {
-          props.navigation.navigate('GoogleMapView', {trip: chosenTrip});
-        }}>
-        <BackgroundButton text="Xem trên bản đồ" />
-      </TouchableOpacity>
-      <TouchableOpacity style={{marginVertical: 10}} onPress={() => {}}>
-        <BackgroundButton text="Chấp nhận ghép đôi" />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{
-          marginVertical: 10,
-          borderRadius: 10,
-          backgroundColor: COLORS.darkgray,
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: RESPONSIVE.pixelSizeHorizontal(315),
-          height: RESPONSIVE.pixelSizeVertical(60),
-        }}
-        onPress={() => {
-          bottomSheetRef.current.snapTo(1);
-        }}>
-        <Text style={FONTS.h2Bold}>Từ chối ghép đôi</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{
-          marginVertical: 10,
-          borderRadius: 10,
-          backgroundColor: COLORS.darkgray,
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: RESPONSIVE.pixelSizeHorizontal(315),
-          height: RESPONSIVE.pixelSizeVertical(60),
-        }}
-        onPress={() => {
-          bottomSheetRef.current.snapTo(1);
-        }}>
-        <Text style={FONTS.h2Bold}>Hủy</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
-  //Open options for trip
-  function openTripOptions(tripDetail) {
-    bottomSheetRef.current.snapTo(0);
-  }
-  //Trip options bottomSheet
-  const tripOptionsBottomSheet = () => {
-    return (
-      <BottomSheet
-        ref={bottomSheetRef}
-        snapPoints={['50%', RESPONSIVE.pixelSizeVertical(-50)]}
-        renderContent={renderInner}
-        initialSnap={1}
-        callbackNode={fall}
-        enabledGestureInteraction={true}
-        borderRadius={10}
-      />
-    );
-  };
 
   function renderHeader() {
     return (
@@ -170,49 +87,42 @@ export default function RecommendTrip(props) {
             marginVertical: RESPONSIVE.pixelSizeVertical(10),
             marginHorizontal: RESPONSIVE.pixelSizeHorizontal(5),
           }}
-          key={trip.tripId}>
-          <Trip
-            tripDetail={trip.tripDetail}
+          key={trip.CandidateTripId}>
+          <CandidateTrip
+            tripDetail={trip}
             pressTrip={() => {
-              setChosenTrip(trip);
-              openTripOptions(trip.tripDetail);
+              //setChosenTrip(trip);
+              //openTripOptions(trip);
             }}
           />
         </View>
       );
     };
     return (
-      <Animated.View
+      <View
         style={{
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'column',
           marginVertical: RESPONSIVE.pixelSizeVertical(20),
-          opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
         }}>
         <FlatList
           data={recommendedTripList}
-          renderItem={({item}) => Item(item)}
-          keyExtractor={item => item.tripId.toString()}
+          renderItem={({item, index}) => Item(item)}
+          keyExtractor={({item, index}) => {
+            return index;
+          }}
           showsVerticalScrollIndicator={false}
         />
-      </Animated.View>
+      </View>
     );
   }
 
   useEffect(() => {
-    setCurrentTrip(props.route.params.trip);
+    console.log('list recommendation', props.route.params.recommendedTripList);
+    setRecommendedTripList(props.route.params.recommendedTripList);
   }, []);
-
-  // fetch trips here
-  useEffect(() => {
-    if (token) {
-      getCandidateTripRecommendations(9, token)
-        .then(res => console.log(res))
-        .catch(err => console.log(err));
-    }
-  }, [token]);
 
   return (
     <View
@@ -221,7 +131,6 @@ export default function RecommendTrip(props) {
       }}>
       {renderHeader()}
       {renderRecommendedTrips()}
-      {tripOptionsBottomSheet()}
     </View>
   );
 }
