@@ -71,10 +71,9 @@ export default function Login(props) {
               dispatch(fetchLoginToken()),
             ]).then(() => console.log('fetched profile and token to redux'));
             props.navigation.navigate('Home');
+            dispatch(updateIsLoading(false));
           });
         });
-        dispatch(updateIsLoading(false));
-        //Navigation
       })
       .catch(err => {
         console.log(err);

@@ -120,8 +120,8 @@ export default function UpdateProfile(props) {
     launchImageLibrary(
       {
         mediaType: 'photo',
-        maxWidth: RESPONSIVE.pixelSizeHorizontal(100),
-        maxHeight: RESPONSIVE.pixelSizeHorizontal(100),
+        //maxWidth: RESPONSIVE.pixelSizeHorizontal(100),
+        //maxHeight: RESPONSIVE.pixelSizeHorizontal(100),
         includeBase64: false,
       },
       response => {
@@ -159,8 +159,8 @@ export default function UpdateProfile(props) {
     launchCamera(
       {
         mediaType: 'photo',
-        maxWidth: RESPONSIVE.pixelSizeHorizontal(100),
-        maxHeight: RESPONSIVE.pixelSizeHorizontal(100),
+        //maxWidth: RESPONSIVE.pixelSizeHorizontal(100),
+        //maxHeight: RESPONSIVE.pixelSizeHorizontal(100),
         includeBase64: true,
       },
       response => {
@@ -198,6 +198,7 @@ export default function UpdateProfile(props) {
 
   //Update profile on server
   function updateProfile() {
+    dispatch(updateIsLoading(true));
     const user = {
       UserFullName: name,
       UserGender: gender,
@@ -211,6 +212,7 @@ export default function UpdateProfile(props) {
         //then in Redux
         dispatch(fetchProfile(token));
         props.navigation.navigate('Home');
+        dispatch(updateIsLoading(false));
       })
       .catch(error => {
         console.log(error);

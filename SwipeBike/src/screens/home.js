@@ -1,5 +1,12 @@
-import React, {useState} from 'react';
-import {View, Text, Image, TouchableOpacity, ScrollView} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
+} from 'react-native';
 import {
   FONTS,
   SIZES,
@@ -9,21 +16,81 @@ import {
   IMAGES,
   STYLES,
 } from '../constants';
-import {Trip, BackgroundButton, waitingTripDetail} from '../components';
+import {
+  Trip,
+  CandidateTrip,
+  BackgroundButton,
+  waitingTripDetail,
+} from '../components';
 
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import {useSelector, useDispatch} from 'react-redux';
+import {updateIsLoading} from '../redux/slices/isLoadingSlice';
+import {getUserTrips, getCandidateTripRecommendations} from '../api';
 
 export default function Home(props) {
   const dispatch = useDispatch();
   //the user
   const [user, setUser] = useState({});
 
+  //Local token
+  const token = useSelector(state => state.loginToken.token);
+
   const userProfile = useSelector(state => state.userProfile.userProfile);
   //dummy data
   //dummy waitingTripList
   const [waitingTripList, setWaitingTripList] = useState([]);
+
+  function renderTrip(trip) {
+    if (trip.TripType == 1)
+      return (
+        <View
+          style={{
+            marginHorizontal:
+              (SIZES.width - RESPONSIVE.pixelSizeHorizontal(350) - 40) / 2,
+            // paddingHorizontal: RESPONSIVE.pixelSizeHorizontal(5),
+          }}
+          key={trip.CandidateTripId}>
+          <CandidateTrip
+            tripDetail={trip}
+            loadRecommendation={() => {
+              callRecommendTrips(trip);
+              //console.log(trip);
+            }}
+          />
+        </View>
+      );
+    else if (trip.TripType == 3)
+      return (
+        <View
+          style={{
+            marginVertical: RESPONSIVE.pixelSizeVertical(10),
+            paddingHorizontal: RESPONSIVE.pixelSizeHorizontal(5),
+          }}
+          key={trip.CandidateTripId}>
+          <Trip
+            tripDetail={trip}
+            pressTrip={trip => {
+              callRecommendTrips(trip);
+            }}
+          />
+        </View>
+      );
+  }
+
+  function callRecommendTrips(trip) {
+    dispatch(updateIsLoading(true));
+    getCandidateTripRecommendations(trip.CandidateTripId, token).then(res => {
+      console.log(res.data);
+      props.navigation.navigate('RecommendTrip', {
+        //console.log("list to be params",res.data.recommendation );
+        recommendedTripList: res.data.recommendation,
+      });
+      dispatch(updateIsLoading(false));
+    });
+    //console.log('trip', trip);
+  }
 
   function renderHeader() {
     return (
@@ -41,9 +108,10 @@ export default function Home(props) {
             alignItems: 'flex-start',
           }}>
           <Text style={FONTS.h2}>Xin chào,</Text>
-          <Text style={FONTS.h1Bold}>{user.name}</Text>
+          <Text style={FONTS.h1Bold}>{userProfile.UserFullName}</Text>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => props.navigation.navigate('Notifications')}>
           <Image source={ICONS.belt}></Image>
         </TouchableOpacity>
       </View>
@@ -127,29 +195,18 @@ export default function Home(props) {
         </View>
         <View
           style={{
-            height: RESPONSIVE.pixelSizeVertical(370),
+            height: RESPONSIVE.pixelSizeVertical(450),
+            marginTop: RESPONSIVE.pixelSizeVertical(20),
           }}>
-          <ScrollView
+          <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
-            pagingEnabled
-            scrollEventThrottle={1}
-            contentContainerStyle={{
-              paddingVertical: RESPONSIVE.pixelSizeVertical(10),
-            }}>
-            {waitingTripList.map(trip => {
-              return (
-                <View
-                  style={{
-                    marginHorizontal:
-                      (SIZES.width - RESPONSIVE.pixelSizeHorizontal(350) - 40) /
-                      2,
-                  }}>
-                  <Trip tripDetail={trip.tripDetail}></Trip>
-                </View>
-              );
-            })}
-          </ScrollView>
+            pagingEnabled={true}
+            data={waitingTripList}
+            renderItem={({item, index}) => renderTrip(item)}
+            keyExtractor={({item, index}) => {
+              return index;
+            }}></FlatList>
         </View>
         <View
           style={{
@@ -178,6 +235,23 @@ export default function Home(props) {
       </View>
     );
   }
+
+  useEffect(() => {
+    dispatch(updateIsLoading(true));
+    getUserTrips(userProfile.UserId, token)
+      .then(res => {
+        console.log('get user trips', res.data);
+        var trips = res.data.trips.map(trip => {
+          trip.TripType = 1;
+          return trip;
+        });
+        setWaitingTripList(trips);
+        // setDisplayingTripList(trips);
+        dispatch(updateIsLoading(false));
+        //setDisplayingTripList(res.data.trips);
+      })
+      .catch(err => console.log('err', err));
+  }, []);
 
   return (
     <View
