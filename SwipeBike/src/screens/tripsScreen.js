@@ -28,9 +28,11 @@ import {
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import {getUserTrips, getCandidateTripRecommendations} from '../api';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 
 export default function TripsScreen(props) {
+  const dispatch = useDispatch();
   //Local token
   const token = useSelector(state => state.loginToken.token);
   //Load user info from redux
@@ -135,12 +137,14 @@ export default function TripsScreen(props) {
   const [displayingTripList, setDisplayingTripList] = useState(waitingTripList);
 
   function callRecommendTrips(trip) {
+    dispatch(updateIsLoading(true));
     getCandidateTripRecommendations(trip.CandidateTripId, token).then(res => {
       console.log(res.data);
       props.navigation.navigate('RecommendTrip', {
         //console.log("list to be params",res.data.recommendation );
         recommendedTripList: res.data.recommendation,
       });
+      dispatch(updateIsLoading(false));
     });
     //console.log('trip', trip);
   }
@@ -285,6 +289,7 @@ export default function TripsScreen(props) {
   }
 
   useEffect(() => {
+    dispatch(updateIsLoading(true));
     getUserTrips(userProfile.UserId, token)
       .then(res => {
         console.log('get user trips', res.data);
@@ -293,6 +298,7 @@ export default function TripsScreen(props) {
           return trip;
         });
         setWaitingTripList(trips);
+        dispatch(updateIsLoading(false));
         //setDisplayingTripList(res.data.trips);
       })
       .catch(err => console.log('err', err));

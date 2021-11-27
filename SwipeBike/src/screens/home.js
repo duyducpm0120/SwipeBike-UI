@@ -13,9 +13,10 @@ import {Trip, BackgroundButton, waitingTripDetail} from '../components';
 
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 export default function Home(props) {
+  const dispatch = useDispatch();
   //the user
   const [user, setUser] = useState({});
 
@@ -144,11 +145,7 @@ export default function Home(props) {
                       (SIZES.width - RESPONSIVE.pixelSizeHorizontal(350) - 40) /
                       2,
                   }}>
-                  <Trip
-                    tripDetail={trip.tripDetail}
-                    pressTrip={() => {
-                      openTripOptions(trip.tripDetail);
-                    }}></Trip>
+                  <Trip tripDetail={trip.tripDetail}></Trip>
                 </View>
               );
             })}

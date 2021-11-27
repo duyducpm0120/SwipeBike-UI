@@ -29,6 +29,8 @@ import {useDispatch} from 'react-redux';
 import {updateToken} from '../redux/slices/loginTokenSlice';
 import {fetchProfile} from '../redux/slices/profileSlice';
 import {fetchLoginToken} from '../redux/slices/loginTokenSlice';
+import {updateIsLoading} from '../redux/slices/isLoadingSlice';
+
 export default function Login(props) {
   const dispatch = useDispatch();
 
@@ -37,6 +39,7 @@ export default function Login(props) {
   const [userPassword, setUserPassword] = useState('');
 
   function login() {
+    dispatch(updateIsLoading(true));
     //validate Inputs
     if (!ValidateEmail(userEmail)) {
       console.log('invalid email');
@@ -70,7 +73,7 @@ export default function Login(props) {
             props.navigation.navigate('Home');
           });
         });
-
+        dispatch(updateIsLoading(false));
         //Navigation
       })
       .catch(err => {

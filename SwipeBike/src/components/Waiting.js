@@ -60,6 +60,7 @@ export default function Waiting() {
         style={{
           justifyContent: 'center',
           alignItems: 'center',
+          backgroundColor: COLORS.backGroundColor,
         }}>
         <Image
           source={IMAGES.swipeBike}

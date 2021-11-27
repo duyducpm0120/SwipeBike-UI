@@ -28,6 +28,7 @@ import {
   TripInfo,
   RecommendTrip,
   Profile,
+  Loading,
 } from './src/screens';
 import {STYLES} from './src/constants';
 import {Waiting} from './src/components';
@@ -117,6 +118,7 @@ const App = () => {
         <Stack.Screen name="RecommendTrip" component={RecommendTrip} />
         <Stack.Screen name="Profile" component={Profile} />
       </Stack.Navigator>
+      <Loading></Loading>
     </NavigationContainer>
   );
 };

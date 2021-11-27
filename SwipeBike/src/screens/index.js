@@ -10,6 +10,7 @@ import CreateTrip from './createTrip';
 import TripInfo from './tripInfo';
 import RecommendTrip from './recommendTrip';
 import Profile from './profile';
+import Loading from './loading';
 
 export {
   Splash,
@@ -24,4 +25,5 @@ export {
   TripInfo,
   RecommendTrip,
   Profile,
+  Loading,
 };
