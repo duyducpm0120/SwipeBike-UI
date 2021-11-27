@@ -298,6 +298,7 @@ export default function TripsScreen(props) {
           return trip;
         });
         setWaitingTripList(trips);
+        setDisplayingTripList(trips);
         dispatch(updateIsLoading(false));
         //setDisplayingTripList(res.data.trips);
       })

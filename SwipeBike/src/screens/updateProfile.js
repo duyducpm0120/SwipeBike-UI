@@ -9,11 +9,12 @@ import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 //redux Field
 import {useSelector, useDispatch} from 'react-redux';
-import {fetchProfile} from '../redux/slices/profileSlice';
 //Handle moment
 import 'moment/locale/vi';
 
 import {updateProfilePic, setupUserProfile} from '../api';
+import {updateIsLoading} from '../redux/slices/isLoadingSlice';
+import {fetchProfile} from '../redux/slices/profileSlice';
 
 export default function UpdateProfile(props) {
   const token = useSelector(state => state.loginToken.token);
@@ -27,7 +28,7 @@ export default function UpdateProfile(props) {
   const [name, setName] = useState(userProfile.UserFullName);
   const [gender, setGender] = useState(userProfile.UserGender);
   const [date, setDate] = useState(new Date(userProfile.UserDoB));
-  const [imageUri, setImageUri] = useState(IMAGES.updateImage);
+
   //const [university, setUniversity] = useState();
   const [phone, setPhone] = useState(userProfile.UserPhone);
 
@@ -133,22 +134,20 @@ export default function UpdateProfile(props) {
         } else if (response.errorCode) {
           console.log('Error code ', response.errorCode);
         } else {
-          const source = {
-            uri: response.assets[0].uri,
-          };
+          dispatch(updateIsLoading(true));
 
-          //  console.log("response, ", response);
-
-          console.log('token to upload', token);
           updateProfilePic(response.assets[0], token)
             .then(result => {
-              console.log(result.data);
+              //console.log(result.data);
+              Promise.all([
+                dispatch(fetchProfile(token)),
+                dispatch(updateIsLoading(false)),
+              ]);
             })
             .catch(err => {
               console.log(err);
             });
 
-          setImageUri(source);
           //console.log(source);
         }
       },
@@ -174,9 +173,7 @@ export default function UpdateProfile(props) {
         } else if (response.errorCode) {
           console.log('Error code ', response.errorCode);
         } else {
-          const source = {
-            uri: response.assets[0].uri,
-          };
+          dispatch(updateIsLoading(true));
 
           const newUri =
             response.assets[0].uri.substr(0, 5) +
@@ -184,14 +181,16 @@ export default function UpdateProfile(props) {
           //   console.log('source', source);
 
           updateProfilePic(newUri, token)
-            .then(res => console.log(res))
+            .then(res =>
+              Promise.all([
+                dispatch(fetchProfile(token)),
+                dispatch(updateIsLoading(false)),
+              ]),
+            )
             .catch(error => {
               console.log(JSON.stringify(error));
               console.log(error.status);
             });
-          setImageUri(source);
-          //console.log(source);
-          //close bottomsheet
         }
       },
     );
