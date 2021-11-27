@@ -11,6 +11,7 @@ import {useSelector} from 'react-redux';
 
 export default function CandidateTrip(props) {
   const token = useSelector(state => state.loginToken.token);
+  const userId = useSelector(state => state.userProfile.userProfile.UserId);
   const [tripDetail, setTripDetail] = useState({
     CandidateTripCreator: {
       UserFullName: null,
@@ -201,6 +202,51 @@ export default function CandidateTrip(props) {
   }
 
   function renderButton() {
+    if (tripDetail.CreatorId == userId)
+      return (
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            marginTop: RESPONSIVE.pixelSizeVertical(10),
+          }}>
+          <TouchableOpacity
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: RESPONSIVE.pixelSizeHorizontal(300),
+              height: RESPONSIVE.pixelSizeVertical(40),
+              backgroundColor: COLORS.primaryLighter1,
+              borderRadius: 5,
+              marginVertical: 5,
+            }}
+            onPress={() => {
+              props.loadRecommendation();
+            }}>
+            <Text style={{...FONTS.h3Bold, color: COLORS.primaryDarker1}}>
+              Xem gợi ý
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: RESPONSIVE.pixelSizeHorizontal(300),
+              height: RESPONSIVE.pixelSizeVertical(40),
+              backgroundColor: COLORS.lightGray0,
+              borderRadius: 5,
+              marginVertical: 5,
+            }}
+            onPress={() => {
+              props.deleteTrip();
+            }}>
+            <Text style={{...FONTS.h3Bold, color: COLORS.black}}>
+              Xóa chuyến đi
+            </Text>
+          </TouchableOpacity>
+        </View>
+      );
     return (
       <View
         style={{
@@ -220,24 +266,10 @@ export default function CandidateTrip(props) {
             marginVertical: 5,
           }}
           onPress={() => {
-            props.pressTrip();
+            props.sendRequest();
           }}>
           <Text style={{...FONTS.h3Bold, color: COLORS.primaryDarker1}}>
-            Xem gợi ý
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: RESPONSIVE.pixelSizeHorizontal(300),
-            height: RESPONSIVE.pixelSizeVertical(40),
-            backgroundColor: COLORS.lightGray0,
-            borderRadius: 5,
-            marginVertical: 5,
-          }}>
-          <Text style={{...FONTS.h3Bold, color: COLORS.black}}>
-            Xóa chuyến đi
+            Gửi lời mời ghép đôi
           </Text>
         </TouchableOpacity>
       </View>

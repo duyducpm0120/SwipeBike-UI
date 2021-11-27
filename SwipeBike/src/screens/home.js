@@ -24,105 +24,6 @@ export default function Home(props) {
   //dummy waitingTripList
   const [waitingTripList, setWaitingTripList] = useState([]);
 
-  //vars for altering bottomsheet
-  const bottomSheetRef = React.createRef(null);
-  const fall = new Animated.Value(1);
-
-  //Create components inner bottomsheet
-  const renderInner = () => (
-    <View
-      style={{
-        backgroundColor: COLORS.backGroundColor,
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        paddingHorizontal: 10,
-      }}>
-      {/* //bar signal */}
-      <View
-        style={{
-          width: '100%',
-          height: 5,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: 10,
-        }}>
-        <View
-          style={{
-            width: 40,
-            height: '100%',
-            backgroundColor: COLORS.darkgray,
-            borderRadius: 100,
-          }}></View>
-      </View>
-      <TouchableOpacity
-        style={{marginVertical: 10}}
-        onPress={() => {
-          //openImagePicker();
-        }}>
-        <BackgroundButton text="Xem trên bản đồ"></BackgroundButton>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{marginVertical: 10}}
-        onPress={() => {
-          //openCamera();
-        }}>
-        <BackgroundButton text="Chấp nhận ghép đôi"></BackgroundButton>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{
-          marginVertical: 10,
-          borderRadius: 10,
-          backgroundColor: COLORS.darkgray,
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: RESPONSIVE.pixelSizeHorizontal(315),
-          height: RESPONSIVE.pixelSizeVertical(60),
-        }}
-        onPress={() => {
-          bottomSheetRef.current.snapTo(1);
-        }}>
-        <Text style={FONTS.h2Bold}>Từ chối ghép đôi</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{
-          marginVertical: 10,
-          borderRadius: 10,
-          backgroundColor: COLORS.darkgray,
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: RESPONSIVE.pixelSizeHorizontal(315),
-          height: RESPONSIVE.pixelSizeVertical(60),
-        }}
-        onPress={() => {
-          bottomSheetRef.current.snapTo(1);
-        }}>
-        <Text style={FONTS.h2Bold}>Hủy</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
-  //Open options for trip
-  function openTripOptions(tripDetail) {
-    bottomSheetRef.current.snapTo(0);
-  }
-  //Trip options bottomSheet
-  const tripOptionsBottomSheet = () => {
-    return (
-      <BottomSheet
-        ref={bottomSheetRef}
-        snapPoints={['50%', RESPONSIVE.pixelSizeVertical(-50)]}
-        renderContent={renderInner}
-        initialSnap={1}
-        callbackNode={fall}
-        enabledGestureInteraction={true}
-        borderRadius={10}
-      />
-    );
-  };
-
   function renderHeader() {
     return (
       <View
@@ -157,8 +58,6 @@ export default function Home(props) {
           flexDirection: 'column',
           marginVertical: 20,
           width: SIZES.width - 40,
-
-          //width: '100%', //width size bug but I don't know why
         }}>
         <View
           style={{
@@ -288,9 +187,8 @@ export default function Home(props) {
       style={{
         ...STYLES.container,
       }}>
-      <Animated.ScrollView
+      <ScrollView
         nestedScrollEnabled={true}
-        style={{opacity: Animated.add(0.3, Animated.multiply(fall, 1.0))}}
         contentContainerStyle={{
           width: '100%',
           justifyContent: 'center',
@@ -301,8 +199,7 @@ export default function Home(props) {
         {renderCreateTrip()}
         {renderWaitingTripList()}
         {/* {renderRecommendedTrip()} */}
-      </Animated.ScrollView>
-      {tripOptionsBottomSheet()}
+      </ScrollView>
     </View>
   );
 }

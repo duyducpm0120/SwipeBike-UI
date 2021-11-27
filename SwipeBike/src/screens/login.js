@@ -27,7 +27,8 @@ import {
 //Redux
 import {useDispatch} from 'react-redux';
 import {updateToken} from '../redux/slices/loginTokenSlice';
-
+import {fetchProfile} from '../redux/slices/profileSlice';
+import {fetchLoginToken} from '../redux/slices/loginTokenSlice';
 export default function Login(props) {
   const dispatch = useDispatch();
 
@@ -62,10 +63,10 @@ export default function Login(props) {
         //Saving token to localStorage
         removeTokenFromLocalStorage().then(() => {
           saveTokenToLocalStorage(result.data.token).then(async () => {
-            const token = await loadTokenFromLocalStorage();
-            //console.log('load token:', token);
-            console.log('token saved: ', token);
-            dispatch(updateToken(result.data.token));
+            await Promise.all([
+              dispatch(fetchProfile(result.data.token)),
+              dispatch(fetchLoginToken()),
+            ]).then(() => console.log('fetched profile and token to redux'));
             props.navigation.navigate('Home');
           });
         });

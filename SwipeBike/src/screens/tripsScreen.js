@@ -156,7 +156,7 @@ export default function TripsScreen(props) {
           key={trip.CandidateTripId}>
           <CandidateTrip
             tripDetail={trip}
-            pressTrip={() => {
+            loadRecommendation={() => {
               callRecommendTrips(trip);
               //console.log(trip);
             }}
