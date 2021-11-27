@@ -164,6 +164,9 @@ export default function TripsScreen(props) {
               callRecommendTrips(trip);
               //console.log(trip);
             }}
+            pressTrip={() => {
+              viewOnMap(trip);
+            }}
           />
         </View>
       );
@@ -183,6 +186,10 @@ export default function TripsScreen(props) {
           />
         </View>
       );
+  }
+
+  function viewOnMap(trip) {
+    props.navigation.navigate('GoogleMapView', {tripData: trip});
   }
   function renderHeader() {
     return (

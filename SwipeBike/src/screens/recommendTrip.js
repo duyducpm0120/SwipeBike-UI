@@ -12,47 +12,13 @@ import {CandidateTrip} from '../components';
 
 export default function RecommendTrip(props) {
   //dummy recommendedTripList
-  const [recommendedTripList, setRecommendedTripList] = useState([
-    {
-      CandidateTripBike: true,
-      CandidateTripCreator: [Object],
-      CandidateTripDateTime: 'Thu Nov 25 2021 10:47:13 GMT+0700 (+07)',
-      CandidateTripFromAddress:
-        'Đại học Khoa học Xã hội và Nhân văn - ĐHQG TP.HCM',
-      CandidateTripFromLat: 10.8722574,
-      CandidateTripFromLong: 106.8020436,
-      CandidateTripGenderDesired: null,
-      CandidateTripId: 39,
-      CandidateTripMessage: null,
-      CandidateTripToAddress:
-        'Phòng thí nghiệm An toàn Thông tin - UIT InSecLab',
-      CandidateTripToLat: 10.8697981,
-      CandidateTripToLong: 106.8028301,
-      CreatorId: 7,
-      TripStatusId: 1,
-      desDistance: [Array],
-      originDistance: [Array],
-    },
-    {
-      CandidateTripBike: true,
-      CandidateTripCreator: [Object],
-      CandidateTripDateTime: 'Fri Nov 26 2021 14:23:41 GMT+0700 (+07)',
-      CandidateTripFromAddress: 'AEON Mall Hà Đông',
-      CandidateTripFromLat: 20.9897037,
-      CandidateTripFromLong: 105.7517169,
-      CandidateTripGenderDesired: null,
-      CandidateTripId: 40,
-      CandidateTripMessage: null,
-      CandidateTripToAddress: 'Bắc Ninh',
-      CandidateTripToLat: 21.1781766,
-      CandidateTripToLong: 106.0710255,
-      CreatorId: 7,
-      TripStatusId: 1,
-      desDistance: [Array],
-      originDistance: [Array],
-    },
-  ]);
+  const [recommendedTripList, setRecommendedTripList] = useState(
+    props.route.params.recommendedTripList,
+  );
 
+  function viewOnMap(trip) {
+    props.navigation.navigate('GoogleMapView', {tripData: trip});
+  }
   function renderHeader() {
     return (
       <View
@@ -91,8 +57,7 @@ export default function RecommendTrip(props) {
           <CandidateTrip
             tripDetail={trip}
             pressTrip={() => {
-              //setChosenTrip(trip);
-              //openTripOptions(trip);
+              viewOnMap(trip);
             }}
           />
         </View>
@@ -120,8 +85,8 @@ export default function RecommendTrip(props) {
   }
 
   useEffect(() => {
-    console.log('list recommendation', props.route.params.recommendedTripList);
-    setRecommendedTripList(props.route.params.recommendedTripList);
+    //console.log('list recommendation', props.route.params.recommendedTripList);
+    //setRecommendedTripList(props.route.params.recommendedTripList);
   }, []);
 
   return (

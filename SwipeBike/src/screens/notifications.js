@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
-import {STYLES, FONTS, IMAGES, ICONS} from '../constants';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {STYLES, FONTS, IMAGES, ICONS, COLORS} from '../constants';
 import {Notification} from '../components';
 
 export default function Notifications(props) {
@@ -19,7 +19,7 @@ export default function Notifications(props) {
             style={{tintColor: COLORS.black, width: 30, height: 30}}
           />
         </TouchableOpacity>
-        <Text style={{...FONTS.title}}>Gợi ý cho bạn</Text>
+        <Text style={{...FONTS.title}}>Thông báo</Text>
         <TouchableOpacity>
           <Image
             source={ICONS.refresh}

@@ -19,8 +19,11 @@ import {
 import {BackgroundButton} from '../components';
 import {signUpApi, loginApi} from '../api';
 import {Button, Snackbar} from 'react-native-paper';
+import {useDispatch} from 'react-redux';
+import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 
 export default function SignUp(props) {
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
@@ -57,12 +60,17 @@ export default function SignUp(props) {
       ]);
       return;
     }
+    dispatch(updateIsLoading(true));
     //signUp
     signUpApi(userEmail, userPassword)
-      .catch(err => console.log(err))
       .then(result => {
         console.log(result.data);
+        dispatch(updateIsLoading(false));
         onToggleSnackBar();
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch(updateIsLoading(false));
       });
   }
   function ValidateEmail(email) {

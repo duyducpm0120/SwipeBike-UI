@@ -288,7 +288,7 @@ export default function CandidateTrip(props) {
         backgroundColor: COLORS.backGroundColor,
         ...STYLES.shadow,
       }}
-      onPress={() => (props.pressTrip ? props.pressTrip(tripDetail) : null)}>
+      onPress={() => props.pressTrip()}>
       {renderImage()}
       {renderDetail()}
       {renderButton()}

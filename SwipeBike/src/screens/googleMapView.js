@@ -27,32 +27,18 @@ import {
   BackgroundButton,
   waitingTripDetail,
   pairingTripDetail,
+  CandidateTrip,
 } from '../components';
 
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
+import {useDispatch} from 'react-redux';
+import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 
 export default function GoogleMapView(props) {
+  const dispatch = useDispatch();
   //Trip to display
-  const [tripData, setTripData] = useState({
-    tripDetail: {
-      CandidateTripDriver: {
-        name: '',
-        image: null,
-      },
-      CandidateTripPassenger: null,
-      CandidateTripBike: null,
-      CandidateTripDateTime: '',
-      CandidateTripFromAddress: null,
-      CandidateTripToAddress: null,
-      CandidateTripFromLat: null,
-      CandidateTripFromLong: null,
-      CandidateTripToLat: null,
-      CandidateTripToLong: null,
-      CandidateTripMessage: null,
-    },
-    tripId: null,
-  });
+  const [tripData, setTripData] = useState(props.route.params.tripData);
   //check trip is loaded ?
   const [loaded, setLoaded] = useState(false);
 
@@ -106,19 +92,10 @@ export default function GoogleMapView(props) {
           }}></View>
       </View>
       {/* Trip Component */}
-      {loaded ? (
-        <Trip tripDetail={tripData.tripDetail} pressTrip={() => {}}></Trip>
-      ) : (
-        <View></View>
-      )}
+
+      <CandidateTrip tripDetail={tripData} pressTrip={() => {}}></CandidateTrip>
     </View>
   );
-  //Get trip param data
-  function getTripData() {
-    setTripData(props.route.params.trip);
-    if (tripData.tripDetail) setLoaded(true);
-    console.log('Success load trip', tripData);
-  }
 
   function requestLocationPermission() {
     if (locationPermission === PermissionsAndroid.RESULTS.GRANTED) {
@@ -148,10 +125,10 @@ export default function GoogleMapView(props) {
     }
   }
 
-  async function getCurrentLocation() {
+  function getCurrentLocation() {
     if (locationPermission !== PermissionsAndroid.RESULTS.GRANTED)
-      await requestLocationPermission();
-    await Geolocation.getCurrentPosition(
+      requestLocationPermission();
+    Geolocation.getCurrentPosition(
       position => {
         if (
           position.coords.latitude === currentLocation.latitude &&
@@ -168,7 +145,7 @@ export default function GoogleMapView(props) {
         });
       },
       error => {
-        //Alert.alert(error.message.toString());
+        Alert.alert(error.message.toString());
       },
       {
         showLocationDialog: true,
@@ -181,24 +158,32 @@ export default function GoogleMapView(props) {
   }
 
   function getDataRoute() {
-    if (loaded != true) return;
+    // if (loaded != true) return;
+    if (!tripData) return;
     const fromCoordinates = [
-      tripData.tripDetail.CandidateTripFromLat,
-      tripData.tripDetail.CandidateTripFromLong,
+      tripData.CandidateTripFromLat,
+      tripData.CandidateTripFromLong,
     ];
     const toCoordinates = [
-      tripData.tripDetail.CandidateTripToLat,
-      tripData.tripDetail.CandidateTripToLong,
+      tripData.CandidateTripToLat,
+      tripData.CandidateTripToLong,
     ];
-    getRoute(fromCoordinates, toCoordinates).then(route => setCoords(route));
+    dispatch(updateIsLoading(true));
+    getRoute(fromCoordinates, toCoordinates).then(route => {
+      setCoords(route);
+      dispatch(updateIsLoading(false));
+    });
     //
   }
 
   useEffect(() => {
-    getTripData();
     getCurrentLocation();
+  }, [currentLocation]);
+
+  useEffect(() => {
     getDataRoute();
-  }, [currentLocation, tripData]);
+  }, []);
+
   return (
     <View style={styles.container}>
       <MapView
@@ -252,17 +237,13 @@ export default function GoogleMapView(props) {
         {/* Route Marker */}
         <Marker
           coordinate={{
-            latitude:
-              loaded == true ? tripData.tripDetail.CandidateTripFromLat : 0,
-            longitude:
-              loaded == true ? tripData.tripDetail.CandidateTripFromLong : 0,
+            latitude: tripData.CandidateTripFromLat,
+            longitude: tripData.CandidateTripFromLong,
           }}></Marker>
         <Marker
           coordinate={{
-            latitude:
-              loaded == true ? tripData.tripDetail.CandidateTripToLat : 0,
-            longitude:
-              loaded == true ? tripData.tripDetail.CandidateTripToLong : 0,
+            latitude: tripData.CandidateTripToLat,
+            longitude: tripData.CandidateTripToLong,
           }}></Marker>
 
         <MapView.Polyline
@@ -278,7 +259,7 @@ export default function GoogleMapView(props) {
       </MapView>
       <BottomSheet
         ref={bottomSheetRef}
-        snapPoints={['55%', RESPONSIVE.pixelSizeVertical(50)]}
+        snapPoints={['70%', RESPONSIVE.pixelSizeVertical(50)]}
         renderContent={renderInner}
         s
         initialSnap={1}

@@ -59,6 +59,9 @@ export default function Home(props) {
               callRecommendTrips(trip);
               //console.log(trip);
             }}
+            pressTrip={() => {
+              viewOnMap(trip);
+            }}
           />
         </View>
       );
@@ -99,15 +102,32 @@ export default function Home(props) {
     return age.toString();
   }
 
+  function viewOnMap(trip) {
+    props.navigation.navigate('GoogleMapView', {tripData: trip});
+  }
   function renderHeader() {
     return (
       <View
         style={{
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexDirection: 'row',
+          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
+          flexDirection: 'column',
           width: '100%',
         }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            width: '100%',
+            marginTop: RESPONSIVE.pixelSizeVertical(10),
+          }}>
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate('Notifications')}>
+            <Image source={ICONS.belt}></Image>
+          </TouchableOpacity>
+        </View>
+
         <View
           style={{
             flexDirection: 'row',
@@ -151,13 +171,9 @@ export default function Home(props) {
                   tintColor: COLORS.white,
                 }}></Image>
             </View>
-            <Text style={FONTS.h1Bold}>{userProfile.UserFullName}</Text>
+            <Text style={FONTS.h2Bold}>{userProfile.UserFullName}</Text>
           </View>
         </View>
-        <TouchableOpacity
-          onPress={() => props.navigation.navigate('Notifications')}>
-          <Image source={ICONS.belt}></Image>
-        </TouchableOpacity>
       </View>
     );
   }
