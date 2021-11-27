@@ -21,6 +21,7 @@ import {
   CandidateTrip,
   BackgroundButton,
   waitingTripDetail,
+  RoundedImage,
 } from '../components';
 
 import Animated from 'react-native-reanimated';
@@ -91,6 +92,12 @@ export default function Home(props) {
     });
     //console.log('trip', trip);
   }
+  function ageOfUser() {
+    var currentYear = parseInt(new Date().getFullYear());
+    var userDobYear = parseInt(new Date(userProfile.UserDoB).getFullYear());
+    var age = currentYear - userDobYear;
+    return age.toString();
+  }
 
   function renderHeader() {
     return (
@@ -103,12 +110,49 @@ export default function Home(props) {
         }}>
         <View
           style={{
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'flex-start',
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            //width: '100%',
+            marginTop: RESPONSIVE.pixelSizeVertical(10),
           }}>
-          <Text style={FONTS.h2}>Xin chào,</Text>
-          <Text style={FONTS.h1Bold}>{userProfile.UserFullName}</Text>
+          <RoundedImage
+            image={{uri: userProfile.UserProfilePic}}
+            width={80}
+            height={80}></RoundedImage>
+          <View
+            style={{
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
+              marginLeft: RESPONSIVE.pixelSizeHorizontal(10),
+            }}>
+            <View
+              style={{
+                backgroundColor: COLORS.primary,
+                width: RESPONSIVE.pixelSizeHorizontal(50),
+                height: RESPONSIVE.pixelSizeVertical(25),
+                marginTop: 5,
+                borderRadius: 50,
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+              }}>
+              <Text style={{...FONTS.h3, color: COLORS.white}}>
+                {ageOfUser()}
+              </Text>
+              <Image
+                source={
+                  userProfile.UserGender == 'male' ? ICONS.male : ICONS.female
+                }
+                style={{
+                  width: RESPONSIVE.pixelSizeHorizontal(12),
+                  height: RESPONSIVE.pixelSizeVertical(12),
+                  tintColor: COLORS.white,
+                }}></Image>
+            </View>
+            <Text style={FONTS.h1Bold}>{userProfile.UserFullName}</Text>
+          </View>
         </View>
         <TouchableOpacity
           onPress={() => props.navigation.navigate('Notifications')}>
@@ -265,6 +309,7 @@ export default function Home(props) {
           justifyContent: 'center',
           alignItems: 'flex-start',
         }}
+        styles={{width: '100%'}}
         showsVerticalScrollIndicator={false}>
         {renderHeader()}
         {renderCreateTrip()}
