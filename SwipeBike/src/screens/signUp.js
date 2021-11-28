@@ -7,18 +7,10 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {
-  FONTS,
-  SIZES,
-  COLORS,
-  RESPONSIVE,
-  ICONS,
-  IMAGES,
-  STYLES,
-} from '../constants';
+import {FONTS, COLORS, RESPONSIVE, ICONS, STYLES} from '../constants';
 import {BackgroundButton} from '../components';
-import {signUpApi, loginApi} from '../api';
-import {Button, Snackbar} from 'react-native-paper';
+import {signUpApi} from '../api';
+import {Snackbar} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 

@@ -15,7 +15,6 @@ import {
   COLORS,
   RESPONSIVE,
   ICONS,
-  IMAGES,
   STYLES,
   getRoute,
 } from '../constants';
@@ -26,12 +25,14 @@ import Geolocation from 'react-native-geolocation-service';
 import {MAPS_API_KEY} from '../../key';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {createCandidateTrip} from '../api';
-import {loadTokenFromLocalStorage} from '../storage';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {updateIsLoading} from '../redux/slices/isLoadingSlice';
+import {Snackbar} from 'react-native-paper';
 //For places search
 navigator.geolocation = require('react-native-geolocation-service');
 
 export default function CreateTrip(props) {
+  const dispatch = useDispatch();
   //Local token from redux
   const token = useSelector(state => state.loginToken.token);
   //Load user info from redux
@@ -47,10 +48,6 @@ export default function CreateTrip(props) {
   const [gender, setGender] = useState('male');
   //dateTime
   const [dateTime, setDateTime] = useState(new Date());
-  //From location
-  const [from, setFrom] = useState({});
-  //To location
-  const [to, setTo] = useState({});
 
   //Device permission for location
   const [locationPermission, setLocationPermission] = useState();
@@ -60,6 +57,11 @@ export default function CreateTrip(props) {
     longitude: 0,
     coordinates: [0, 0],
   });
+
+  //Snackbar field
+  const [snackBarVisible, setSnackBarVisible] = React.useState(false);
+  const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible);
+  const onDismissSnackBar = () => setSnackBarVisible(false);
 
   //Polyline coordinates
   const [coords, setCoords] = useState([
@@ -104,11 +106,11 @@ export default function CreateTrip(props) {
     }
   }
 
-  async function getCurrentLocation() {
+  function getCurrentLocation() {
     console.log('get current location!');
     if (locationPermission !== PermissionsAndroid.RESULTS.GRANTED)
-      await requestLocationPermission();
-    await Geolocation.getCurrentPosition(
+      requestLocationPermission();
+    Geolocation.getCurrentPosition(
       position => {
         if (
           position.coords.latitude === currentLocation.latitude &&
@@ -138,7 +140,7 @@ export default function CreateTrip(props) {
     //console.log(currentLocation);
   }
 
-  async function getDataRoute() {
+  function getDataRoute() {
     if (!fromLocation || !toLocation) return;
     getRoute(fromLocation.coordinate, toLocation.coordinate).then(route =>
       setCoords(route),
@@ -174,16 +176,21 @@ export default function CreateTrip(props) {
       CandidateTripToLat: toLocation.coordinate[0],
       CandidateTripToLong: toLocation.coordinate[1],
       CandidateTripBike: isDriver,
+      CandidateTripGenderDesired: gender,
       CandidateTripMessage: null,
     };
 
     //console.log(trip);
     //console.log('token', token);
 
+    dispatch(updateIsLoading(true));
     //Call API here
     createCandidateTrip(trip, token)
       .then(res => {
         console.log('Created new candidateTrip');
+        dispatch(updateIsLoading(false));
+
+        onToggleSnackBar();
       })
       .catch(error => {
         console.log(error);
@@ -739,7 +746,7 @@ export default function CreateTrip(props) {
   //updating current location
   useEffect(() => {
     getCurrentLocation();
-  });
+  }, []);
   //updating route
   useEffect(() => {
     getDataRoute();
@@ -753,6 +760,19 @@ export default function CreateTrip(props) {
       {renderHeader()}
       {renderCreateTrip()}
       {renderFooter()}
+      <Snackbar
+        visible={snackBarVisible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: 'OK',
+          onPress: () => {
+            // Do something
+            onDismissSnackBar();
+            props.navigation.goBack();
+          },
+        }}>
+        Tạo chuyến đi thành công
+      </Snackbar>
     </View>
   );
 }
