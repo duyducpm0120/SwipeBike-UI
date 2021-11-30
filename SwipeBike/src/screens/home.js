@@ -16,16 +16,8 @@ import {
   IMAGES,
   STYLES,
 } from '../constants';
-import {
-  Trip,
-  CandidateTrip,
-  BackgroundButton,
-  waitingTripDetail,
-  RoundedImage,
-} from '../components';
+import {Trip, CandidateTrip, RoundedImage} from '../components';
 
-import Animated from 'react-native-reanimated';
-import BottomSheet from 'reanimated-bottom-sheet';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import {getUserTrips, getCandidateTripRecommendations} from '../api';

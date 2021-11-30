@@ -1,10 +1,18 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity, Image, FlatList} from 'react-native';
 import {STYLES, FONTS, IMAGES, ICONS, COLORS, RESPONSIVE} from '../constants';
 import {Notification} from '../components';
 
 export default function Notifications(props) {
   const notificationsList = [
+    {
+      NotificationId: 3,
+      NotificationTitle: 'Lời mời kết bạn',
+      NotificationContent: 'đã gửi cho bạn lời mời ghép đôi chuyến đi',
+      NotificationTargetId: 8,
+      CreatorName: 'Duong Thanh Vuong',
+      CreatorImage: IMAGES.cuteDriver,
+    },
     {
       NotificationId: 3,
       NotificationTitle: 'Lời mời kết bạn',
@@ -94,8 +102,8 @@ export default function Notifications(props) {
         style={{
           justifyContent: 'center',
           alignItems: 'center',
-          width: '100%',
           marginVertical: RESPONSIVE.pixelSizeVertical(10),
+          flex: 1,
         }}>
         <FlatList
           showsVerticalScrollIndicator={false}
@@ -112,6 +120,7 @@ export default function Notifications(props) {
       </View>
     );
   }
+
   return (
     <View style={{...STYLES.container}}>
       {renderHeader()}

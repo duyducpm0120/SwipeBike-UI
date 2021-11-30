@@ -13,6 +13,8 @@ import {signUpApi} from '../api';
 import {Snackbar} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
+import Uni from '../utils/UniList.json';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 export default function SignUp(props) {
   const dispatch = useDispatch();
@@ -25,6 +27,18 @@ export default function SignUp(props) {
   const [snackBarVisible, setSnackBarVisible] = React.useState(false);
   const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible);
   const onDismissSnackBar = () => setSnackBarVisible(false);
+
+  //Email dropdown field
+  const [open, setOpen] = useState(false);
+  const [items, setItems] = useState(
+    Uni.map(item => {
+      return {
+        label: item.UniEmailSuffix,
+        value: item.UniCode,
+      };
+    }),
+  );
+  const [emailSuffixValue, setEmailSuffixValue] = useState(items[0].label);
 
   function SignUp() {
     //validate inputs
@@ -114,6 +128,7 @@ export default function SignUp(props) {
             borderRadius: 10,
             width: '100%',
             marginVertical: RESPONSIVE.pixelSizeVertical(10),
+            zIndex: 1,
           }}>
           <Image
             source={ICONS.email}
@@ -127,11 +142,29 @@ export default function SignUp(props) {
             style={{
               ...FONTS.h3,
               marginLeft: RESPONSIVE.pixelSizeHorizontal(15),
-              width: RESPONSIVE.pixelSizeHorizontal(270),
+              width: RESPONSIVE.pixelSizeHorizontal(110),
             }}
             onChangeText={email => {
-              setUserEmail(email);
+              setUserEmail(email + emailSuffixValue);
             }}></TextInput>
+          <View style={{width: '60%'}}>
+            <DropDownPicker
+              placeholder={items[0].label}
+              open={open}
+              value={emailSuffixValue}
+              items={items}
+              setOpen={setOpen}
+              setValue={setEmailSuffixValue}
+              setItems={setItems}
+              style={{
+                backgroundColor: COLORS.backGroundColor,
+                borderColor: 'transparent',
+              }}
+              textStyle={{
+                ...FONTS.h3,
+              }}
+            />
+          </View>
         </View>
         <View
           style={{

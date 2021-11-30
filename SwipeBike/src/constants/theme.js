@@ -153,6 +153,7 @@ export const STYLES = StyleSheet.create({
     //backgroundColor: COLORS.backGroundColor,
     paddingTop: 20,
     paddingHorizontal: 20,
+    backgroundColor: COLORS.backGroundColor,
   },
   scrollContainer: {
     justifyContent: 'flex-start',
