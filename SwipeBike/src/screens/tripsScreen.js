@@ -195,11 +195,24 @@ export default function TripsScreen(props) {
     return (
       <View
         style={{
-          justifyContent: 'center',
+          justifyContent: 'space-between',
           alignItems: 'center',
+          flexDirection: 'row',
           width: '100%',
         }}>
-        <Text style={{...FONTS.title}}>Chuyến đi</Text>
+        <TouchableOpacity onPress={() => props.navigation.goBack()}>
+          <Image
+            source={ICONS.leftArr1}
+            style={{tintColor: COLORS.black, width: 30, height: 30}}
+          />
+        </TouchableOpacity>
+        <Text style={{...FONTS.title}}>Chuyến đi </Text>
+        <TouchableOpacity>
+          <Image
+            source={ICONS.refresh}
+            style={{tintColor: COLORS.black, width: 30, height: 30}}
+          />
+        </TouchableOpacity>
       </View>
     );
   }

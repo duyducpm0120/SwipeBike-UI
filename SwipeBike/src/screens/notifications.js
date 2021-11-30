@@ -1,9 +1,68 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
-import {STYLES, FONTS, IMAGES, ICONS, COLORS} from '../constants';
+import {View, Text, TouchableOpacity, Image, FlatList} from 'react-native';
+import {STYLES, FONTS, IMAGES, ICONS, COLORS, RESPONSIVE} from '../constants';
 import {Notification} from '../components';
 
 export default function Notifications(props) {
+  const notificationsList = [
+    {
+      NotificationId: 3,
+      NotificationTitle: 'Lời mời kết bạn',
+      NotificationContent: 'đã gửi cho bạn lời mời ghép đôi chuyến đi',
+      NotificationTargetId: 8,
+      CreatorName: 'Duong Thanh Vuong',
+      CreatorImage: IMAGES.cuteDriver,
+    },
+    {
+      NotificationId: 3,
+      NotificationTitle: 'Lời mời kết bạn',
+      NotificationContent: 'đã gửi cho bạn lời mời ghép đôi chuyến đi',
+      NotificationTargetId: 8,
+      CreatorName: 'Duong Thanh Vuong',
+      CreatorImage: IMAGES.cuteDriver,
+    },
+    {
+      NotificationId: 3,
+      NotificationTitle: 'Lời mời kết bạn',
+      NotificationContent: 'đã gửi cho bạn lời mời ghép đôi chuyến đi',
+      NotificationTargetId: 8,
+      CreatorName: 'Duong Thanh Vuong',
+      CreatorImage: IMAGES.cuteDriver,
+    },
+    {
+      NotificationId: 3,
+      NotificationTitle: 'Lời mời kết bạn',
+      NotificationContent: 'đã gửi cho bạn lời mời ghép đôi chuyến đi',
+      NotificationTargetId: 8,
+      CreatorName: 'Duong Thanh Vuong',
+      CreatorImage: IMAGES.cuteDriver,
+    },
+    {
+      NotificationId: 3,
+      NotificationTitle: 'Lời mời kết bạn',
+      NotificationContent: 'đã gửi cho bạn lời mời ghép đôi chuyến đi',
+      NotificationTargetId: 8,
+      CreatorName: 'Duong Thanh Vuong',
+      CreatorImage: IMAGES.cuteDriver,
+    },
+    {
+      NotificationId: 3,
+      NotificationTitle: 'Lời mời kết bạn',
+      NotificationContent: 'đã gửi cho bạn lời mời ghép đôi chuyến đi',
+      NotificationTargetId: 8,
+      CreatorName: 'Duong Thanh Vuong',
+      CreatorImage: IMAGES.cuteDriver,
+    },
+    {
+      NotificationId: 3,
+      NotificationTitle: 'Lời mời kết bạn',
+      NotificationContent: 'đã gửi cho bạn lời mời ghép đôi chuyến đi',
+      NotificationTargetId: 8,
+      CreatorName: 'Duong Thanh Vuong',
+      CreatorImage: IMAGES.cuteDriver,
+    },
+  ];
+
   function renderHeader() {
     return (
       <View
@@ -29,5 +88,34 @@ export default function Notifications(props) {
       </View>
     );
   }
-  return <View style={{...STYLES.container}}>{renderHeader()}</View>;
+  function renderNotifications() {
+    return (
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          marginVertical: RESPONSIVE.pixelSizeVertical(10),
+        }}>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={notificationsList}
+          renderItem={({item, index}) => {
+            return <Notification notificationData={item}></Notification>;
+          }}
+          keyExtractor={({item, index}) => {
+            return index;
+          }}
+          style={{
+            width: '100%',
+          }}></FlatList>
+      </View>
+    );
+  }
+  return (
+    <View style={{...STYLES.container}}>
+      {renderHeader()}
+      {renderNotifications()}
+    </View>
+  );
 }

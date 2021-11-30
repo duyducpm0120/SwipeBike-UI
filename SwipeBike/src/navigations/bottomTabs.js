@@ -14,7 +14,7 @@ import {
 
 import {TabIcon} from '../components';
 import {View} from 'react-native';
-import {TripsScreen, Profile} from '../screens';
+import {Profile} from '../screens';
 
 const Tab = createBottomTabNavigator();
 
@@ -45,19 +45,7 @@ const BottomTabs = () => {
           ),
         }}
       />
-      <Tab.Screen
-        name="TripsScreen"
-        component={TripsScreen}
-        options={{
-          tabBarIcon: ({focused}) => (
-            <TabIcon
-              focused={focused}
-              normalIcon={ICONS.send}
-              focusedIcon={ICONS.sendBold}
-            />
-          ),
-        }}
-      />
+
       <Tab.Screen
         name="Profile"
         component={Profile}

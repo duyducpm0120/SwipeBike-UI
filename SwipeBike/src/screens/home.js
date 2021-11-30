@@ -288,7 +288,7 @@ export default function Home(props) {
               marginTop: 10,
               ...STYLES.shadow,
             }}
-            onPress={() => props.navigation.jumpTo('TripsScreen')}>
+            onPress={() => props.navigation.navigate('TripsScreen')}>
             <Text style={FONTS.h3Bold}>Xem thêm</Text>
           </TouchableOpacity>
         </View>

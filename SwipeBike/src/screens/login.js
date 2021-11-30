@@ -70,8 +70,8 @@ export default function Login(props) {
               dispatch(fetchProfile(result.data.token)),
               dispatch(fetchLoginToken()),
             ]).then(() => console.log('fetched profile and token to redux'));
-            props.navigation.navigate('Home');
             dispatch(updateIsLoading(false));
+            props.navigation.navigate('Home');
           });
         });
       })
