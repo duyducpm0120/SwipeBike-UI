@@ -2,76 +2,26 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity, Image, FlatList} from 'react-native';
 import {STYLES, FONTS, IMAGES, ICONS, COLORS, RESPONSIVE} from '../constants';
 import {Notification} from '../components';
+import {getUserNotifications} from '../api';
+import {useSelector} from 'react-redux';
 
-export default function Notifications(props) {
-  const notificationsList = [
+export default function Notifications (props) {
+  const token = useSelector (state => state.loginToken.token);
+  const [notificationsList, setNotificationList] = useState ([
     {
-      NotificationId: 3,
-      NotificationTitle: 'Lời mời kết bạn',
-      NotificationContent: 'đã gửi cho bạn lời mời ghép đôi chuyến đi',
-      NotificationTargetId: 8,
-      CreatorName: 'Duong Thanh Vuong',
-      CreatorImage: IMAGES.cuteDriver,
+      CreatorImage: 'https://storage.googleapis.com/swipebike-38736.appspot.com/user_5_pic_2021-11-27T07:37:32.817Z',
+      NotificationCreateTime: '2021-12-02T15:10:42.544Z',
+      NotificationCreator: {UserFullName: 'Alexandra'},
+      NotificationCreatorId: 5,
+      NotificationId: 1,
+      NotificationRead: false,
+      NotificationTargetId: 3,
+      UserNotificationContent: ' muốn ghép chuyến đi với bạn',
+      UserNotificationTitle: 'Lời mời ghép đôi mới',
     },
-    {
-      NotificationId: 3,
-      NotificationTitle: 'Lời mời kết bạn',
-      NotificationContent: 'đã gửi cho bạn lời mời ghép đôi chuyến đi',
-      NotificationTargetId: 8,
-      CreatorName: 'Duong Thanh Vuong',
-      CreatorImage: IMAGES.cuteDriver,
-    },
-    {
-      NotificationId: 3,
-      NotificationTitle: 'Lời mời kết bạn',
-      NotificationContent: 'đã gửi cho bạn lời mời ghép đôi chuyến đi',
-      NotificationTargetId: 8,
-      CreatorName: 'Duong Thanh Vuong',
-      CreatorImage: IMAGES.cuteDriver,
-    },
-    {
-      NotificationId: 3,
-      NotificationTitle: 'Lời mời kết bạn',
-      NotificationContent: 'đã gửi cho bạn lời mời ghép đôi chuyến đi',
-      NotificationTargetId: 8,
-      CreatorName: 'Duong Thanh Vuong',
-      CreatorImage: IMAGES.cuteDriver,
-    },
-    {
-      NotificationId: 3,
-      NotificationTitle: 'Lời mời kết bạn',
-      NotificationContent: 'đã gửi cho bạn lời mời ghép đôi chuyến đi',
-      NotificationTargetId: 8,
-      CreatorName: 'Duong Thanh Vuong',
-      CreatorImage: IMAGES.cuteDriver,
-    },
-    {
-      NotificationId: 3,
-      NotificationTitle: 'Lời mời kết bạn',
-      NotificationContent: 'đã gửi cho bạn lời mời ghép đôi chuyến đi',
-      NotificationTargetId: 8,
-      CreatorName: 'Duong Thanh Vuong',
-      CreatorImage: IMAGES.cuteDriver,
-    },
-    {
-      NotificationId: 3,
-      NotificationTitle: 'Lời mời kết bạn',
-      NotificationContent: 'đã gửi cho bạn lời mời ghép đôi chuyến đi',
-      NotificationTargetId: 8,
-      CreatorName: 'Duong Thanh Vuong',
-      CreatorImage: IMAGES.cuteDriver,
-    },
-    {
-      NotificationId: 3,
-      NotificationTitle: 'Lời mời kết bạn',
-      NotificationContent: 'đã gửi cho bạn lời mời ghép đôi chuyến đi',
-      NotificationTargetId: 8,
-      CreatorName: 'Duong Thanh Vuong',
-      CreatorImage: IMAGES.cuteDriver,
-    },
-  ];
+  ]);
 
-  function renderHeader() {
+  function renderHeader () {
     return (
       <View
         style={{
@@ -79,8 +29,9 @@ export default function Notifications(props) {
           alignItems: 'center',
           flexDirection: 'row',
           width: '100%',
-        }}>
-        <TouchableOpacity onPress={() => props.navigation.goBack()}>
+        }}
+      >
+        <TouchableOpacity onPress={() => props.navigation.goBack ()}>
           <Image
             source={ICONS.leftArr1}
             style={{tintColor: COLORS.black, width: 30, height: 30}}
@@ -96,35 +47,45 @@ export default function Notifications(props) {
       </View>
     );
   }
-  function renderNotifications() {
+  function renderNotifications () {
     return (
       <View
         style={{
           justifyContent: 'center',
           alignItems: 'center',
-          marginVertical: RESPONSIVE.pixelSizeVertical(10),
+          marginVertical: RESPONSIVE.pixelSizeVertical (10),
           flex: 1,
-        }}>
+        }}
+      >
         <FlatList
           showsVerticalScrollIndicator={false}
           data={notificationsList}
           renderItem={({item, index}) => {
-            return <Notification notificationData={item}></Notification>;
+            return <Notification notificationData={item} />;
           }}
           keyExtractor={({item, index}) => {
             return index;
           }}
           style={{
             width: '100%',
-          }}></FlatList>
+          }}
+        />
       </View>
     );
   }
 
+  useEffect (() => {
+    getUserNotifications (token)
+      .then (res => {
+        setNotificationList (res.data.notifications);
+      })
+      .catch (err => console.log ('noti list err', err));
+  }, []);
+
   return (
     <View style={{...STYLES.container}}>
-      {renderHeader()}
-      {renderNotifications()}
+      {renderHeader ()}
+      {renderNotifications ()}
     </View>
   );
 }

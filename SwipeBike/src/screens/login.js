@@ -17,7 +17,7 @@ import {
   STYLES,
 } from '../constants';
 import {BackgroundButton} from '../components';
-import {signUpApi, loginApi} from '../api';
+import {signUpApi, loginApi,sendFcmToken} from '../api';
 import {
   saveTokenToLocalStorage,
   loadTokenFromLocalStorage,
@@ -39,7 +39,7 @@ export default function Login(props) {
   const [userPassword, setUserPassword] = useState('');
 
   function login() {
-    dispatch(updateIsLoading(true));
+    
     //validate Inputs
     if (!ValidateEmail(userEmail)) {
       console.log('invalid email');
@@ -59,9 +59,12 @@ export default function Login(props) {
       return;
     }
     //console.log('valid information');
+    dispatch(updateIsLoading(true));
     //login
     loginApi(userEmail, userPassword)
       .then(result => {
+        //Register Device for FCM push notifications
+        sendFcmToken(result.data.token);
         //console.log(result.data);
         //Saving token to localStorage
         removeTokenFromLocalStorage().then(() => {

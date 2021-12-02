@@ -7,7 +7,7 @@
  */
 import 'react-native-gesture-handler';
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Alert} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
@@ -46,26 +46,7 @@ const App = () => {
   const [token, setToken] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
-  //FCM Token Registration
-  const sendFcmToken = async () => {
-    await messaging().registerDeviceForRemoteMessages();
-    const token = await messaging()
-      .getToken()
-      .catch(err => {
-        console.log(err);
-      });
-    console.log('Firebase token ', token);
-    axios
-      .post('http://10.0.2.2:3001/notification/register', {token})
-      .then(result => {
-        //console.log(result);
-      });
-  };
-
-  ///FCM token
-  useEffect(() => {
-    sendFcmToken();
-  }, []);
+  
 
   ///Fetch Redux data when token loaded
   useEffect(() => {
@@ -84,10 +65,20 @@ const App = () => {
     }
   }, [token]);
 
+  //Load loginToken from local storage
   useEffect(() => {
     loadTokenFromLocalStorage().then(res => setToken(res));
     //fetch token to redux
     dispatch(fetchLoginToken());
+  }, []);
+
+  //Load loginToken from local storage
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
   }, []);
 
   return isLoading ? (

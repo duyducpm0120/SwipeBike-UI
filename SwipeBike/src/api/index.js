@@ -11,8 +11,13 @@ import {
   updateUserProfile,
   loadUserProfile,
 } from './profile';
-
+import {sendFcmToken} from './FCM';
+import {getUserNotifications } from './notification';
+import {sendTripRequest} from './TripRequest'
 export {
+  getUserNotifications,
+  sendTripRequest,
+  sendFcmToken,
   signUpApi,
   loginApi,
   createCandidateTrip,
