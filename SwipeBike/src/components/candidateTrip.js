@@ -279,10 +279,10 @@ export default function CandidateTrip(props) {
   return (
     <TouchableOpacity
       style={{
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
         alignItems: 'center',
         width: RESPONSIVE.pixelSizeHorizontal(350),
-        height: RESPONSIVE.pixelSizeHorizontal(450),
+        height: RESPONSIVE.pixelSizeVertical(450),
         padding: 20,
         borderRadius: 10,
         backgroundColor: COLORS.backGroundColor,

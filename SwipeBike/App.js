@@ -38,13 +38,14 @@ import {loadTokenFromLocalStorage} from '../SwipeBike/src/storage';
 import {useDispatch} from 'react-redux';
 import {fetchProfile} from './src/redux/slices/profileSlice';
 import {fetchLoginToken} from './src/redux/slices/loginTokenSlice';
-import {updateIsNewNoti} from './src/redux/slices/isNewNoti';
+import {updateIsNewNoti} from './src/redux/slices/isNewNotiSlice';
 const Stack = createStackNavigator();
 
 const App = () => {
   const dispatch = useDispatch();
   const [token, setToken] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
   ///Fetch Redux data when token loaded
   useEffect(() => {
     if (token) {
@@ -63,11 +64,11 @@ const App = () => {
   }, [token]);
 
   //Load loginToken from local storage
-  useEffect(() => {
-    loadTokenFromLocalStorage().then(res => setToken(res));
-    //fetch token to redux
-    dispatch(fetchLoginToken());
-  }, []);
+  // useEffect(() => {
+  //   loadTokenFromLocalStorage().then(res => setToken(res));
+  //   //fetch token to redux
+  //   dispatch(fetchLoginToken());
+  // }, []);
 
   //receive message from FCM
   useEffect(() => {

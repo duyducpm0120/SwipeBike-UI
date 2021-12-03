@@ -11,7 +11,7 @@ export default function Loading() {
           position: 'absolute',
           width: '100%',
           height: '100%',
-          backgroundColor: COLORS.backGroundColor,
+          backgroundColor: COLORS.black,
           opacity: 0.6,
           justifyContent: 'center',
           alignItems: 'center',

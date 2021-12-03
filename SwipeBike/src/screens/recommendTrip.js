@@ -9,12 +9,34 @@ import {
 } from 'react-native';
 import {FONTS, STYLES, RESPONSIVE, ICONS, COLORS} from '../constants';
 import {CandidateTrip} from '../components';
+import {useSelector, useDispatch} from 'react-redux';
+import {sendTripRequest} from '../api';
+import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 
 export default function RecommendTrip(props) {
-  //dummy recommendedTripList
+  const dispatch = useDispatch();
+  //Local token
+  const token = useSelector(state => state.loginToken.token);
+  //Selected CandidateTrip
+  const selectedTrip = useSelector(state => state.selectedTrip.tripData);
+  //recommendedTripList
   const [recommendedTripList, setRecommendedTripList] = useState(
     props.route.params.recommendedTripList,
   );
+
+  function sendPairingRequest(trip) {
+    console.log('sendRequest');
+    dispatch(updateIsLoading(true));
+    sendTripRequest(selectedTrip.CandidateTripId, trip.CandidateTripId, token)
+      .then(res => {
+        console.log('sent request!!!', res.data);
+        dispatch(updateIsLoading(false));
+      })
+      .catch(err => {
+        console.log('send request fail', err.response.data);
+        dispatch(updateIsLoading(false));
+      });
+  }
 
   function viewOnMap(trip) {
     props.navigation.navigate('GoogleMapView', {tripData: trip});
@@ -58,6 +80,9 @@ export default function RecommendTrip(props) {
             tripDetail={trip}
             pressTrip={() => {
               viewOnMap(trip);
+            }}
+            sendRequest={() => {
+              sendPairingRequest(trip);
             }}
           />
         </View>

@@ -12,8 +12,8 @@ import {
   loadUserProfile,
 } from './profile';
 import {sendFcmToken} from './FCM';
-import {getUserNotifications } from './notification';
-import {sendTripRequest} from './TripRequest'
+import {getUserNotifications} from './notification';
+import {sendTripRequest} from './TripRequest';
 export {
   getUserNotifications,
   sendTripRequest,

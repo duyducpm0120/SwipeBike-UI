@@ -30,6 +30,7 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import {getUserTrips, getCandidateTripRecommendations} from '../api';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
+import {updateSelectedTrip} from '../redux/slices/selectedTripSlice';
 
 export default function TripsScreen(props) {
   const dispatch = useDispatch();
@@ -161,6 +162,9 @@ export default function TripsScreen(props) {
           <CandidateTrip
             tripDetail={trip}
             loadRecommendation={() => {
+              //update Candidate Selected trip
+              dispatch(updateSelectedTrip(trip));
+              //call recommendation
               callRecommendTrips(trip);
               //console.log(trip);
             }}

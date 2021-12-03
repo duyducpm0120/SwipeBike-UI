@@ -3,26 +3,15 @@ import {View, Text, TouchableOpacity, Image, FlatList} from 'react-native';
 import {STYLES, FONTS, IMAGES, ICONS, COLORS, RESPONSIVE} from '../constants';
 import {Notification} from '../components';
 import {getUserNotifications} from '../api';
-import {useSelector} from 'react-redux';
-import {updateIsNewNoti} from '../redux/slices/isNewNoti';
+import {useSelector, useDispatch} from 'react-redux';
+import {updateIsNewNoti} from '../redux/slices/isNewNotiSlice';
+import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 
 export default function Notifications(props) {
+  const dispatch = useDispatch();
   const token = useSelector(state => state.loginToken.token);
-  const isNewNoti = useSelector(state => state.isNewNoti.vale);
-  const [notificationsList, setNotificationList] = useState([
-    {
-      CreatorImage:
-        'https://storage.googleapis.com/swipebike-38736.appspot.com/user_5_pic_2021-11-27T07:37:32.817Z',
-      NotificationCreateTime: '2021-12-02T15:10:42.544Z',
-      NotificationCreator: {UserFullName: 'Alexandra'},
-      NotificationCreatorId: 5,
-      NotificationId: 1,
-      NotificationRead: false,
-      NotificationTargetId: 3,
-      UserNotificationContent: ' muốn ghép chuyến đi với bạn',
-      UserNotificationTitle: 'Lời mời ghép đôi mới',
-    },
-  ]);
+  const isNewNoti = useSelector(state => state.isNewNoti.value);
+  const [notificationsList, setNotificationList] = useState([]);
 
   function renderHeader() {
     return (
@@ -76,10 +65,12 @@ export default function Notifications(props) {
   }
 
   useEffect(() => {
+    //dispatch(updateIsLoading(true));
     getUserNotifications(token)
       .then(res => {
         setNotificationList(res.data.notifications);
         dispatch(updateIsNewNoti(false));
+        // dispatch(updateIsLoading(false));
       })
       .catch(err => console.log('noti list err', err));
   }, [isNewNoti]);

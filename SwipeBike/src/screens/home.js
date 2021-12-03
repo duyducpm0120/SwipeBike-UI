@@ -20,6 +20,7 @@ import {Trip, CandidateTrip, RoundedImage} from '../components';
 
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
+import {updateSelectedTrip} from '../redux/slices/selectedTripSlice';
 import {getUserTrips, getCandidateTripRecommendations} from '../api';
 
 export default function Home(props) {
@@ -48,6 +49,9 @@ export default function Home(props) {
           <CandidateTrip
             tripDetail={trip}
             loadRecommendation={() => {
+              //update Candidate Selected trip
+              dispatch(updateSelectedTrip(trip));
+              //call recommendation
               callRecommendTrips(trip);
               //console.log(trip);
             }}
@@ -257,7 +261,7 @@ export default function Home(props) {
         </View>
         <View
           style={{
-            height: RESPONSIVE.pixelSizeVertical(450),
+            height: RESPONSIVE.pixelSizeVertical(460),
             marginTop: RESPONSIVE.pixelSizeVertical(20),
           }}>
           <FlatList
