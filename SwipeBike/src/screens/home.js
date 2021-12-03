@@ -24,11 +24,11 @@ import {getUserTrips, getCandidateTripRecommendations} from '../api';
 
 export default function Home(props) {
   const dispatch = useDispatch();
-  //the user
-  const [user, setUser] = useState({});
 
   //Local token
   const token = useSelector(state => state.loginToken.token);
+  //Is new notification?
+  const isNewNoti = useSelector(state => state.isNewNoti.value);
 
   const userProfile = useSelector(state => state.userProfile.userProfile);
   //dummy data
@@ -110,7 +110,7 @@ export default function Home(props) {
           style={{
             flexDirection: 'row',
             justifyContent: 'flex-end',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             width: '100%',
             marginTop: RESPONSIVE.pixelSizeVertical(10),
           }}>
@@ -118,6 +118,16 @@ export default function Home(props) {
             onPress={() => props.navigation.navigate('Notifications')}>
             <Image source={ICONS.belt}></Image>
           </TouchableOpacity>
+          {isNewNoti ? (
+            <View
+              style={{
+                borderRadius: 50,
+                width: RESPONSIVE.pixelSizeHorizontal(10),
+                height: RESPONSIVE.pixelSizeVertical(10),
+                backgroundColor: COLORS.primary,
+                position: 'absolute',
+              }}></View>
+          ) : null}
         </View>
 
         <View

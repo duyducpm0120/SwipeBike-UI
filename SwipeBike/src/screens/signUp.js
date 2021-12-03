@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from 'react-native';
 import {FONTS, COLORS, RESPONSIVE, ICONS, STYLES} from '../constants';
 import {BackgroundButton} from '../components';
@@ -123,30 +124,40 @@ export default function SignUp(props) {
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'flex-start',
+            justifyContent: 'center',
             alignItems: 'center',
             borderRadius: 10,
-            width: '100%',
+            // width: '100%',
             marginVertical: RESPONSIVE.pixelSizeVertical(10),
             zIndex: 1,
           }}>
-          <Image
-            source={ICONS.email}
+          <View
             style={{
-              width: RESPONSIVE.pixelSizeHorizontal(24),
-              height: RESPONSIVE.pixelSizeHorizontal(24),
-              tintColor: COLORS.lightGray1,
-            }}></Image>
-          <TextInput
-            placeholder="Email"
-            style={{
-              ...FONTS.h3,
-              marginLeft: RESPONSIVE.pixelSizeHorizontal(15),
-              width: RESPONSIVE.pixelSizeHorizontal(110),
-            }}
-            onChangeText={email => {
-              setUserEmail(email + emailSuffixValue);
-            }}></TextInput>
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              borderRadius: 10,
+              width: '40%',
+              marginVertical: RESPONSIVE.pixelSizeVertical(10),
+            }}>
+            <Image
+              source={ICONS.email}
+              style={{
+                width: RESPONSIVE.pixelSizeHorizontal(24),
+                height: RESPONSIVE.pixelSizeHorizontal(24),
+                tintColor: COLORS.lightGray1,
+              }}></Image>
+            <TextInput
+              placeholder="Email"
+              style={{
+                ...FONTS.h3,
+                marginLeft: RESPONSIVE.pixelSizeHorizontal(15),
+                width: RESPONSIVE.pixelSizeHorizontal(110),
+              }}
+              onChangeText={email => {
+                setUserEmail(email + emailSuffixValue);
+              }}></TextInput>
+          </View>
           <View style={{width: '60%'}}>
             <DropDownPicker
               placeholder={items[0].label}
@@ -166,6 +177,7 @@ export default function SignUp(props) {
             />
           </View>
         </View>
+
         <View
           style={{
             flexDirection: 'row',

@@ -4,12 +4,15 @@ import {STYLES, FONTS, IMAGES, ICONS, COLORS, RESPONSIVE} from '../constants';
 import {Notification} from '../components';
 import {getUserNotifications} from '../api';
 import {useSelector} from 'react-redux';
+import {updateIsNewNoti} from '../redux/slices/isNewNoti';
 
-export default function Notifications (props) {
-  const token = useSelector (state => state.loginToken.token);
-  const [notificationsList, setNotificationList] = useState ([
+export default function Notifications(props) {
+  const token = useSelector(state => state.loginToken.token);
+  const isNewNoti = useSelector(state => state.isNewNoti.vale);
+  const [notificationsList, setNotificationList] = useState([
     {
-      CreatorImage: 'https://storage.googleapis.com/swipebike-38736.appspot.com/user_5_pic_2021-11-27T07:37:32.817Z',
+      CreatorImage:
+        'https://storage.googleapis.com/swipebike-38736.appspot.com/user_5_pic_2021-11-27T07:37:32.817Z',
       NotificationCreateTime: '2021-12-02T15:10:42.544Z',
       NotificationCreator: {UserFullName: 'Alexandra'},
       NotificationCreatorId: 5,
@@ -21,7 +24,7 @@ export default function Notifications (props) {
     },
   ]);
 
-  function renderHeader () {
+  function renderHeader() {
     return (
       <View
         style={{
@@ -29,9 +32,8 @@ export default function Notifications (props) {
           alignItems: 'center',
           flexDirection: 'row',
           width: '100%',
-        }}
-      >
-        <TouchableOpacity onPress={() => props.navigation.goBack ()}>
+        }}>
+        <TouchableOpacity onPress={() => props.navigation.goBack()}>
           <Image
             source={ICONS.leftArr1}
             style={{tintColor: COLORS.black, width: 30, height: 30}}
@@ -47,16 +49,15 @@ export default function Notifications (props) {
       </View>
     );
   }
-  function renderNotifications () {
+  function renderNotifications() {
     return (
       <View
         style={{
           justifyContent: 'center',
           alignItems: 'center',
-          marginVertical: RESPONSIVE.pixelSizeVertical (10),
+          marginVertical: RESPONSIVE.pixelSizeVertical(10),
           flex: 1,
-        }}
-      >
+        }}>
         <FlatList
           showsVerticalScrollIndicator={false}
           data={notificationsList}
@@ -74,18 +75,19 @@ export default function Notifications (props) {
     );
   }
 
-  useEffect (() => {
-    getUserNotifications (token)
-      .then (res => {
-        setNotificationList (res.data.notifications);
+  useEffect(() => {
+    getUserNotifications(token)
+      .then(res => {
+        setNotificationList(res.data.notifications);
+        dispatch(updateIsNewNoti(false));
       })
-      .catch (err => console.log ('noti list err', err));
-  }, []);
+      .catch(err => console.log('noti list err', err));
+  }, [isNewNoti]);
 
   return (
     <View style={{...STYLES.container}}>
-      {renderHeader ()}
-      {renderNotifications ()}
+      {renderHeader()}
+      {renderNotifications()}
     </View>
   );
 }

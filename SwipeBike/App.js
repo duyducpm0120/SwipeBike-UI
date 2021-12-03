@@ -36,18 +36,15 @@ import {Waiting} from './src/components';
 import BottomTabs from './src/navigations/bottomTabs';
 import {loadTokenFromLocalStorage} from '../SwipeBike/src/storage';
 import {useDispatch} from 'react-redux';
-import {updateToken} from './src/redux/slices/loginTokenSlice';
 import {fetchProfile} from './src/redux/slices/profileSlice';
 import {fetchLoginToken} from './src/redux/slices/loginTokenSlice';
+import {updateIsNewNoti} from './src/redux/slices/isNewNoti';
 const Stack = createStackNavigator();
 
 const App = () => {
   const dispatch = useDispatch();
   const [token, setToken] = useState();
   const [isLoading, setIsLoading] = useState(true);
-
-  
-
   ///Fetch Redux data when token loaded
   useEffect(() => {
     if (token) {
@@ -72,10 +69,11 @@ const App = () => {
     dispatch(fetchLoginToken());
   }, []);
 
-  //Load loginToken from local storage
+  //receive message from FCM
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      dispatch(updateIsNewNoti(true));
     });
 
     return unsubscribe;

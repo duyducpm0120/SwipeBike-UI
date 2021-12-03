@@ -2,11 +2,13 @@ import {configureStore} from '@reduxjs/toolkit';
 import profileReducer from './slices/profileSlice';
 import loginTokenReducer from './slices/loginTokenSlice';
 import isLoadingReducer from './slices/isLoadingSlice';
+import isNewNotiReducer from './slices/isNewNoti';
 export default configureStore({
   reducer: {
     userProfile: profileReducer,
     loginToken: loginTokenReducer,
     isLoading: isLoadingReducer,
+    isNewNoti: isNewNotiReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
