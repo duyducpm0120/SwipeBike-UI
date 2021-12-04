@@ -9,22 +9,14 @@ import {
   Animated,
   Alert,
 } from 'react-native';
-import {
-  FONTS,
-  SIZES,
-  COLORS,
-  RESPONSIVE,
-  ICONS,
-  STYLES,
-  getRoute,
-} from '../constants';
+import {FONTS, SIZES, COLORS, RESPONSIVE, ICONS, STYLES} from '../constants';
 import {getVietnameseDate, getVietnameseTime} from '../components';
 import DatePicker from 'react-native-date-picker';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import Geolocation from 'react-native-geolocation-service';
 import {MAPS_API_KEY} from '../../key';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import {createCandidateTrip} from '../api';
+import {createCandidateTrip, getRoute} from '../api';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import {Snackbar} from 'react-native-paper';

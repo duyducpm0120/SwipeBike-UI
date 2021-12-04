@@ -1,39 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  Alert,
-  PermissionsAndroid,
-  Image,
-  Button,
-  TouchableOpacity,
-} from 'react-native';
+import {View, StyleSheet, Alert, PermissionsAndroid, Image} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import Geolocation from 'react-native-geolocation-service';
-import {
-  FONTS,
-  SIZES,
-  COLORS,
-  RESPONSIVE,
-  ICONS,
-  IMAGES,
-  STYLES,
-  getRoute,
-} from '../constants';
-import {MAPS_API_KEY} from '../../key';
-import {
-  Trip,
-  BackgroundButton,
-  waitingTripDetail,
-  pairingTripDetail,
-  CandidateTrip,
-} from '../components';
-
+import {COLORS, RESPONSIVE, ICONS} from '../constants';
+import {CandidateTrip} from '../components';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import {useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
+import {getRoute} from '../api';
 
 export default function GoogleMapView(props) {
   const dispatch = useDispatch();

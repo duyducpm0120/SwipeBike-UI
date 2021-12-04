@@ -14,6 +14,7 @@ import {
 import {sendFcmToken} from './FCM';
 import {getUserNotifications} from './notification';
 import {sendTripRequest} from './TripRequest';
+import {getRoute} from './GoogleMapServices';
 export {
   getUserNotifications,
   sendTripRequest,
@@ -27,4 +28,5 @@ export {
   loadUserProfile,
   getCandidateTripRecommendations,
   getUserTrips,
+  getRoute,
 };

@@ -1,4 +1,28 @@
 import {MAPS_API_KEY} from '../../key';
+
+export async function getRoute(originCoordinates, destinationCoordinates) {
+  const mode = 'driving'; // 'walking';
+  const origin = originCoordinates;
+  const destination = destinationCoordinates;
+  const API_KEY = MAPS_API_KEY;
+  const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${API_KEY}&mode=${mode}`;
+
+  var route = [];
+  console.log('origin', originCoordinates);
+  console.log('destination', destinationCoordinates);
+  await fetch(url)
+    .then(response => response.json())
+    .then(responseJson => {
+      if (responseJson.routes.length) {
+        route = decode(responseJson.routes[0].overview_polyline.points);
+      }
+    })
+    .catch(e => {
+      console.log(e);
+    });
+  return route;
+}
+
 function decode(t, e) {
   for (
     var n,
@@ -29,27 +53,4 @@ function decode(t, e) {
     return {latitude: t[0], longitude: t[1]};
   }));
   // transforms something like this geocFltrhVvDsEtA}ApSsVrDaEvAcBSYOS_@... to an array of coordinates
-}
-
-export async function getRoute(originCoordinates, destinationCoordinates) {
-  const mode = 'driving'; // 'walking';
-  const origin = originCoordinates;
-  const destination = destinationCoordinates;
-  const APIKEY = MAPS_API_KEY;
-  const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${APIKEY}&mode=${mode}`;
-
-  var route = [];
-  console.log('origin', originCoordinates);
-  console.log('destination', destinationCoordinates);
-  await fetch(url)
-    .then(response => response.json())
-    .then(responseJson => {
-      if (responseJson.routes.length) {
-        route = decode(responseJson.routes[0].overview_polyline.points);
-      }
-    })
-    .catch(e => {
-      console.log(e);
-    });
-  return route;
 }
