@@ -18,6 +18,9 @@ import {
   sendTripRequest,
   getUserPendingReceivedRequests,
   getUserPendingSentRequests,
+  cancelTripRequest,
+  rejectTripRequest,
+  acceptTripRequest,
 } from './TripRequest';
 import {getRoute} from './GoogleMapServices';
 export {
@@ -37,4 +40,7 @@ export {
   getProfileById,
   getUserPendingReceivedRequests,
   getUserPendingSentRequests,
+  cancelTripRequest,
+  rejectTripRequest,
+  acceptTripRequest,
 };

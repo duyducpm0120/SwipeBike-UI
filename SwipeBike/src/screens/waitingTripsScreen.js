@@ -15,6 +15,9 @@ import {
   getCandidateTripRecommendations,
   getUserPendingReceivedRequests,
   getUserPendingSentRequests,
+  rejectTripRequest,
+  cancelTripRequest,
+  acceptTripRequest,
 } from '../api';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
@@ -33,16 +36,17 @@ export default function WaitingTripsScreen(props) {
   //waitingTripList
   const [waitingTripList, setWaitingTripList] = useState([]);
 
-  //dummy paring trip list
-  const [pairingTripList, setPairingTripList] = useState([]);
+  const [receivedTripList, setReceivedTripList] = useState([]);
+  const [sentTripList, setSentTripList] = useState([]);
 
   //trip types
   const tripTypes = [
-    {name: 'Đã gửi', imgUrl: ICONS.send},
-    {name: 'Đã nhận', imgUrl: ICONS.friend},
+    {name: 'Chuyến đi của bạn', imgUrl: ICONS.send},
+    {name: 'Yêu cầu đã nhận', imgUrl: ICONS.friend},
+    {name: 'Yêu cầu đã gửi', imgUrl: ICONS.friend},
   ];
   //var for controlling trip type displaying
-  const [tripTypeControl, setTripTypeControl] = useState('Yêu cầu đã gửi');
+  const [tripTypeControl, setTripTypeControl] = useState('Chuyến đi của bạn');
   //var for controlling displaying trip List
   const [displayingTripList, setDisplayingTripList] = useState(waitingTripList);
 
@@ -59,6 +63,35 @@ export default function WaitingTripsScreen(props) {
     //console.log('trip', trip);
   }
 
+  function acceptRequest(trip) {
+    dispatch(updateIsLoading(true));
+    acceptTripRequest(token, trip.RequestId)
+      .then(res => {
+        console.log('accept successfully');
+        dispatch(updateIsLoading(false));
+      })
+      .catch(err => {
+        console.log('error', JSON.stringify(err));
+        console.log('my token to accept trip', token);
+
+        dispatch(updateIsLoading(false));
+      });
+  }
+
+  function cancelRequest(trip) {
+    dispatch(updateIsLoading(true));
+    cancelTripRequest(token, trip.RequestId)
+      .then(res => {
+        console.log('cancel successfully');
+        dispatch(updateIsLoading(false));
+      })
+      .catch(err => {
+        console.log('error', JSON.stringify(err));
+        console.log('my token to accept trip', token);
+
+        dispatch(updateIsLoading(false));
+      });
+  }
   function renderTrip(trip) {
     if (trip.TripType == WAITING_TRIP_TYPE)
       return (
@@ -93,8 +126,11 @@ export default function WaitingTripsScreen(props) {
           key={trip.RequestId}>
           <TripRequest
             tripDetail={trip}
-            pressTrip={trip => {
-              callRecommendTrips(trip);
+            acceptRequest={() => {
+              acceptRequest(trip);
+            }}
+            cancelRequest={() => {
+              cancelRequest(trip);
             }}
           />
         </View>
@@ -164,10 +200,11 @@ export default function WaitingTripsScreen(props) {
                 }}
                 onPress={() => {
                   setTripTypeControl(tripType.name);
-                  if (tripType.name == 'Đã gửi')
+                  if (tripType.name == 'Chuyến đi của bạn')
                     setDisplayingTripList(waitingTripList);
-                  else if (tripType.name == 'Đã nhận')
-                    setDisplayingTripList(pairingTripList);
+                  else if (tripType.name == 'Yêu cầu đã nhận')
+                    setDisplayingTripList(receivedTripList);
+                  else setDisplayingTripList(sentTripList);
                 }}>
                 <Image
                   source={tripType.imgUrl}
@@ -240,8 +277,8 @@ export default function WaitingTripsScreen(props) {
             trip.TripType = RECEIVED_REQUEST_TRIP_TYPE;
             return trip;
           });
-          setPairingTripList(trips2);
-          //console.log('Received Request:', res2.data.requests);
+          setReceivedTripList(trips2);
+          console.log('Received Request:', res2.data.requests);
         })
         .catch(err => console.log('Received request err', err)),
       getUserPendingSentRequests(token)
@@ -250,7 +287,7 @@ export default function WaitingTripsScreen(props) {
             trip.TripType = SENT_REQUEST_TRIP_TYPE;
             return trip;
           });
-          setHistoryTripList(trips3);
+          setSentTripList(trips3);
           // console.log('Sent Request:', res3.data.requests);
         })
         .catch(err => console.log('Sent request err', err)),

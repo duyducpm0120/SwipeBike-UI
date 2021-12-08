@@ -6,9 +6,14 @@ import {
   getVietnameseDate,
   getVietnameseTime,
 } from '../components';
+import {useSelector} from 'react-redux';
 
 export default function TripRequest(props) {
   const [tripDetail, setTripDetail] = useState(props.tripDetail);
+  const userId = useSelector(state => state.userProfile.userProfile.UserId);
+  useEffect(() => {
+    setTripDetail(props.tripDetail);
+  }, []);
 
   function renderImage() {
     return (
@@ -210,45 +215,77 @@ export default function TripRequest(props) {
   }
 
   function renderButton() {
-    return (
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          marginTop: RESPONSIVE.pixelSizeVertical(10),
-        }}>
-        <TouchableOpacity
+    if (tripDetail.RequestCreatorId != userId)
+      return (
+        <View
           style={{
             justifyContent: 'center',
             alignItems: 'center',
-            width: RESPONSIVE.pixelSizeHorizontal(300),
-            height: RESPONSIVE.pixelSizeVertical(40),
-            backgroundColor: COLORS.primaryLighter1,
-            borderRadius: 5,
-            marginVertical: 5,
-          }}
-          onPress={() => {
-            //props.loadRecommendation();
+            width: '100%',
+            marginTop: RESPONSIVE.pixelSizeVertical(10),
           }}>
-          <Text style={{...FONTS.h3Bold, color: COLORS.primaryDarker1}}>
-            Chấp nhận ghép đôi
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+          <TouchableOpacity
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: RESPONSIVE.pixelSizeHorizontal(300),
+              height: RESPONSIVE.pixelSizeVertical(40),
+              backgroundColor: COLORS.primaryLighter1,
+              borderRadius: 5,
+              marginVertical: 5,
+            }}
+            onPress={() => {
+              props.acceptRequest();
+            }}>
+            <Text style={{...FONTS.h3Bold, color: COLORS.primaryDarker1}}>
+              Chấp nhận ghép đôi
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: RESPONSIVE.pixelSizeHorizontal(300),
+              height: RESPONSIVE.pixelSizeVertical(40),
+              backgroundColor: COLORS.lightGray0,
+              borderRadius: 5,
+              marginVertical: 5,
+            }}
+            onPress={() => {
+              props.rejectRequest();
+            }}>
+            <Text style={{...FONTS.h3Bold, color: COLORS.black}}>Từ chối</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    else
+      return (
+        <View
           style={{
             justifyContent: 'center',
             alignItems: 'center',
-            width: RESPONSIVE.pixelSizeHorizontal(300),
-            height: RESPONSIVE.pixelSizeVertical(40),
-            backgroundColor: COLORS.lightGray0,
-            borderRadius: 5,
-            marginVertical: 5,
+            width: '100%',
+            marginTop: RESPONSIVE.pixelSizeVertical(10),
           }}>
-          <Text style={{...FONTS.h3Bold, color: COLORS.black}}>Từ chối</Text>
-        </TouchableOpacity>
-      </View>
-    );
+          <TouchableOpacity
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: RESPONSIVE.pixelSizeHorizontal(300),
+              height: RESPONSIVE.pixelSizeVertical(40),
+              backgroundColor: COLORS.lightGray0,
+              borderRadius: 5,
+              marginVertical: 5,
+            }}
+            onPress={() => {
+              props.cancelRequest();
+            }}>
+            <Text style={{...FONTS.h3Bold, color: COLORS.black}}>
+              Xóa yêu cầu
+            </Text>
+          </TouchableOpacity>
+        </View>
+      );
   }
   return (
     <TouchableOpacity
