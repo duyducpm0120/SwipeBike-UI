@@ -10,10 +10,15 @@ import {
   setupUserProfile,
   updateUserProfile,
   loadUserProfile,
+  getProfileById,
 } from './profile';
 import {sendFcmToken} from './FCM';
 import {getUserNotifications} from './notification';
-import {sendTripRequest} from './TripRequest';
+import {
+  sendTripRequest,
+  getUserPendingReceivedRequests,
+  getUserPendingSentRequests,
+} from './TripRequest';
 import {getRoute} from './GoogleMapServices';
 export {
   getUserNotifications,
@@ -29,4 +34,7 @@ export {
   getCandidateTripRecommendations,
   getUserTrips,
   getRoute,
+  getProfileById,
+  getUserPendingReceivedRequests,
+  getUserPendingSentRequests,
 };

@@ -3,137 +3,46 @@ import {
   View,
   Text,
   Image,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   FlatList,
 } from 'react-native';
-import {
-  FONTS,
-  SIZES,
-  COLORS,
-  RESPONSIVE,
-  ICONS,
-  IMAGES,
-  STYLES,
-} from '../constants';
-import {
-  Trip,
-  CandidateTrip,
-  BackgroundButton,
-  waitingTripDetail,
-  pairingTripDetail,
-} from '../components';
+import {FONTS, COLORS, RESPONSIVE, ICONS, STYLES} from '../constants';
+import {CandidateTrip, TripRequest, pairingTripDetail} from '../components';
 
-import Animated from 'react-native-reanimated';
-import BottomSheet from 'reanimated-bottom-sheet';
-import {getUserTrips, getCandidateTripRecommendations} from '../api';
+import {
+  getUserTrips,
+  getCandidateTripRecommendations,
+  getUserPendingReceivedRequests,
+  getUserPendingSentRequests,
+} from '../api';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import {updateSelectedTrip} from '../redux/slices/selectedTripSlice';
 
-export default function TripsScreen(props) {
+const WAITING_TRIP_TYPE = 1;
+const RECEIVED_REQUEST_TRIP_TYPE = 2;
+const SENT_REQUEST_TRIP_TYPE = 2;
+
+export default function WaitingTripsScreen(props) {
   const dispatch = useDispatch();
   //Local token
   const token = useSelector(state => state.loginToken.token);
   //Load user info from redux
   const userProfile = useSelector(state => state.userProfile.userProfile);
-  //dummy waitingTripList
-  const [waitingTripList, setWaitingTripList] = useState([
-    {
-      tripId: 0,
-      tripDetail: waitingTripDetail,
-    },
-    {
-      tripId: 1,
-      tripDetail: waitingTripDetail,
-    },
-    {
-      tripId: 2,
-      tripDetail: waitingTripDetail,
-    },
-    {
-      tripId: 3,
-      tripDetail: waitingTripDetail,
-    },
-    {
-      tripId: 4,
-      tripDetail: waitingTripDetail,
-    },
-  ]);
+  //waitingTripList
+  const [waitingTripList, setWaitingTripList] = useState([]);
 
   //dummy paring trip list
-  const [pairingTripList, setPairingTripList] = useState([
-    {
-      tripId: 0,
-      tripDetail: pairingTripDetail,
-    },
-    {
-      tripId: 1,
-      tripDetail: pairingTripDetail,
-    },
-    {
-      tripId: 2,
-      tripDetail: pairingTripDetail,
-    },
-    {
-      tripId: 3,
-      tripDetail: pairingTripDetail,
-    },
-    {
-      tripId: 4,
-      tripDetail: pairingTripDetail,
-    },
-  ]);
-
-  //dummy history trip list
-  const [historyTripList, setHistoryTripList] = useState([
-    // {
-    //   tripId: 0,
-    //   tripDetail: pairingTripDetail,
-    // },
-    // {
-    //   tripId: 1,
-    //   tripDetail: pairingTripDetail,
-    // },
-    // {
-    //   tripId: 2,
-    //   tripDetail: pairingTripDetail,
-    // },
-    // {
-    //   tripId: 3,
-    //   tripDetail: pairingTripDetail,
-    // },
-    // {
-    //   tripId: 4,
-    //   tripDetail: pairingTripDetail,
-    // },
-    // {
-    //   tripId: 5,
-    //   tripDetail: pairingTripDetail,
-    // },
-    // {
-    //   tripId: 6,
-    //   tripDetail: pairingTripDetail,
-    // },
-    // {
-    //   tripId: 7,
-    //   tripDetail: pairingTripDetail,
-    // },
-    // {
-    //   tripId: 8,
-    //   tripDetail: pairingTripDetail,
-    // },
-  ]);
+  const [pairingTripList, setPairingTripList] = useState([]);
 
   //trip types
   const tripTypes = [
-    {name: 'Đang chờ', imgUrl: ICONS.waiting},
-    {name: 'Đang ghép đôi', imgUrl: ICONS.friend},
-    {name: 'Lịch sử', imgUrl: ICONS.history},
+    {name: 'Đã gửi', imgUrl: ICONS.send},
+    {name: 'Đã nhận', imgUrl: ICONS.friend},
   ];
   //var for controlling trip type displaying
-  const [tripTypeControl, setTripTypeControl] = useState('Đang chờ');
+  const [tripTypeControl, setTripTypeControl] = useState('Yêu cầu đã gửi');
   //var for controlling displaying trip List
   const [displayingTripList, setDisplayingTripList] = useState(waitingTripList);
 
@@ -151,7 +60,7 @@ export default function TripsScreen(props) {
   }
 
   function renderTrip(trip) {
-    if (trip.TripType == 1)
+    if (trip.TripType == WAITING_TRIP_TYPE)
       return (
         <View
           style={{
@@ -174,15 +83,15 @@ export default function TripsScreen(props) {
           />
         </View>
       );
-    else if (trip.TripType == 3)
+    else if (trip.TripType == RECEIVED_REQUEST_TRIP_TYPE)
       return (
         <View
           style={{
             marginVertical: RESPONSIVE.pixelSizeVertical(10),
             paddingHorizontal: RESPONSIVE.pixelSizeHorizontal(5),
           }}
-          key={trip.CandidateTripId}>
-          <Trip
+          key={trip.RequestId}>
+          <TripRequest
             tripDetail={trip}
             pressTrip={trip => {
               callRecommendTrips(trip);
@@ -210,7 +119,7 @@ export default function TripsScreen(props) {
             style={{tintColor: COLORS.black, width: 30, height: 30}}
           />
         </TouchableOpacity>
-        <Text style={{...FONTS.title}}>Chuyến đi </Text>
+        <Text style={{...FONTS.title}}>Đang chờ</Text>
         <TouchableOpacity>
           <Image
             source={ICONS.refresh}
@@ -255,11 +164,10 @@ export default function TripsScreen(props) {
                 }}
                 onPress={() => {
                   setTripTypeControl(tripType.name);
-                  if (tripType.name == 'Đang chờ')
+                  if (tripType.name == 'Đã gửi')
                     setDisplayingTripList(waitingTripList);
-                  else if (tripType.name == 'Đang ghép đôi')
+                  else if (tripType.name == 'Đã nhận')
                     setDisplayingTripList(pairingTripList);
-                  else setDisplayingTripList(historyTripList);
                 }}>
                 <Image
                   source={tripType.imgUrl}
@@ -314,19 +222,41 @@ export default function TripsScreen(props) {
 
   useEffect(() => {
     dispatch(updateIsLoading(true));
-    getUserTrips(userProfile.UserId, token)
-      .then(res => {
-        console.log('get user trips', res.data);
-        var trips = res.data.trips.map(trip => {
-          trip.TripType = 1;
-          return trip;
-        });
-        setWaitingTripList(trips);
-        setDisplayingTripList(trips);
-        dispatch(updateIsLoading(false));
-        //setDisplayingTripList(res.data.trips);
-      })
-      .catch(err => console.log('err', err));
+    Promise.all([
+      getUserTrips(userProfile.UserId, token)
+        .then(res => {
+          console.log('get user trips', res.data);
+          var trips = res.data.trips.map(trip => {
+            trip.TripType = WAITING_TRIP_TYPE;
+            return trip;
+          });
+          setWaitingTripList(trips);
+          setDisplayingTripList(trips);
+        })
+        .catch(err => console.log('err', err)),
+      getUserPendingReceivedRequests(token)
+        .then(res2 => {
+          var trips2 = res2.data.requests.map(trip => {
+            trip.TripType = RECEIVED_REQUEST_TRIP_TYPE;
+            return trip;
+          });
+          setPairingTripList(trips2);
+          //console.log('Received Request:', res2.data.requests);
+        })
+        .catch(err => console.log('Received request err', err)),
+      getUserPendingSentRequests(token)
+        .then(res3 => {
+          var trips3 = res3.data.requests.map(trip => {
+            trip.TripType = SENT_REQUEST_TRIP_TYPE;
+            return trip;
+          });
+          setHistoryTripList(trips3);
+          // console.log('Sent Request:', res3.data.requests);
+        })
+        .catch(err => console.log('Sent request err', err)),
+    ]).then(res3 => {
+      dispatch(updateIsLoading(false));
+    });
   }, []);
 
   return (

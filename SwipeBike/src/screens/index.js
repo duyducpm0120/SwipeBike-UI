@@ -4,7 +4,7 @@ import Login from './login';
 import ForgotPassword from './forgotPasswod';
 import UpdateProfile from './updateProfile';
 import Home from './home';
-import TripsScreen from './tripsScreen';
+import WaitingTripsScreen from './waitingTripsScreen';
 import GoogleMapView from './googleMapView';
 import CreateTrip from './createTrip';
 import TripInfo from './tripInfo';
@@ -20,7 +20,7 @@ export {
   ForgotPassword,
   UpdateProfile,
   Home,
-  TripsScreen,
+  WaitingTripsScreen,
   GoogleMapView,
   CreateTrip,
   TripInfo,

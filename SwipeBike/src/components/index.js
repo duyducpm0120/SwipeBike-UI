@@ -7,6 +7,7 @@ import CandidateTrip from './candidateTrip';
 import {getVietnameseDate, getVietnameseTime} from './VietnameseDatetime';
 import {waitingTripDetail, pairingTripDetail} from './dummyTripDetail';
 import Notification from './notification';
+import TripRequest from './tripRequest';
 
 export {
   Waiting,
@@ -20,4 +21,5 @@ export {
   waitingTripDetail,
   pairingTripDetail,
   Notification,
+  TripRequest,
 };

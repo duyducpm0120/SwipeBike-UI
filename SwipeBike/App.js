@@ -22,7 +22,7 @@ import {
   Login,
   ForgotPassword,
   UpdateProfile,
-  TripsScreen,
+  WaitingTripsScreen,
   GoogleMapView,
   CreateTrip,
   TripInfo,
@@ -102,7 +102,7 @@ const App = () => {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
-        <Stack.Screen name="TripsScreen" component={TripsScreen} />
+        <Stack.Screen name="WaitingTripsScreen" component={WaitingTripsScreen} />
         <Stack.Screen name="GoogleMapView" component={GoogleMapView} />
         <Stack.Screen name="CreateTrip" component={CreateTrip} />
         <Stack.Screen name="TripInfo" component={TripInfo} />

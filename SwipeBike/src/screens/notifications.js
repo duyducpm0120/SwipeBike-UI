@@ -51,7 +51,14 @@ export default function Notifications(props) {
           showsVerticalScrollIndicator={false}
           data={notificationsList}
           renderItem={({item, index}) => {
-            return <Notification notificationData={item} />;
+            return (
+              <Notification
+                notificationData={item}
+                notiClick={() =>
+                  props.navigation.navigate('WaitingTripsScreen')
+                }
+              />
+            );
           }}
           keyExtractor={({item, index}) => {
             return index;

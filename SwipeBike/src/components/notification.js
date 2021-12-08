@@ -93,6 +93,9 @@ export default function Notification(props) {
           padding: RESPONSIVE.pixelSizeVertical(10),
           marginVertical: RESPONSIVE.pixelSizeVertical(10),
           width: '100%',
+        }}
+        onPress={() => {
+          props.notiClick();
         }}>
         {renderImage()}
         {renderContent()}
