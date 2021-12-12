@@ -68,7 +68,13 @@ export default function GoogleMapView(props) {
       </View>
       {/* Trip Component */}
 
-      <CandidateTrip tripDetail={tripData} pressTrip={() => {}}></CandidateTrip>
+      <CandidateTrip
+        tripDetail={tripData}
+        pressTrip={() => {}}
+        viewProfile={() => {
+          props.navigation.navigate('Profile', {CreatorId: tripData.CandidateTripCreator.UserId});
+          console.log("IDDDD", tripData);
+        }}></CandidateTrip>
     </View>
   );
 
