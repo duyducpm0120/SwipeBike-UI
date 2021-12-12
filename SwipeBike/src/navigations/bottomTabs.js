@@ -3,25 +3,17 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import {Home} from '../screens';
 import {
-  FONTS,
-  SIZES,
-  COLORS,
-  RESPONSIVE,
   ICONS,
-  IMAGES,
-  STYLES,
 } from '../constants';
 
 import {TabIcon} from '../components';
-import {View} from 'react-native';
-import {Profile} from '../screens';
 
 const Tab = createBottomTabNavigator();
 
 const BottomTabs = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Dashboard"
       screenOptions={{
         elevation: 0,
         headerShown: false,
@@ -46,7 +38,7 @@ const BottomTabs = () => {
         }}
       />
 
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Profile"
         component={Profile}
         options={{
@@ -58,7 +50,7 @@ const BottomTabs = () => {
             />
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Message"
         component={Home}

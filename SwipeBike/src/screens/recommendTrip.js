@@ -84,6 +84,7 @@ export default function RecommendTrip(props) {
             sendRequest={() => {
               sendPairingRequest(trip);
             }}
+            viewProfile={()=>{props.navigation.navigate("Profile",{CreatorId: trip.CreatorId})}}
           />
         </View>
       );
@@ -108,11 +109,6 @@ export default function RecommendTrip(props) {
       </View>
     );
   }
-
-  useEffect(() => {
-    //console.log('list recommendation', props.route.params.recommendedTripList);
-    //setRecommendedTripList(props.route.params.recommendedTripList);
-  }, []);
 
   return (
     <View

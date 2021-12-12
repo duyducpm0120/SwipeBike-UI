@@ -25,12 +25,15 @@ export default function TripRequest(props) {
           width: '100%',
         }}>
         {/* // driver field */}
-        <View
+        <TouchableOpacity
           style={{
             width: '45%',
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'column',
+          }}
+          onPress={() => {
+            props.viewProfile(tripDetail.RequestCreator.UserId);
           }}>
           <RoundedImage
             image={{uri: tripDetail.RequestCreator.UserProfilePic}}
@@ -45,9 +48,9 @@ export default function TripRequest(props) {
             }}>
             {tripDetail.RequestCreator.UserFullName}
           </Text>
-        </View>
-        {/* Divider */}
+        </TouchableOpacity>
 
+        {/* Divider */}
         <View
           style={{
             marginHorizontal: '3%',
@@ -57,14 +60,17 @@ export default function TripRequest(props) {
           }}></View>
 
         {/* passenger field */}
-
-        <View
+        <TouchableOpacity
           style={{
             width: '45%',
             // height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'column',
+          }}
+          onPress={() => {
+            props.viewProfile(tripDetail.RequestTarget.UserId);
+            console.log('trip request target detail', tripDetail.RequestTarget);
           }}>
           <RoundedImage
             image={{uri: tripDetail.RequestTarget.UserProfilePic}}
@@ -80,7 +86,7 @@ export default function TripRequest(props) {
             }}>
             {tripDetail.RequestTarget.UserFullName}
           </Text>
-        </View>
+        </TouchableOpacity>
       </View>
     );
   }

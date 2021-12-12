@@ -16,14 +16,16 @@ export default function CandidateTrip(props) {
 
   function renderImage() {
     return (
-      <View
+      <TouchableOpacity
         style={{
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'row',
           width: '100%',
+        }}
+        onPress={()=>{
+          props.viewProfile();
         }}>
-        {/* // driver field */}
         <View
           style={{
             width: '100%',
@@ -44,7 +46,7 @@ export default function CandidateTrip(props) {
             {tripDetail.CandidateTripCreator.UserFullName}
           </Text>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 

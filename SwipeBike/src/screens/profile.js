@@ -1,11 +1,18 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, TouchableOpacity, ScrollView, Image} from 'react-native';
 import {COLORS, FONTS, ICONS, STYLES, RESPONSIVE} from '../constants';
 import {BackgroundButton, Trip, RoundedImage} from '../components';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {getProfileById} from '../api';
+import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 
 export default function Profile(props) {
-  const userProfile = useSelector(state => state.userProfile.userProfile);
+  const dispatch = useDispatch();
+  //Local token
+  const token = useSelector(state => state.loginToken.token);
+
+  const ownerUserProfile = useSelector(state => state.userProfile.userProfile);
+  const [userProfile, setUserProfile] = useState({});
 
   const [rating, setRating] = useState([
     {
@@ -26,24 +33,36 @@ export default function Profile(props) {
   ]);
 
   function renderHeader() {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          width: '100%',
-          marginBottom: RESPONSIVE.pixelSizeVertical(50),
-        }}>
-        <TouchableOpacity>
-          <Image source={ICONS.setting}></Image>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => props.navigation.navigate('UpdateProfile')}>
-          <Image source={ICONS.edit}></Image>
-        </TouchableOpacity>
-      </View>
-    );
+    if (props.route.params.CreatorId == ownerUserProfile.UserId)
+      return (
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            width: '100%',
+            marginBottom: RESPONSIVE.pixelSizeVertical(50),
+          }}>
+          <TouchableOpacity>
+            <Image source={ICONS.setting}></Image>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate('UpdateProfile')}>
+            <Image source={ICONS.edit}></Image>
+          </TouchableOpacity>
+        </View>
+      );
+    else
+      return (
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            width: '100%',
+            marginBottom: RESPONSIVE.pixelSizeVertical(50),
+          }}></View>
+      );
   }
   function ageOfUser() {
     var currentYear = parseInt(new Date().getFullYear());
@@ -157,6 +176,20 @@ export default function Profile(props) {
       </View>
     );
   }
+
+  useEffect(() => {
+    dispatch(updateIsLoading(true));
+    getProfileById(props.route.params.CreatorId, token)
+      .then(res => {
+        //console.log("profile", res.data);
+        setUserProfile(res.data.profile);
+        dispatch(updateIsLoading(false));
+      })
+      .catch(err => {
+        console.log('profile load err', err);
+        dispatch(updateIsLoading(false));
+      });
+  }, []);
   return (
     <ScrollView contentContainerStyle={{...STYLES.container}}>
       {renderHeader()}

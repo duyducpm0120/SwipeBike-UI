@@ -58,6 +58,7 @@ export default function Home(props) {
             pressTrip={() => {
               viewOnMap(trip);
             }}
+            viewProfile={()=>{props.navigation.navigate("Profile",{CreatorId : trip.CreatorId})}}
           />
         </View>
       );
@@ -134,14 +135,15 @@ export default function Home(props) {
           ) : null}
         </View>
 
-        <View
+        <TouchableOpacity
           style={{
             flexDirection: 'row',
             justifyContent: 'flex-start',
             alignItems: 'center',
             //width: '100%',
             marginTop: RESPONSIVE.pixelSizeVertical(10),
-          }}>
+          }}
+          onPress={()=>{props.navigation.navigate("Profile",{CreatorId: userProfile.UserId})}}>
           <RoundedImage
             image={{uri: userProfile.UserProfilePic}}
             width={80}
@@ -179,7 +181,7 @@ export default function Home(props) {
             </View>
             <Text style={FONTS.h2Bold}>{userProfile.UserFullName}</Text>
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
     );
   }

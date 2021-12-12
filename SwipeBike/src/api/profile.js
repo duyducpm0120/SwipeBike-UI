@@ -41,7 +41,7 @@ export const updateUserProfile = (info, token) => {
 };
 
 export const getProfileById = (id, token) => {
-  return axios.get('http://10.0.2.2:3001/profile/getProfileById' + id, {
+  return axios.get('http://10.0.2.2:3001/profile/getProfileById/' + id, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

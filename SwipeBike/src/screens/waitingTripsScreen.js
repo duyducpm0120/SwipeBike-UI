@@ -113,6 +113,7 @@ export default function WaitingTripsScreen(props) {
             pressTrip={() => {
               viewOnMap(trip);
             }}
+            viewProfile={()=>{props.navigation.navigate("Profile",{CreatorId: trip.CreatorId})}}
           />
         </View>
       );
@@ -132,6 +133,7 @@ export default function WaitingTripsScreen(props) {
             cancelRequest={() => {
               cancelRequest(trip);
             }}
+            viewProfile={(CreatorId)=>{props.navigation.navigate("Profile",{CreatorId: CreatorId})}}
           />
         </View>
       );
