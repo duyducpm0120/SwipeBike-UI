@@ -89,6 +89,9 @@ export default function Home(props) {
         recommendedTripList: res.data.recommendation,
       });
       dispatch(updateIsLoading(false));
+    }).catch(err =>{ 
+      console.log("call recommend trip err", err);
+      dispatch(updateIsLoading(false));
     });
     //console.log('trip', trip);
   }
