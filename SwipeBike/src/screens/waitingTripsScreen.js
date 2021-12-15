@@ -138,6 +138,44 @@ export default function WaitingTripsScreen(props) {
       );
   }
 
+  const loadData = () =>{
+    dispatch(updateIsLoading(true));
+    Promise.all([
+      getUserTrips(userProfile.UserId, token)
+        .then(res => {
+          console.log('get user trips', res.data);
+          var trips = res.data.trips.map(trip => {
+            trip.TripType = TRIPTYPE.WAITING_TRIP_TYPE;
+            return trip;
+          });
+          setWaitingTripList(trips);
+          setDisplayingTripList(trips);
+        })
+        .catch(err => console.log('err', err)),
+      getUserPendingReceivedRequests(token)
+        .then(res2 => {
+          var trips2 = res2.data.requests.map(trip => {
+            trip.TripType = TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE;
+            return trip;
+          });
+          setReceivedTripList(trips2);
+          console.log('Received Request:', res2.data.requests);
+        })
+        .catch(err => console.log('Received request err', err)),
+      getUserPendingSentRequests(token)
+        .then(res3 => {
+          var trips3 = res3.data.requests.map(trip => {
+            trip.TripType = TRIPTYPE.SENT_REQUEST_TRIP_TYPE;
+            return trip;
+          });
+          setSentTripList(trips3);
+          // console.log('Sent Request:', res3.data.requests);
+        })
+        .catch(err => console.log('Sent request err', err)),
+    ]).then(res3 => {
+      dispatch(updateIsLoading(false));
+    });
+  }
   function viewOnMap(trip) {
     props.navigation.navigate('GoogleMapView', {tripData: trip});
   }
@@ -157,7 +195,7 @@ export default function WaitingTripsScreen(props) {
           />
         </TouchableOpacity>
         <Text style={{...FONTS.title}}>Đang chờ</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>{loadData()}}>
           <Image
             source={ICONS.refresh}
             style={{tintColor: COLORS.black, width: 30, height: 30}}
@@ -259,42 +297,7 @@ export default function WaitingTripsScreen(props) {
   }
 
   useEffect(() => {
-    dispatch(updateIsLoading(true));
-    Promise.all([
-      getUserTrips(userProfile.UserId, token)
-        .then(res => {
-          console.log('get user trips', res.data);
-          var trips = res.data.trips.map(trip => {
-            trip.TripType = TRIPTYPE.WAITING_TRIP_TYPE;
-            return trip;
-          });
-          setWaitingTripList(trips);
-          setDisplayingTripList(trips);
-        })
-        .catch(err => console.log('err', err)),
-      getUserPendingReceivedRequests(token)
-        .then(res2 => {
-          var trips2 = res2.data.requests.map(trip => {
-            trip.TripType = TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE;
-            return trip;
-          });
-          setReceivedTripList(trips2);
-          console.log('Received Request:', res2.data.requests);
-        })
-        .catch(err => console.log('Received request err', err)),
-      getUserPendingSentRequests(token)
-        .then(res3 => {
-          var trips3 = res3.data.requests.map(trip => {
-            trip.TripType = TRIPTYPE.SENT_REQUEST_TRIP_TYPE;
-            return trip;
-          });
-          setSentTripList(trips3);
-          // console.log('Sent Request:', res3.data.requests);
-        })
-        .catch(err => console.log('Sent request err', err)),
-    ]).then(res3 => {
-      dispatch(updateIsLoading(false));
-    });
+    loadData();
   }, []);
 
   return (
