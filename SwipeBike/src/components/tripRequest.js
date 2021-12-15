@@ -213,7 +213,7 @@ export default function TripRequest(props) {
               marginLeft: 10,
               width: '90%',
             }}>
-            {tripDetail.DriverToAddress}
+            {tripDetail.PassengerToAddress}
           </Text>
         </View>
       </View>

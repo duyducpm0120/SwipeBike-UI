@@ -70,19 +70,6 @@ export default function Notification(props) {
     );
   }
 
-  function renderSizeBar() {
-    return (
-      <View
-        style={{
-          width: '90%',
-          height: 0.5,
-          backgroundColor: COLORS.darkgray,
-          marginVertical: RESPONSIVE.pixelSizeVertical(5),
-        }}
-      />
-    );
-  }
-
   return (
     <View style={{justifyContent: 'center', alignItems: 'center'}}>
       <TouchableOpacity
@@ -100,7 +87,6 @@ export default function Notification(props) {
         {renderImage()}
         {renderContent()}
       </TouchableOpacity>
-      {renderSizeBar()}
     </View>
   );
 }

@@ -6,6 +6,7 @@ import {getUserNotifications} from '../api';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsNewNoti} from '../redux/slices/isNewNotiSlice';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function Notifications(props) {
   const dispatch = useDispatch();

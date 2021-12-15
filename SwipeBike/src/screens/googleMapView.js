@@ -2,20 +2,46 @@ import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Alert, PermissionsAndroid, Image} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import Geolocation from 'react-native-geolocation-service';
-import {COLORS, RESPONSIVE, ICONS} from '../constants';
-import {CandidateTrip} from '../components';
+import {COLORS, RESPONSIVE, ICONS, TRIPTYPE} from '../constants';
+import {CandidateTrip, TripRequest} from '../components';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
-import {useDispatch} from 'react-redux';
+import {useDispatch,useSelector} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
-import {getRoute} from '../api';
+import {
+  getCandidateTripRecommendations,
+  cancelTripRequest,
+  acceptTripRequest,
+  getRoute
+} from '../api';
+import {updateSelectedTrip} from '../redux/slices/selectedTripSlice';
 
 export default function GoogleMapView(props) {
   const dispatch = useDispatch();
+  const token = useSelector(state => state.loginToken.token);
   //Trip to display
   const [tripData, setTripData] = useState(props.route.params.tripData);
-  //check trip is loaded ?
-  const [loaded, setLoaded] = useState(false);
+
+  const [address, setAddress] = useState(() => {
+    let data = props.route.params.tripData;
+    if (data.TripType == TRIPTYPE.WAITING_TRIP_TYPE)
+      return {
+        FromLat: data.CandidateTripFromLat,
+        FromLong: data.CandidateTripFromLong,
+        ToLat: data.CandidateTripToLat,
+        ToLong: data.CandidateTripToLong,
+      };
+    else if (
+      data.TripType == TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE ||
+      TRIPTYPE.SENT_REQUEST_TRIP_TYPE
+    )
+      return {
+        FromLat: data.DriverFromLat,
+        FromLong: data.DriverFromLong,
+        ToLat: data.PassengerToLat,
+        ToLong: data.PassengerToLong,
+      };
+  });
 
   //Polyline coordinates
   const [coords, setCoords] = useState([
@@ -35,6 +61,135 @@ export default function GoogleMapView(props) {
   const bottomSheetRef = React.createRef(null);
   const fall = new Animated.Value(1);
 
+  
+  function callRecommendTrips(trip) {
+    dispatch(updateIsLoading(true));
+    getCandidateTripRecommendations(trip.CandidateTripId, token).then(res => {
+      console.log(res.data);
+      props.navigation.navigate('RecommendTrip', {
+        //console.log("list to be params",res.data.recommendation );
+        recommendedTripList: res.data.recommendation,
+      });
+      dispatch(updateIsLoading(false));
+    });
+    //console.log('trip', trip);
+  }
+
+  function acceptRequest(trip) {
+    dispatch(updateIsLoading(true));
+    acceptTripRequest(token, trip.RequestId)
+      .then(res => {
+        console.log('accept successfully');
+        dispatch(updateIsLoading(false));
+      })
+      .catch(err => {
+        console.log('error', JSON.stringify(err));
+        console.log('my token to accept trip', token);
+
+        dispatch(updateIsLoading(false));
+      });
+  }
+
+  function cancelRequest(trip) {
+    dispatch(updateIsLoading(true));
+    cancelTripRequest(token, trip.RequestId)
+      .then(res => {
+        console.log('cancel successfully');
+        dispatch(updateIsLoading(false));
+      })
+      .catch(err => {
+        console.log('error', JSON.stringify(err));
+        console.log('my token to accept trip', token);
+
+        dispatch(updateIsLoading(false));
+      });
+  }
+  function callRecommendTrips(trip) {
+    dispatch(updateIsLoading(true));
+    getCandidateTripRecommendations(trip.CandidateTripId, token).then(res => {
+      console.log(res.data);
+      props.navigation.navigate('RecommendTrip', {
+        //console.log("list to be params",res.data.recommendation );
+        recommendedTripList: res.data.recommendation,
+      });
+      dispatch(updateIsLoading(false));
+    });
+    //console.log('trip', trip);
+  }
+
+  function acceptRequest(trip) {
+    dispatch(updateIsLoading(true));
+    acceptTripRequest(token, trip.RequestId)
+      .then(res => {
+        console.log('accept successfully');
+        dispatch(updateIsLoading(false));
+      })
+      .catch(err => {
+        console.log('error', JSON.stringify(err));
+        console.log('my token to accept trip', token);
+
+        dispatch(updateIsLoading(false));
+      });
+  }
+
+  function cancelRequest(trip) {
+    dispatch(updateIsLoading(true));
+    cancelTripRequest(token, trip.RequestId)
+      .then(res => {
+        console.log('cancel successfully');
+        dispatch(updateIsLoading(false));
+      })
+      .catch(err => {
+        console.log('error', JSON.stringify(err));
+        console.log('my token to accept trip', token);
+
+        dispatch(updateIsLoading(false));
+      });
+  }
+  const renderTrip = () =>{
+    if (tripData.TripType == TRIPTYPE.WAITING_TRIP_TYPE)
+    return (
+      <CandidateTrip
+        tripDetail={tripData}
+        loadRecommendation={() => {
+          //update Candidate Selected trip
+          dispatch(updateSelectedTrip(tripData));
+          //call recommendation
+          callRecommendTrips(tripData);
+          //console.log(trip);
+        }}
+        pressTrip={() => {
+          viewOnMap(tripData);
+        }}
+        viewProfile={() => {
+          props.navigation.navigate('Profile', {
+            CreatorId: trip.CreatorId,
+          });
+        }}
+      />
+    );
+  else if (
+    tripData.TripType == TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE ||
+    TRIPTYPE.SENT_REQUEST_TRIP_TYPE
+  )
+    return (
+      <TripRequest
+        tripDetail={tripData}
+        acceptRequest={() => {
+          acceptRequest(tripData);
+        }}
+        cancelRequest={() => {
+          cancelRequest(tripData);
+        }}
+        viewProfile={CreatorId => {
+          props.navigation.navigate('Profile', {CreatorId: CreatorId});
+        }}
+        pressTrip={() => {
+          viewOnMap(tripData);
+        }}
+      />
+    );
+  }
   //Render inside bottomsheet
   const renderInner = () => (
     <View
@@ -66,15 +221,9 @@ export default function GoogleMapView(props) {
             borderRadius: 100,
           }}></View>
       </View>
-      {/* Trip Component */}
 
-      <CandidateTrip
-        tripDetail={tripData}
-        pressTrip={() => {}}
-        viewProfile={() => {
-          props.navigation.navigate('Profile', {CreatorId: tripData.CandidateTripCreator.UserId});
-          console.log("IDDDD", tripData);
-        }}></CandidateTrip>
+      {/* Trip Component */}
+     {renderTrip()}
     </View>
   );
 
@@ -141,14 +290,8 @@ export default function GoogleMapView(props) {
   function getDataRoute() {
     // if (loaded != true) return;
     if (!tripData) return;
-    const fromCoordinates = [
-      tripData.CandidateTripFromLat,
-      tripData.CandidateTripFromLong,
-    ];
-    const toCoordinates = [
-      tripData.CandidateTripToLat,
-      tripData.CandidateTripToLong,
-    ];
+    const fromCoordinates = [address.FromLat, address.FromLong];
+    const toCoordinates = [address.ToLat, address.ToLong];
     dispatch(updateIsLoading(true));
     getRoute(fromCoordinates, toCoordinates).then(route => {
       setCoords(route);
@@ -218,13 +361,13 @@ export default function GoogleMapView(props) {
         {/* Route Marker */}
         <Marker
           coordinate={{
-            latitude: tripData.CandidateTripFromLat,
-            longitude: tripData.CandidateTripFromLong,
+            latitude: address.FromLat,
+            longitude: address.FromLong,
           }}></Marker>
         <Marker
           coordinate={{
-            latitude: tripData.CandidateTripToLat,
-            longitude: tripData.CandidateTripToLong,
+            latitude: address.ToLat,
+            longitude: address.ToLong,
           }}></Marker>
 
         <MapView.Polyline

@@ -22,10 +22,8 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import {updateSelectedTrip} from '../redux/slices/selectedTripSlice';
+import { TRIPTYPE } from '../constants';
 
-const WAITING_TRIP_TYPE = 1;
-const RECEIVED_REQUEST_TRIP_TYPE = 2;
-const SENT_REQUEST_TRIP_TYPE = 2;
 
 export default function WaitingTripsScreen(props) {
   const dispatch = useDispatch();
@@ -93,7 +91,7 @@ export default function WaitingTripsScreen(props) {
       });
   }
   function renderTrip(trip) {
-    if (trip.TripType == WAITING_TRIP_TYPE)
+    if (trip.TripType == TRIPTYPE.WAITING_TRIP_TYPE)
       return (
         <View
           style={{
@@ -117,7 +115,7 @@ export default function WaitingTripsScreen(props) {
           />
         </View>
       );
-    else if (trip.TripType == RECEIVED_REQUEST_TRIP_TYPE)
+    else if (trip.TripType == TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE)
       return (
         <View
           style={{
@@ -134,6 +132,7 @@ export default function WaitingTripsScreen(props) {
               cancelRequest(trip);
             }}
             viewProfile={(CreatorId)=>{props.navigation.navigate("Profile",{CreatorId: CreatorId})}}
+            pressTrip={()=>{viewOnMap(trip)}}
           />
         </View>
       );
@@ -266,7 +265,7 @@ export default function WaitingTripsScreen(props) {
         .then(res => {
           console.log('get user trips', res.data);
           var trips = res.data.trips.map(trip => {
-            trip.TripType = WAITING_TRIP_TYPE;
+            trip.TripType = TRIPTYPE.WAITING_TRIP_TYPE;
             return trip;
           });
           setWaitingTripList(trips);
@@ -276,7 +275,7 @@ export default function WaitingTripsScreen(props) {
       getUserPendingReceivedRequests(token)
         .then(res2 => {
           var trips2 = res2.data.requests.map(trip => {
-            trip.TripType = RECEIVED_REQUEST_TRIP_TYPE;
+            trip.TripType = TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE;
             return trip;
           });
           setReceivedTripList(trips2);
@@ -286,7 +285,7 @@ export default function WaitingTripsScreen(props) {
       getUserPendingSentRequests(token)
         .then(res3 => {
           var trips3 = res3.data.requests.map(trip => {
-            trip.TripType = SENT_REQUEST_TRIP_TYPE;
+            trip.TripType = TRIPTYPE.SENT_REQUEST_TRIP_TYPE;
             return trip;
           });
           setSentTripList(trips3);
