@@ -6,13 +6,24 @@ import {getUserNotifications} from '../api';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsNewNoti} from '../redux/slices/isNewNotiSlice';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export default function Notifications(props) {
   const dispatch = useDispatch();
   const token = useSelector(state => state.loginToken.token);
   const isNewNoti = useSelector(state => state.isNewNoti.value);
   const [notificationsList, setNotificationList] = useState([]);
+
+  const reloadData = () => {
+    //dispatch(updateIsLoading(true));
+    getUserNotifications(token)
+      .then(res => {
+        setNotificationList(res.data.notifications);
+        dispatch(updateIsNewNoti(false));
+        // dispatch(updateIsLoading(false));
+      })
+      .catch(err => console.log('noti list err', err));
+  };
 
   function renderHeader() {
     return (
@@ -73,14 +84,7 @@ export default function Notifications(props) {
   }
 
   useEffect(() => {
-    //dispatch(updateIsLoading(true));
-    getUserNotifications(token)
-      .then(res => {
-        setNotificationList(res.data.notifications);
-        dispatch(updateIsNewNoti(false));
-        // dispatch(updateIsLoading(false));
-      })
-      .catch(err => console.log('noti list err', err));
+    reloadData();
   }, [isNewNoti]);
 
   return (
