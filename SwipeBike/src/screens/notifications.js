@@ -15,12 +15,12 @@ export default function Notifications(props) {
   const [notificationsList, setNotificationList] = useState([]);
 
   const reloadData = () => {
-    //dispatch(updateIsLoading(true));
+    dispatch(updateIsLoading(true));
     getUserNotifications(token)
       .then(res => {
         setNotificationList(res.data.notifications);
         dispatch(updateIsNewNoti(false));
-        // dispatch(updateIsLoading(false));
+        dispatch(updateIsLoading(false));
       })
       .catch(err => console.log('noti list err', err));
   };
@@ -41,7 +41,7 @@ export default function Notifications(props) {
           />
         </TouchableOpacity>
         <Text style={{...FONTS.title}}>Thông báo</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={reloadData}>
           <Image
             source={ICONS.refresh}
             style={{tintColor: COLORS.black, width: 30, height: 30}}
