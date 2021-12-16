@@ -22,6 +22,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import {updateSelectedTrip} from '../redux/slices/selectedTripSlice';
 import {getUserTrips, getCandidateTripRecommendations} from '../api';
+import {TRIPTYPE} from '../constants';
 
 export default function Home(props) {
   const dispatch = useDispatch();
@@ -37,7 +38,7 @@ export default function Home(props) {
   const [waitingTripList, setWaitingTripList] = useState([]);
 
   function renderTrip(trip) {
-    if (trip.TripType == 1)
+    if (trip.TripType == TRIPTYPE.WAITING_TRIP_TYPE)
       return (
         <View
           style={{
@@ -58,7 +59,9 @@ export default function Home(props) {
             pressTrip={() => {
               viewOnMap(trip);
             }}
-            viewProfile={()=>{props.navigation.navigate("Profile",{CreatorId : trip.CreatorId})}}
+            viewProfile={() => {
+              props.navigation.navigate('Profile', {CreatorId: trip.CreatorId});
+            }}
           />
         </View>
       );
@@ -82,17 +85,24 @@ export default function Home(props) {
 
   function callRecommendTrips(trip) {
     dispatch(updateIsLoading(true));
-    getCandidateTripRecommendations(trip.CandidateTripId, token).then(res => {
-      console.log(res.data);
-      props.navigation.navigate('RecommendTrip', {
-        //console.log("list to be params",res.data.recommendation );
-        recommendedTripList: res.data.recommendation,
+    getCandidateTripRecommendations(trip.CandidateTripId, token)
+      .then(res => {
+        console.log(res.data);
+        let data = res.data.recommendation.map(trip => {
+          trip.TripType = TRIPTYPE.WAITING_TRIP_TYPE;
+          return trip;
+        });
+        //console.log('recommend', data);
+        props.navigation.navigate('RecommendTrip', {
+          //console.log("list to be params",res.data.recommendation );
+          recommendedTripList: data,
+        });
+        dispatch(updateIsLoading(false));
+      })
+      .catch(err => {
+        console.log('call recommend trip err', err);
+        dispatch(updateIsLoading(false));
       });
-      dispatch(updateIsLoading(false));
-    }).catch(err =>{ 
-      console.log("call recommend trip err", err);
-      dispatch(updateIsLoading(false));
-    });
     //console.log('trip', trip);
   }
   function ageOfUser() {
@@ -146,7 +156,11 @@ export default function Home(props) {
             //width: '100%',
             marginTop: RESPONSIVE.pixelSizeVertical(10),
           }}
-          onPress={()=>{props.navigation.navigate("Profile",{CreatorId: userProfile.UserId})}}>
+          onPress={() => {
+            props.navigation.navigate('Profile', {
+              CreatorId: userProfile.UserId,
+            });
+          }}>
           <RoundedImage
             image={{uri: userProfile.UserProfilePic}}
             width={80}
