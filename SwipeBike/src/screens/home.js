@@ -176,11 +176,10 @@ export default function Home(props) {
               style={{
                 backgroundColor: COLORS.primary,
                 width: RESPONSIVE.pixelSizeHorizontal(50),
-                height: RESPONSIVE.pixelSizeVertical(25),
-                marginTop: 5,
+                height: RESPONSIVE.pixelSizeVertical(25),  
                 borderRadius: 50,
                 flexDirection: 'row',
-                justifyContent: 'space-evenly',
+                justifyContent: 'center',
                 alignItems: 'center',
               }}>
               <Text style={{...FONTS.h3, color: COLORS.white}}>
@@ -191,8 +190,7 @@ export default function Home(props) {
                   userProfile.UserGender == 'male' ? ICONS.male : ICONS.female
                 }
                 style={{
-                  width: RESPONSIVE.pixelSizeHorizontal(12),
-                  height: RESPONSIVE.pixelSizeVertical(12),
+                  transform:[{scale:0.5}],
                   tintColor: COLORS.white,
                 }}></Image>
             </View>
