@@ -22,8 +22,8 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import {updateSelectedTrip} from '../redux/slices/selectedTripSlice';
-import { TRIPTYPE } from '../constants';
-
+import {TRIPTYPE} from '../constants';
+import {Snackbar} from 'react-native-paper';
 
 export default function WaitingTripsScreen(props) {
   const dispatch = useDispatch();
@@ -48,20 +48,57 @@ export default function WaitingTripsScreen(props) {
   //var for controlling displaying trip List
   const [displayingTripList, setDisplayingTripList] = useState(waitingTripList);
 
-  function callRecommendTrips(trip) {
-    dispatch(updateIsLoading(true));
-    getCandidateTripRecommendations(trip.CandidateTripId, token).then(res => {
-      console.log(res.data);
-      props.navigation.navigate('RecommendTrip', {
-        //console.log("list to be params",res.data.recommendation );
-        recommendedTripList: res.data.recommendation,
-      });
-      dispatch(updateIsLoading(false));
-    });
-    //console.log('trip', trip);
+  //Snackbar field
+  const [snackBarVisible, setSnackBarVisible] = React.useState(false);
+  const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible);
+  const onDismissSnackBar = () => setSnackBarVisible(false);
+  const [snackbarTitle, setSnackBarTitle] = useState('');
+
+  function renderSnackBar() {
+    return (
+      <Snackbar
+        visible={snackBarVisible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: 'OK',
+          onPress: () => {
+            // Do something
+            onDismissSnackBar();
+          },
+        }}>
+        {snackbarTitle}
+      </Snackbar>
+    );
   }
 
-  function acceptRequest(trip) {
+  function accept (trip) {
+    acceptRequest(trip).then(() => {
+      setSnackBarTitle("Chấp nhận ghép đôi thành công");
+      onToggleSnackBar();
+      loadData()});
+  }
+  function cancel (trip) {
+    cancelRequest(trip).then(() => {
+      setSnackBarTitle("Huỷ yêu cầu ghép đôi thành công");
+      onToggleSnackBar();
+      loadData()});
+  }
+  function reject (trip) {
+    rejectRequest(trip).then(() => {
+      setSnackBarTitle("Từ chối yêu cầu ghép đôi thành công");
+      onToggleSnackBar();
+      loadData()});
+  }
+
+
+  function callRecommendTrips(trip) {
+    dispatch(updateIsLoading(true));
+    //update Candidate Selected trip
+    dispatch(updateSelectedTrip(trip));
+    props.navigation.navigate('RecommendTrip');
+  }
+
+  async function acceptRequest(trip) {
     dispatch(updateIsLoading(true));
     acceptTripRequest(token, trip.RequestId)
       .then(res => {
@@ -71,12 +108,11 @@ export default function WaitingTripsScreen(props) {
       .catch(err => {
         console.log('error', JSON.stringify(err));
         console.log('my token to accept trip', token);
-
         dispatch(updateIsLoading(false));
       });
   }
 
-  function cancelRequest(trip) {
+  async function cancelRequest(trip) {
     dispatch(updateIsLoading(true));
     cancelTripRequest(token, trip.RequestId)
       .then(res => {
@@ -90,6 +126,20 @@ export default function WaitingTripsScreen(props) {
         dispatch(updateIsLoading(false));
       });
   }
+  async function rejectRequest(trip) {
+    dispatch(updateIsLoading(true));
+    rejectTripRequest(token, trip.RequestId)
+      .then(res => {
+        console.log('reject successfully');
+        dispatch(updateIsLoading(false));
+      })
+      .catch(err => {
+        console.log('error', JSON.stringify(err));
+        console.log('my token to accept trip', token);
+        dispatch(updateIsLoading(false));
+      });
+  }
+
   function renderTrip(trip) {
     if (trip.TripType == TRIPTYPE.WAITING_TRIP_TYPE)
       return (
@@ -102,8 +152,6 @@ export default function WaitingTripsScreen(props) {
           <CandidateTrip
             tripDetail={trip}
             loadRecommendation={() => {
-              //update Candidate Selected trip
-              dispatch(updateSelectedTrip(trip));
               //call recommendation
               callRecommendTrips(trip);
               //console.log(trip);
@@ -111,7 +159,9 @@ export default function WaitingTripsScreen(props) {
             pressTrip={() => {
               viewOnMap(trip);
             }}
-            viewProfile={()=>{props.navigation.navigate("Profile",{CreatorId: trip.CreatorId})}}
+            viewProfile={() => {
+              props.navigation.navigate('Profile', {CreatorId: trip.CreatorId});
+            }}
           />
         </View>
       );
@@ -126,19 +176,26 @@ export default function WaitingTripsScreen(props) {
           <TripRequest
             tripDetail={trip}
             acceptRequest={() => {
-              acceptRequest(trip);
+              accept(trip);
             }}
             cancelRequest={() => {
-              cancelRequest(trip);
+              cancel(trip);
             }}
-            viewProfile={(CreatorId)=>{props.navigation.navigate("Profile",{CreatorId: CreatorId})}}
-            pressTrip={()=>{viewOnMap(trip)}}
+            rejectRequest={()=>{
+              reject(trip);
+            }}
+            viewProfile={CreatorId => {
+              props.navigation.navigate('Profile', {CreatorId: CreatorId});
+            }}
+            pressTrip={() => {
+              viewOnMap(trip);
+            }}
           />
         </View>
       );
   }
 
-  const loadData = () =>{
+  const loadData = () => {
     dispatch(updateIsLoading(true));
     Promise.all([
       getUserTrips(userProfile.UserId, token)
@@ -175,7 +232,7 @@ export default function WaitingTripsScreen(props) {
     ]).then(res3 => {
       dispatch(updateIsLoading(false));
     });
-  }
+  };
   function viewOnMap(trip) {
     props.navigation.navigate('GoogleMapView', {tripData: trip});
   }
@@ -195,7 +252,10 @@ export default function WaitingTripsScreen(props) {
           />
         </TouchableOpacity>
         <Text style={{...FONTS.title}}>Đang chờ</Text>
-        <TouchableOpacity onPress={()=>{loadData()}}>
+        <TouchableOpacity
+          onPress={() => {
+            loadData();
+          }}>
           <Image
             source={ICONS.refresh}
             style={{tintColor: COLORS.black, width: 30, height: 30}}
@@ -309,6 +369,7 @@ export default function WaitingTripsScreen(props) {
       {renderHeader()}
       {renderTripTypes()}
       {renderDisplayingTripList()}
+      {renderSnackBar()}
     </View>
   );
 }

@@ -10,8 +10,9 @@ import {
 import {FONTS, STYLES, RESPONSIVE, ICONS, COLORS} from '../constants';
 import {CandidateTrip} from '../components';
 import {useSelector, useDispatch} from 'react-redux';
-import {sendTripRequest} from '../api';
+import {sendTripRequest, getCandidateTripRecommendations} from '../api';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
+import {Snackbar} from 'react-native-paper';
 
 export default function RecommendTrip(props) {
   const dispatch = useDispatch();
@@ -20,21 +21,58 @@ export default function RecommendTrip(props) {
   //Selected CandidateTrip
   const selectedTrip = useSelector(state => state.selectedTrip.tripData);
   //recommendedTripList
-  const [recommendedTripList, setRecommendedTripList] = useState(
-    props.route.params.recommendedTripList,
-  );
+  const [recommendedTripList, setRecommendedTripList] = useState();
+  //Snackbar field
+  const [snackBarVisible, setSnackBarVisible] = React.useState(false);
+  const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible);
+  const onDismissSnackBar = () => setSnackBarVisible(false);
+  const [snackbarTitle, setSnackBarTitle] = useState('');
+
+  function renderSnackBar() {
+    return (
+      <Snackbar
+        visible={snackBarVisible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: 'OK',
+          onPress: () => {
+            // Do something
+            onDismissSnackBar();
+          },
+        }}>
+        {snackbarTitle}
+      </Snackbar>
+    );
+  }
+
+  function loadData () {
+    dispatch(updateIsLoading(true));
+    getCandidateTripRecommendations(selectedTrip.CandidateTripId, token).then(res => {
+      console.log(res.data);
+      setRecommendedTripList(res.data.recommendation);
+      dispatch(updateIsLoading(false));
+    }).catch(err => {
+      console.log('Load reccommendation err', err.response.data);
+      dispatch(updateIsLoading(false));
+      setSnackBarTitle("Có lỗi xảy ra");
+      onToggleSnackBar();
+    });
+  }
 
   function sendPairingRequest(trip) {
-    console.log('sendRequest');
     dispatch(updateIsLoading(true));
     sendTripRequest(selectedTrip.CandidateTripId, trip.CandidateTripId, token)
       .then(res => {
-        console.log('sent request!!!', res.data);
+        console.log('sent request successfully!!!', res.data);
         dispatch(updateIsLoading(false));
+        setSnackBarTitle("Gửi lời mời ghép đôi thành công");
+        onToggleSnackBar();
       })
       .catch(err => {
         console.log('send request fail', err.response.data);
         dispatch(updateIsLoading(false));
+        setSnackBarTitle("Gửi lời mời ghép đôi thất bại");
+        onToggleSnackBar();
       });
   }
 
@@ -57,7 +95,9 @@ export default function RecommendTrip(props) {
           />
         </TouchableOpacity>
         <Text style={{...FONTS.title}}>Gợi ý cho bạn</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>{
+          loadData();
+        }}>
           <Image
             source={ICONS.refresh}
             style={{tintColor: COLORS.black, width: 30, height: 30}}
@@ -110,6 +150,10 @@ export default function RecommendTrip(props) {
     );
   }
 
+  useEffect(()=>{
+    loadData();
+  },[]);
+
   return (
     <View
       style={{
@@ -117,6 +161,7 @@ export default function RecommendTrip(props) {
       }}>
       {renderHeader()}
       {renderRecommendedTrips()}
+      {renderSnackBar()}
     </View>
   );
 }

@@ -85,25 +85,9 @@ export default function Home(props) {
 
   function callRecommendTrips(trip) {
     dispatch(updateIsLoading(true));
-    getCandidateTripRecommendations(trip.CandidateTripId, token)
-      .then(res => {
-        console.log(res.data);
-        let data = res.data.recommendation.map(trip => {
-          trip.TripType = TRIPTYPE.WAITING_TRIP_TYPE;
-          return trip;
-        });
-        //console.log('recommend', data);
-        props.navigation.navigate('RecommendTrip', {
-          //console.log("list to be params",res.data.recommendation );
-          recommendedTripList: data,
-        });
-        dispatch(updateIsLoading(false));
-      })
-      .catch(err => {
-        console.log('call recommend trip err', err);
-        dispatch(updateIsLoading(false));
-      });
-    //console.log('trip', trip);
+    //update Candidate Selected trip
+    dispatch(updateSelectedTrip(trip));
+    props.navigation.navigate('RecommendTrip');
   }
   function ageOfUser() {
     var currentYear = parseInt(new Date().getFullYear());
