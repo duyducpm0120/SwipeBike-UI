@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList,
+  RefreshControl,
 } from 'react-native';
 import {FONTS, COLORS, RESPONSIVE, ICONS, STYLES} from '../constants';
 import {CandidateTrip, TripRequest, pairingTripDetail} from '../components';
@@ -54,6 +55,10 @@ export default function WaitingTripsScreen(props) {
   const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible);
   const onDismissSnackBar = () => setSnackBarVisible(false);
   const [snackbarTitle, setSnackBarTitle] = useState('');
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = useCallback(() => {
+    loadData();
+  }, []);
 
   function renderSnackBar() {
     return (
@@ -252,7 +257,7 @@ export default function WaitingTripsScreen(props) {
 
   const loadData = () => {
     dispatch(updateIsLoading(true));
-    setTripTypeControl("Chuyến đi của bạn");
+    setTripTypeControl('Chuyến đi của bạn');
     Promise.all([
       getUserCandidateTrips(userProfile.UserId, token)
         .then(res => {
@@ -406,7 +411,10 @@ export default function WaitingTripsScreen(props) {
           renderItem={({item, index}) => renderTrip(item)}
           keyExtractor={({item, index}) => {
             return index;
-          }}></FlatList>
+          }}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }></FlatList>
       </View>
     );
   }

@@ -32,13 +32,10 @@ export default function Home(props) {
   const token = useSelector(state => state.loginToken.token);
   //Is new notification?
   const isNewNoti = useSelector(state => state.isNewNoti.value);
-
   const userProfile = useSelector(state => state.userProfile.userProfile);
-  //dummy data
-  //dummy waitingTripList
   const [waitingTripList, setWaitingTripList] = useState([]);
+  
   const [refreshing, setRefreshing] = React.useState(false);
-
   const onRefresh = useCallback(() => {
     loadData();
   }, []);

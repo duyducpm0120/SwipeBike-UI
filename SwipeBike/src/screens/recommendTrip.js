@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   Image,
   FlatList,
+  RefreshControl
   // Animated,
 } from 'react-native';
 import {FONTS, STYLES, RESPONSIVE, ICONS, COLORS, TRIPTYPE} from '../constants';
@@ -27,6 +28,10 @@ export default function RecommendTrip(props) {
   const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible);
   const onDismissSnackBar = () => setSnackBarVisible(false);
   const [snackbarTitle, setSnackBarTitle] = useState('');
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = useCallback(() => {
+    loadData();
+  }, []);
 
   function renderSnackBar() {
     return (
@@ -149,6 +154,9 @@ export default function RecommendTrip(props) {
             return index;
           }}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       </View>
     );
