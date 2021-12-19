@@ -2,7 +2,7 @@ import {signUpApi, loginApi} from './auth';
 
 import {
   createCandidateTrip,
-  getUserTrips,
+  getUserCandidateTrips,
   getCandidateTripRecommendations,
 } from './CandidateTrip';
 import {
@@ -22,6 +22,7 @@ import {
   rejectTripRequest,
   acceptTripRequest,
 } from './TripRequest';
+import { getTrips } from './Trip';
 import {getRoute} from './GoogleMapServices';
 export {
   getUserNotifications,
@@ -35,7 +36,7 @@ export {
   updateUserProfile,
   loadUserProfile,
   getCandidateTripRecommendations,
-  getUserTrips,
+  getUserCandidateTrips,
   getRoute,
   getProfileById,
   getUserPendingReceivedRequests,
@@ -43,4 +44,5 @@ export {
   cancelTripRequest,
   rejectTripRequest,
   acceptTripRequest,
+  getTrips
 };

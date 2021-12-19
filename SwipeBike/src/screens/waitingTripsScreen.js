@@ -11,13 +11,14 @@ import {FONTS, COLORS, RESPONSIVE, ICONS, STYLES} from '../constants';
 import {CandidateTrip, TripRequest, pairingTripDetail} from '../components';
 
 import {
-  getUserTrips,
+  getUserCandidateTrips,
   getCandidateTripRecommendations,
   getUserPendingReceivedRequests,
   getUserPendingSentRequests,
   rejectTripRequest,
   cancelTripRequest,
   acceptTripRequest,
+  getTrips,
 } from '../api';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
@@ -44,7 +45,7 @@ export default function WaitingTripsScreen(props) {
     {name: 'Yêu cầu đã gửi', imgUrl: ICONS.friend},
   ];
   //var for controlling trip type displaying
-  const [tripTypeControl, setTripTypeControl] = useState('Chuyến đi của bạn');
+  const [tripTypeControl, setTripTypeControl] = useState();
   //var for controlling displaying trip List
   const [displayingTripList, setDisplayingTripList] = useState(waitingTripList);
 
@@ -71,25 +72,27 @@ export default function WaitingTripsScreen(props) {
     );
   }
 
-  function accept (trip) {
+  function accept(trip) {
     acceptRequest(trip).then(() => {
-      setSnackBarTitle("Chấp nhận ghép đôi thành công");
+      setSnackBarTitle('Chấp nhận ghép đôi thành công');
       onToggleSnackBar();
-      loadData()});
+      loadData();
+    });
   }
-  function cancel (trip) {
+  function cancel(trip) {
     cancelRequest(trip).then(() => {
-      setSnackBarTitle("Huỷ yêu cầu ghép đôi thành công");
+      setSnackBarTitle('Huỷ yêu cầu ghép đôi thành công');
       onToggleSnackBar();
-      loadData()});
+      reloadSentTripRequests();
+    });
   }
-  function reject (trip) {
+  function reject(trip) {
     rejectRequest(trip).then(() => {
-      setSnackBarTitle("Từ chối yêu cầu ghép đôi thành công");
+      setSnackBarTitle('Từ chối yêu cầu ghép đôi thành công');
       onToggleSnackBar();
-      loadData()});
+      reloadReceivedTripRequests();
+    });
   }
-
 
   function callRecommendTrips(trip) {
     dispatch(updateIsLoading(true));
@@ -162,6 +165,7 @@ export default function WaitingTripsScreen(props) {
             viewProfile={() => {
               props.navigation.navigate('Profile', {CreatorId: trip.CreatorId});
             }}
+            deleteTrip={() => {}}
           />
         </View>
       );
@@ -181,7 +185,7 @@ export default function WaitingTripsScreen(props) {
             cancelRequest={() => {
               cancel(trip);
             }}
-            rejectRequest={()=>{
+            rejectRequest={() => {
               reject(trip);
             }}
             viewProfile={CreatorId => {
@@ -194,13 +198,64 @@ export default function WaitingTripsScreen(props) {
         </View>
       );
   }
+  function reloadCandidateTrips() {
+    dispatch(updateIsLoading(true));
+    getUserCandidateTrips(token)
+      .then(res2 => {
+        var trips2 = res2.data.requests.map(trip => {
+          trip.TripType = TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE;
+          return trip;
+        });
+        setWaitingTripList(trips2);
+        setDisplayingTripList(trips2);
+        dispatch(updateIsLoading(false));
+      })
+      .catch(err => {
+        console.log('get CandidateTrips err', err);
+        dispatch(updateIsLoading(false));
+      });
+  }
+  function reloadReceivedTripRequests() {
+    dispatch(updateIsLoading(true));
+    getUserPendingReceivedRequests(token)
+      .then(res2 => {
+        var trips2 = res2.data.requests.map(trip => {
+          trip.TripType = TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE;
+          return trip;
+        });
+        setReceivedTripList(trips2);
+        setDisplayingTripList(trips2);
+        dispatch(updateIsLoading(false));
+      })
+      .catch(err => {
+        console.log('Received request err', err);
+        dispatch(updateIsLoading(false));
+      });
+  }
+  function reloadSentTripRequests() {
+    dispatch(updateIsLoading(true));
+    getUserPendingSentRequests(token)
+      .then(res2 => {
+        var trips2 = res2.data.requests.map(trip => {
+          trip.TripType = TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE;
+          return trip;
+        });
+        setSentTripList(trips2);
+        setDisplayingTripList(trips2);
+        dispatch(updateIsLoading(false));
+      })
+      .catch(err => {
+        console.log('Sent request err', err);
+        dispatch(updateIsLoading(false));
+      });
+  }
 
   const loadData = () => {
     dispatch(updateIsLoading(true));
+    setTripTypeControl("Chuyến đi của bạn");
     Promise.all([
-      getUserTrips(userProfile.UserId, token)
+      getUserCandidateTrips(userProfile.UserId, token)
         .then(res => {
-          console.log('get user trips', res.data);
           var trips = res.data.trips.map(trip => {
             trip.TripType = TRIPTYPE.WAITING_TRIP_TYPE;
             return trip;
@@ -234,7 +289,7 @@ export default function WaitingTripsScreen(props) {
     });
   };
   function viewOnMap(trip) {
-    props.navigation.navigate('GoogleMapView', {tripData: trip});
+    props.navigation.navigate('GoogleMapView', {tripData: trip, isViewed: true});
   }
   function renderHeader() {
     return (

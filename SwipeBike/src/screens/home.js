@@ -21,7 +21,7 @@ import {Trip, CandidateTrip, RoundedImage} from '../components';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import {updateSelectedTrip} from '../redux/slices/selectedTripSlice';
-import {getUserTrips, getCandidateTripRecommendations} from '../api';
+import {getUserCandidateTrips, getCandidateTripRecommendations} from '../api';
 import {TRIPTYPE} from '../constants';
 
 export default function Home(props) {
@@ -62,6 +62,7 @@ export default function Home(props) {
             viewProfile={() => {
               props.navigation.navigate('Profile', {CreatorId: trip.CreatorId});
             }}
+            deleteTrip={()=>{}}
           />
         </View>
       );
@@ -305,7 +306,7 @@ export default function Home(props) {
 
   useEffect(() => {
     dispatch(updateIsLoading(true));
-    getUserTrips(userProfile.UserId, token)
+    getUserCandidateTrips(userProfile.UserId, token)
       .then(res => {
         console.log('get user trips', res.data);
         var trips = res.data.trips.map(trip => {

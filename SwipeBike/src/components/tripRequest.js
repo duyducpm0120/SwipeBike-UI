@@ -305,10 +305,10 @@ export default function TripRequest(props) {
         backgroundColor: COLORS.backGroundColor,
         ...STYLES.shadow,
       }}
-      onPress={() => (props.pressTrip ? props.pressTrip(tripDetail) : null)}>
+      onPress={() => (props.pressTrip && props.isViewed == true ? null : props.pressTrip(tripDetail))}>
       {renderImage()}
       {renderDetail()}
-      {renderButton()}
+      {props.isViewed == true ? <View></View> : renderButton()}
     </TouchableOpacity>
   );
 }

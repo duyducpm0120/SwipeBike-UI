@@ -8,7 +8,7 @@ export function createCandidateTrip(trip, token) {
   });
 }
 
-export function getUserTrips(UserId, token) {
+export function getUserCandidateTrips(UserId, token) {
   return axios.get(
     'http://10.0.2.2:3001/candidatetrip/getbycreator/' + UserId,
     {

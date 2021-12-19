@@ -166,6 +166,7 @@ export default function GoogleMapView(props) {
             CreatorId: trip.CreatorId,
           });
         }}
+        isViewed={props.route.params.isViewed}
       />
     );
   else if (
@@ -187,6 +188,7 @@ export default function GoogleMapView(props) {
         pressTrip={() => {
           viewOnMap(tripData);
         }}
+        isViewed={props.route.params.isViewed}
       />
     );
   }

@@ -7,7 +7,7 @@ import {
   FlatList,
   // Animated,
 } from 'react-native';
-import {FONTS, STYLES, RESPONSIVE, ICONS, COLORS} from '../constants';
+import {FONTS, STYLES, RESPONSIVE, ICONS, COLORS, TRIPTYPE} from '../constants';
 import {CandidateTrip} from '../components';
 import {useSelector, useDispatch} from 'react-redux';
 import {sendTripRequest, getCandidateTripRecommendations} from '../api';
@@ -49,7 +49,11 @@ export default function RecommendTrip(props) {
     dispatch(updateIsLoading(true));
     getCandidateTripRecommendations(selectedTrip.CandidateTripId, token).then(res => {
       console.log(res.data);
-      setRecommendedTripList(res.data.recommendation);
+      let tripList = res.data.recommendation.map(trip => {
+        trip.TripType = TRIPTYPE.WAITING_TRIP_TYPE;
+        return trip;
+      })
+      setRecommendedTripList(tripList);
       dispatch(updateIsLoading(false));
     }).catch(err => {
       console.log('Load reccommendation err', err.response.data);
@@ -77,7 +81,7 @@ export default function RecommendTrip(props) {
   }
 
   function viewOnMap(trip) {
-    props.navigation.navigate('GoogleMapView', {tripData: trip});
+    props.navigation.navigate('GoogleMapView', {tripData: trip, isViewed: true});
   }
   function renderHeader() {
     return (

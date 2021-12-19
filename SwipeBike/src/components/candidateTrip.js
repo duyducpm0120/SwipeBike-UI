@@ -270,10 +270,10 @@ export default function CandidateTrip(props) {
         backgroundColor: COLORS.backGroundColor,
         ...STYLES.shadow,
       }}
-      onPress={() => props.pressTrip()}>
+      onPress={() => (props.pressTrip && props.isViewed == true ? null : props.pressTrip(tripDetail))}>
       {renderImage()}
       {renderDetail()}
-      {renderButton()}
+      {props.isViewed == true ? <View></View> : renderButton()}
     </TouchableOpacity>
   );
 }
