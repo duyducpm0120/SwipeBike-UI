@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect,useCallback} from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList,
+  RefreshControl,
 } from 'react-native';
 import {
   FONTS,
@@ -36,7 +37,28 @@ export default function Home(props) {
   //dummy data
   //dummy waitingTripList
   const [waitingTripList, setWaitingTripList] = useState([]);
+  const [refreshing, setRefreshing] = React.useState(false);
 
+  const onRefresh = useCallback(() => {
+    loadData();
+  }, []);
+
+  function loadData() {
+    dispatch(updateIsLoading(true));
+    getUserCandidateTrips(userProfile.UserId, token)
+      .then(res => {
+        console.log('get user trips', res.data);
+        var trips = res.data.trips.map(trip => {
+          trip.TripType = 1;
+          return trip;
+        });
+        setWaitingTripList(trips);
+        // setDisplayingTripList(trips);
+        dispatch(updateIsLoading(false));
+        //setDisplayingTripList(res.data.trips);
+      })
+      .catch(err => console.log('err', err));
+  }
   function renderTrip(trip) {
     if (trip.TripType == TRIPTYPE.WAITING_TRIP_TYPE)
       return (
@@ -62,7 +84,7 @@ export default function Home(props) {
             viewProfile={() => {
               props.navigation.navigate('Profile', {CreatorId: trip.CreatorId});
             }}
-            deleteTrip={()=>{}}
+            deleteTrip={() => {}}
           />
         </View>
       );
@@ -161,7 +183,7 @@ export default function Home(props) {
               style={{
                 backgroundColor: COLORS.primary,
                 width: RESPONSIVE.pixelSizeHorizontal(50),
-                height: RESPONSIVE.pixelSizeVertical(25),  
+                height: RESPONSIVE.pixelSizeVertical(25),
                 borderRadius: 50,
                 flexDirection: 'row',
                 justifyContent: 'center',
@@ -175,7 +197,7 @@ export default function Home(props) {
                   userProfile.UserGender == 'male' ? ICONS.male : ICONS.female
                 }
                 style={{
-                  transform:[{scale:0.5}],
+                  transform: [{scale: 0.5}],
                   tintColor: COLORS.white,
                 }}></Image>
             </View>
@@ -265,24 +287,29 @@ export default function Home(props) {
           style={{
             height: RESPONSIVE.pixelSizeVertical(460),
             marginTop: RESPONSIVE.pixelSizeVertical(20),
-            justifyContent:'center',
-            alignItems:'center',
-            width:SIZES.width - 40
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: SIZES.width - 40,
           }}>
-            {waitingTripList.length > 0 ?  <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            pagingEnabled={true}
-            data={waitingTripList}
-            renderItem={({item, index}) => renderTrip(item)}
-            keyExtractor={({item, index}) => {
-              return index;
-            }}></FlatList> : <View
-            style={{flex:1, justifyContent:'center',alignItems:'center'}}
-            ><Image source={ICONS.nothing} style={{transform:[{scale:0.5}]}}></Image>
-            <Text style={{...FONTS.h1}}>Bạn không có chuyến đi nào</Text>
-            </View>}
-          
+          {waitingTripList.length > 0 ? (
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              pagingEnabled={true}
+              data={waitingTripList}
+              renderItem={({item, index}) => renderTrip(item)}
+              keyExtractor={({item, index}) => {
+                return index;
+              }}></FlatList>
+          ) : (
+            <View
+              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <Image
+                source={ICONS.nothing}
+                style={{transform: [{scale: 0.5}]}}></Image>
+              <Text style={{...FONTS.h1}}>Bạn không có chuyến đi nào</Text>
+            </View>
+          )}
         </View>
         <View
           style={{
@@ -313,20 +340,7 @@ export default function Home(props) {
   }
 
   useEffect(() => {
-    dispatch(updateIsLoading(true));
-    getUserCandidateTrips(userProfile.UserId, token)
-      .then(res => {
-        console.log('get user trips', res.data);
-        var trips = res.data.trips.map(trip => {
-          trip.TripType = 1;
-          return trip;
-        });
-        setWaitingTripList(trips);
-        // setDisplayingTripList(trips);
-        dispatch(updateIsLoading(false));
-        //setDisplayingTripList(res.data.trips);
-      })
-      .catch(err => console.log('err', err));
+    loadData();
   }, []);
 
   return (
@@ -342,7 +356,10 @@ export default function Home(props) {
           alignItems: 'flex-start',
         }}
         styles={{width: '100%'}}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         {renderHeader()}
         {renderCreateTrip()}
         {renderWaitingTripList()}
