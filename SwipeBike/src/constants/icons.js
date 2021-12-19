@@ -43,6 +43,7 @@ export const phone = require('../assets/icons/Light/phone.png');
 export const badBold = require('../assets/icons/Bold/bad.png');
 export const heartBold = require('../assets/icons/Bold/heart.png');
 export const finishBold = require('../assets/icons/Bold/finish.png');
+export const nothing = require('../assets/icons/Light/nothing.png');
 
 export default {
   cameraBold,
@@ -92,4 +93,5 @@ export default {
   badBold,
   heartBold,
   finishBold,
+  nothing
 };

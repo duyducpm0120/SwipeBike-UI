@@ -265,8 +265,11 @@ export default function Home(props) {
           style={{
             height: RESPONSIVE.pixelSizeVertical(460),
             marginTop: RESPONSIVE.pixelSizeVertical(20),
+            justifyContent:'center',
+            alignItems:'center',
+            width:SIZES.width - 40
           }}>
-          <FlatList
+            {waitingTripList.length > 0 ?  <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
             pagingEnabled={true}
@@ -274,7 +277,12 @@ export default function Home(props) {
             renderItem={({item, index}) => renderTrip(item)}
             keyExtractor={({item, index}) => {
               return index;
-            }}></FlatList>
+            }}></FlatList> : <View
+            style={{flex:1, justifyContent:'center',alignItems:'center'}}
+            ><Image source={ICONS.nothing} style={{transform:[{scale:0.5}]}}></Image>
+            <Text style={{...FONTS.h1}}>Bạn không có chuyến đi nào</Text>
+            </View>}
+          
         </View>
         <View
           style={{
