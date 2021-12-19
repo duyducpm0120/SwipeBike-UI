@@ -23,7 +23,7 @@ import {Trip, CandidateTrip, RoundedImage} from '../components';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import {updateSelectedTrip} from '../redux/slices/selectedTripSlice';
-import {getUserCandidateTrips, getTrips} from '../api';
+import {getUserCandidateTrips, getTrips, cancelTrip} from '../api';
 
 export default function Home(props) {
   const dispatch = useDispatch();
@@ -40,6 +40,14 @@ export default function Home(props) {
   const onRefresh = useCallback(() => {
     loadData();
   }, []);
+
+  function cancelPairingTrip(trip) {
+    cancelTrip(trip.TripId, token)
+      .then(res => {
+        console.log('success cancel Trip');
+      })
+      .catch(err => console.log('cancel trip err',err));
+  }
 
   function loadData() {
     dispatch(updateIsLoading(true));
@@ -115,6 +123,9 @@ export default function Home(props) {
             }}
             viewProfile={id => {
               props.navigation.navigate('Profile', {Id: id});
+            }}
+            cancelTrip={()=>{
+              cancelPairingTrip(trip);
             }}
           />
         </View>

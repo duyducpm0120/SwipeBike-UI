@@ -88,9 +88,9 @@ export default function Notifications(props) {
   }, [isNewNoti]);
 
   return (
-    <View style={{...STYLES.container}}>
+    <ScrollView contentContainerStyle={{...STYLES.scrollContainer}}>
       {renderHeader()}
       {renderNotifications()}
-    </View>
+    </ScrollView>
   );
 }

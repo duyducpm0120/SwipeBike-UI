@@ -22,7 +22,7 @@ import {
   rejectTripRequest,
   acceptTripRequest,
 } from './TripRequest';
-import { getTrips } from './Trip';
+import { getTrips,cancelTrip } from './Trip';
 import {getRoute} from './GoogleMapServices';
 export {
   getUserNotifications,
@@ -44,5 +44,6 @@ export {
   cancelTripRequest,
   rejectTripRequest,
   acceptTripRequest,
-  getTrips
+  getTrips,
+  cancelTrip
 };

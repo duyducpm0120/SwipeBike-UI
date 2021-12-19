@@ -268,6 +268,9 @@ export default function Trip(props) {
             backgroundColor: COLORS.lightGray0,
             borderRadius: 5,
             marginVertical: 5,
+          }}
+          onPress={()=>{
+            props.cancelTrip();
           }}>
           <Text style={{...FONTS.h3Bold, color: COLORS.black}}>
             Hủy chuyến đi

@@ -88,14 +88,14 @@ export default function WaitingTripsScreen(props) {
     cancelRequest(trip).then(() => {
       setSnackBarTitle('Huỷ yêu cầu ghép đôi thành công');
       onToggleSnackBar();
-      reloadSentTripRequests();
+      loadData();
     });
   }
   function reject(trip) {
     rejectRequest(trip).then(() => {
       setSnackBarTitle('Từ chối yêu cầu ghép đôi thành công');
       onToggleSnackBar();
-      reloadReceivedTripRequests();
+      loadData();
     });
   }
 
@@ -110,12 +110,12 @@ export default function WaitingTripsScreen(props) {
     dispatch(updateIsLoading(true));
     acceptTripRequest(token, trip.RequestId)
       .then(res => {
-        console.log('accept successfully');
+        console.log('accept successfully', res.data);
         dispatch(updateIsLoading(false));
       })
       .catch(err => {
         console.log('error', JSON.stringify(err));
-        console.log('my token to accept trip', token);
+        //console.log('my token to accept trip', token);
         dispatch(updateIsLoading(false));
       });
   }
@@ -174,7 +174,7 @@ export default function WaitingTripsScreen(props) {
           />
         </View>
       );
-    else if (trip.TripType == TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE)
+    else if (trip.TripType == TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE || trip.TripType == TRIPTYPE.SENT_REQUEST_TRIP_TYPE )
       return (
         <View
           style={{
@@ -279,7 +279,7 @@ export default function WaitingTripsScreen(props) {
             return trip;
           });
           setReceivedTripList(trips2);
-          console.log('Received Request:', res2.data.requests);
+          //console.log('Received Request:', res2.data.requests);
         })
         .catch(err => console.log('Received request err', err)),
       getUserPendingSentRequests(token)
@@ -288,6 +288,7 @@ export default function WaitingTripsScreen(props) {
             trip.TripType = TRIPTYPE.SENT_REQUEST_TRIP_TYPE;
             return trip;
           });
+          console.log("trips3", trips3);
           setSentTripList(trips3);
           // console.log('Sent Request:', res3.data.requests);
         })

@@ -148,7 +148,7 @@ export default function TripRequest(props) {
               ...FONTS.h3,
               marginLeft: 10,
             }}>
-            {getVietnameseDate(tripDetail.RequestTarget)}
+            {getVietnameseDate(tripDetail.RequestCreateTime)}
           </Text>
         </View>
 
