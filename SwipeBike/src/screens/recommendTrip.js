@@ -133,7 +133,7 @@ export default function RecommendTrip(props) {
             sendRequest={() => {
               sendPairingRequest(trip);
             }}
-            viewProfile={()=>{props.navigation.navigate("Profile",{CreatorId: trip.CreatorId})}}
+            viewProfile={(id)=>{props.navigation.navigate("Profile",{Id: id})}}
           />
         </View>
       );

@@ -1,4 +1,4 @@
-import React, {useState, useEffect,useCallback} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
   Text,
@@ -16,14 +16,14 @@ import {
   ICONS,
   IMAGES,
   STYLES,
+  TRIPTYPE
 } from '../constants';
 import {Trip, CandidateTrip, RoundedImage} from '../components';
 
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import {updateSelectedTrip} from '../redux/slices/selectedTripSlice';
-import {getUserCandidateTrips, getCandidateTripRecommendations} from '../api';
-import {TRIPTYPE} from '../constants';
+import {getUserCandidateTrips, getTrips} from '../api';
 
 export default function Home(props) {
   const dispatch = useDispatch();
@@ -34,7 +34,8 @@ export default function Home(props) {
   const isNewNoti = useSelector(state => state.isNewNoti.value);
   const userProfile = useSelector(state => state.userProfile.userProfile);
   const [waitingTripList, setWaitingTripList] = useState([]);
-  
+  const [paringTripList, setPairingTripList] = useState([]);
+
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = useCallback(() => {
     loadData();
@@ -42,19 +43,30 @@ export default function Home(props) {
 
   function loadData() {
     dispatch(updateIsLoading(true));
-    getUserCandidateTrips(userProfile.UserId, token)
-      .then(res => {
-        console.log('get user trips', res.data);
-        var trips = res.data.trips.map(trip => {
-          trip.TripType = 1;
+
+    Promise.all([
+      getUserCandidateTrips(userProfile.UserId, token)
+        .then(res => {
+          //console.log('get user Candidate trips successfully');
+          let trips = res.data.trips.map(trip => {
+            trip.TripType = TRIPTYPE.WAITING_TRIP_TYPE;
+            return trip;
+          });
+          //console.log(trips[0]);
+          setWaitingTripList(trips);
+        })
+        .catch(err => console.log('get user Candidatetrip err', err)),
+      getTrips(token).then(res => {
+        console.log('get user trips successfully');
+        let trips2 = res.data.trips.map(trip => {
+          trip.TripType = TRIPTYPE.PAIRING_TRIP_TYPE;
           return trip;
         });
-        setWaitingTripList(trips);
-        // setDisplayingTripList(trips);
-        dispatch(updateIsLoading(false));
-        //setDisplayingTripList(res.data.trips);
-      })
-      .catch(err => console.log('err', err));
+        setPairingTripList(trips2);
+      }).catch(err => console.log('get user trips err', err)),
+    ]).then(() => {
+      dispatch(updateIsLoading(false));
+    });
   }
   function renderTrip(trip) {
     if (trip.TripType == TRIPTYPE.WAITING_TRIP_TYPE)
@@ -78,14 +90,14 @@ export default function Home(props) {
             pressTrip={() => {
               viewOnMap(trip);
             }}
-            viewProfile={() => {
-              props.navigation.navigate('Profile', {CreatorId: trip.CreatorId});
+            viewProfile={(id) => {
+              props.navigation.navigate('Profile', {Id: id});
             }}
             deleteTrip={() => {}}
           />
         </View>
       );
-    else if (trip.TripType == 3)
+    else if (trip.TripType == TRIPTYPE.PAIRING_TRIP_TYPE)
       return (
         <View
           style={{
@@ -96,7 +108,10 @@ export default function Home(props) {
           <Trip
             tripDetail={trip}
             pressTrip={trip => {
-              callRecommendTrips(trip);
+              viewOnMap(trip);
+            }}
+            viewProfile={(id) => {
+              props.navigation.navigate('Profile', {Id: id});
             }}
           />
         </View>
@@ -336,6 +351,79 @@ export default function Home(props) {
     );
   }
 
+  function renderPairingTripList(){
+    return (
+      <View
+        style={{
+          marginVertical: 20,
+          //height: RESPONSIVE.pixelSizeVertical(900),
+          justifyContent: 'flex-start',
+        }}>
+        <View
+          style={{
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            flexDirection: 'row',
+            //marginBottom: RESPONSIVE.pixelSizeVertical(10),
+          }}>
+          <Text style={{...FONTS.h2Bold}}>Đang ghép đôi</Text>
+        </View>
+        <View
+          style={{
+            height: RESPONSIVE.pixelSizeVertical(460),
+            marginTop: RESPONSIVE.pixelSizeVertical(20),
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: SIZES.width - 40,
+          }}>
+          {waitingTripList.length > 0 ? (
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              pagingEnabled={true}
+              data={paringTripList}
+              renderItem={({item, index}) => renderTrip(item)}
+              keyExtractor={({item, index}) => {
+                return index;
+              }}></FlatList>
+          ) : (
+            <View
+              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <Image
+                source={ICONS.nothing}
+                style={{transform: [{scale: 0.5}]}}></Image>
+              <Text style={{...FONTS.h1}}>Bạn không có chuyến đi nào</Text>
+            </View>
+          )}
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+          }}>
+          <TouchableOpacity
+            style={{
+              width: RESPONSIVE.pixelSizeHorizontal(200),
+              height: RESPONSIVE.pixelSizeVertical(50),
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              flexDirection: 'row',
+              paddingHorizontal: RESPONSIVE.pixelSizeHorizontal(10),
+              backgroundColor: COLORS.primary,
+              borderRadius: 50,
+              marginTop: 10,
+              ...STYLES.shadow,
+            }}
+            onPress={() => props.navigation.navigate('WaitingTripsScreen')}>
+            <Text style={FONTS.h3Bold}>Xem thêm</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
   useEffect(() => {
     loadData();
   }, []);
@@ -360,6 +448,7 @@ export default function Home(props) {
         {renderHeader()}
         {renderCreateTrip()}
         {renderWaitingTripList()}
+        {renderPairingTripList()}
         {/* {renderRecommendedTrip()} */}
       </ScrollView>
     </View>

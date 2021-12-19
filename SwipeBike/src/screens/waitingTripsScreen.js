@@ -167,8 +167,8 @@ export default function WaitingTripsScreen(props) {
             pressTrip={() => {
               viewOnMap(trip);
             }}
-            viewProfile={() => {
-              props.navigation.navigate('Profile', {CreatorId: trip.CreatorId});
+            viewProfile={(id) => {
+              props.navigation.navigate('Profile', {Id: id});
             }}
             deleteTrip={() => {}}
           />
@@ -193,8 +193,11 @@ export default function WaitingTripsScreen(props) {
             rejectRequest={() => {
               reject(trip);
             }}
-            viewProfile={CreatorId => {
-              props.navigation.navigate('Profile', {CreatorId: CreatorId});
+            viewPassengerProfile={()=>{
+              props.navigation.navigate('Profile', {Id: CreatorId});
+            }}
+            viewProfile={Id => {
+              props.navigation.navigate('Profile', {Id: Id});
             }}
             pressTrip={() => {
               viewOnMap(trip);
@@ -261,7 +264,7 @@ export default function WaitingTripsScreen(props) {
     Promise.all([
       getUserCandidateTrips(userProfile.UserId, token)
         .then(res => {
-          var trips = res.data.trips.map(trip => {
+          let trips = res.data.trips.map(trip => {
             trip.TripType = TRIPTYPE.WAITING_TRIP_TYPE;
             return trip;
           });
@@ -271,7 +274,7 @@ export default function WaitingTripsScreen(props) {
         .catch(err => console.log('err', err)),
       getUserPendingReceivedRequests(token)
         .then(res2 => {
-          var trips2 = res2.data.requests.map(trip => {
+          let trips2 = res2.data.requests.map(trip => {
             trip.TripType = TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE;
             return trip;
           });
@@ -281,7 +284,7 @@ export default function WaitingTripsScreen(props) {
         .catch(err => console.log('Received request err', err)),
       getUserPendingSentRequests(token)
         .then(res3 => {
-          var trips3 = res3.data.requests.map(trip => {
+          let trips3 = res3.data.requests.map(trip => {
             trip.TripType = TRIPTYPE.SENT_REQUEST_TRIP_TYPE;
             return trip;
           });
@@ -289,7 +292,7 @@ export default function WaitingTripsScreen(props) {
           // console.log('Sent Request:', res3.data.requests);
         })
         .catch(err => console.log('Sent request err', err)),
-    ]).then(res3 => {
+    ]).then(() => {
       dispatch(updateIsLoading(false));
     });
   };

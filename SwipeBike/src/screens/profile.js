@@ -33,7 +33,7 @@ export default function Profile(props) {
   ]);
 
   function renderHeader() {
-    if (props.route.params.CreatorId == ownerUserProfile.UserId)
+    if (props.route.params.Id == ownerUserProfile.UserId)
       return (
         <View
           style={{
@@ -178,7 +178,7 @@ export default function Profile(props) {
 
   useEffect(() => {
     dispatch(updateIsLoading(true));
-    getProfileById(props.route.params.CreatorId, token)
+    getProfileById(props.route.params.Id, token)
       .then(res => {
         //console.log("profile", res.data);
         setUserProfile(res.data.profile);
@@ -188,6 +188,7 @@ export default function Profile(props) {
         console.log('profile load err', err);
         dispatch(updateIsLoading(false));
       });
+      console.log("user Id", props.route.params.Id);
   }, []);
   return (
     <ScrollView contentContainerStyle={{...STYLES.container}}>

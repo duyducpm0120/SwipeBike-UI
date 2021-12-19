@@ -24,7 +24,7 @@ export default function CandidateTrip(props) {
           width: '100%',
         }}
         onPress={()=>{
-          props.viewProfile();
+          props.viewProfile(tripDetail.CreatorId);
         }}>
         <View
           style={{

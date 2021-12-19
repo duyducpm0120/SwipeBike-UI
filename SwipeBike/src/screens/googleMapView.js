@@ -3,16 +3,16 @@ import {View, StyleSheet, Alert, PermissionsAndroid, Image} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import Geolocation from 'react-native-geolocation-service';
 import {COLORS, RESPONSIVE, ICONS, TRIPTYPE} from '../constants';
-import {CandidateTrip, TripRequest} from '../components';
+import {CandidateTrip, Trip, TripRequest} from '../components';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
-import {useDispatch,useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import {
   getCandidateTripRecommendations,
   cancelTripRequest,
   acceptTripRequest,
-  getRoute
+  getRoute,
 } from '../api';
 import {updateSelectedTrip} from '../redux/slices/selectedTripSlice';
 
@@ -41,6 +41,13 @@ export default function GoogleMapView(props) {
         ToLat: data.PassengerToLat,
         ToLong: data.PassengerToLong,
       };
+    else
+      return {
+        FromLat: data.DriverFromLat,
+        FromLong: data.DriverFromLong,
+        ToLat: data.PassengerToLat,
+        ToLong: data.PassengerToLong,
+      };
   });
 
   //Polyline coordinates
@@ -61,7 +68,6 @@ export default function GoogleMapView(props) {
   const bottomSheetRef = React.createRef(null);
   const fall = new Animated.Value(1);
 
-  
   function callRecommendTrips(trip) {
     dispatch(updateIsLoading(true));
     getCandidateTripRecommendations(trip.CandidateTripId, token).then(res => {
@@ -146,52 +152,65 @@ export default function GoogleMapView(props) {
         dispatch(updateIsLoading(false));
       });
   }
-  const renderTrip = (trip) =>{
+  const renderTrip = trip => {
     if (tripData.TripType == TRIPTYPE.WAITING_TRIP_TYPE)
-    return (
-      <CandidateTrip
-        tripDetail={tripData}
-        loadRecommendation={() => {
-          //update Candidate Selected trip
-          dispatch(updateSelectedTrip(tripData));
-          //call recommendation
-          callRecommendTrips(tripData);
-          //console.log(trip);
-        }}
-        pressTrip={() => {
-          viewOnMap(tripData);
-        }}
-        viewProfile={() => {
-          props.navigation.navigate('Profile', {
-            CreatorId: trip.CreatorId,
-          });
-        }}
-        // isViewed={props.route.params.isViewed}
-      />
-    );
-  else if (
-    tripData.TripType == TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE ||
-    TRIPTYPE.SENT_REQUEST_TRIP_TYPE
-  )
-    return (
-      <TripRequest
-        tripDetail={tripData}
-        acceptRequest={() => {
-          acceptRequest(tripData);
-        }}
-        cancelRequest={() => {
-          cancelRequest(tripData);
-        }}
-        viewProfile={CreatorId => {
-          props.navigation.navigate('Profile', {CreatorId: CreatorId});
-        }}
-        pressTrip={() => {
-          viewOnMap(tripData);
-        }}
-        // isViewed={props.route.params.isViewed}
-      />
-    );
-  }
+      return (
+        <CandidateTrip
+          tripDetail={tripData}
+          loadRecommendation={() => {
+            //update Candidate Selected trip
+            dispatch(updateSelectedTrip(tripData));
+            //call recommendation
+            callRecommendTrips(tripData);
+            //console.log(trip);
+          }}
+          pressTrip={() => {
+            viewOnMap(tripData);
+          }}
+          viewProfile={() => {
+            props.navigation.navigate('Profile', {
+              CreatorId: trip.CreatorId,
+            });
+          }}
+          // isViewed={props.route.params.isViewed}
+        />
+      );
+    else if (tripData.TripType == TRIPTYPE.PAIRING_TRIP_TYPE)
+      return (
+        <Trip
+          tripDetail={tripData}
+          viewProfile={CreatorId => {
+            props.navigation.navigate('Profile', {CreatorId: CreatorId});
+          }}
+          pressTrip={() => {
+            viewOnMap(tripData);
+          }}
+          // isViewed={props.route.params.isViewed}
+        />
+      );
+    else if (
+      tripData.TripType == TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE ||
+      tripData.TripType == TRIPTYPE.SENT_REQUEST_TRIP_TYPE
+    )
+      return (
+        <TripRequest
+          tripDetail={tripData}
+          acceptRequest={() => {
+            acceptRequest(tripData);
+          }}
+          cancelRequest={() => {
+            cancelRequest(tripData);
+          }}
+          viewProfile={CreatorId => {
+            props.navigation.navigate('Profile', {CreatorId: CreatorId});
+          }}
+          pressTrip={() => {
+            viewOnMap(tripData);
+          }}
+          // isViewed={props.route.params.isViewed}
+        />
+      );
+  };
   //Render inside bottomsheet
   const renderInner = () => (
     <View
@@ -225,7 +244,7 @@ export default function GoogleMapView(props) {
       </View>
 
       {/* Trip Component */}
-     {renderTrip(tripData)}
+      {renderTrip(tripData)}
     </View>
   );
 

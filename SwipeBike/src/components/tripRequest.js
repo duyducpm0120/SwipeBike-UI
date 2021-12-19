@@ -33,7 +33,7 @@ export default function TripRequest(props) {
             flexDirection: 'column',
           }}
           onPress={() => {
-            props.viewProfile(tripDetail.RequestCreator.UserId);
+            props.viewProfile(tripDetail.RequestCreatorId);
           }}>
           <RoundedImage
             image={{uri: tripDetail.RequestCreator.UserProfilePic}}
@@ -69,7 +69,7 @@ export default function TripRequest(props) {
             flexDirection: 'column',
           }}
           onPress={() => {
-            props.viewProfile(tripDetail.RequestTarget.UserId);
+            props.viewProfile(tripDetail.RequestTargetId);
             console.log('trip request target detail', tripDetail.RequestTarget);
           }}>
           <RoundedImage
