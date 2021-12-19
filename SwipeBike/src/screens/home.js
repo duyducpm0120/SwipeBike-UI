@@ -16,7 +16,7 @@ import {
   ICONS,
   IMAGES,
   STYLES,
-  TRIPTYPE
+  TRIPTYPE,
 } from '../constants';
 import {Trip, CandidateTrip, RoundedImage} from '../components';
 
@@ -56,14 +56,16 @@ export default function Home(props) {
           setWaitingTripList(trips);
         })
         .catch(err => console.log('get user Candidatetrip err', err)),
-      getTrips(token).then(res => {
-        console.log('get user trips successfully');
-        let trips2 = res.data.trips.map(trip => {
-          trip.TripType = TRIPTYPE.PAIRING_TRIP_TYPE;
-          return trip;
-        });
-        setPairingTripList(trips2);
-      }).catch(err => console.log('get user trips err', err)),
+      getTrips(token)
+        .then(res => {
+          console.log('get user trips successfully');
+          let trips2 = res.data.trips.map(trip => {
+            trip.TripType = TRIPTYPE.PAIRING_TRIP_TYPE;
+            return trip;
+          });
+          setPairingTripList(trips2);
+        })
+        .catch(err => console.log('get user trips err', err)),
     ]).then(() => {
       dispatch(updateIsLoading(false));
     });
@@ -90,7 +92,7 @@ export default function Home(props) {
             pressTrip={() => {
               viewOnMap(trip);
             }}
-            viewProfile={(id) => {
+            viewProfile={id => {
               props.navigation.navigate('Profile', {Id: id});
             }}
             deleteTrip={() => {}}
@@ -101,8 +103,9 @@ export default function Home(props) {
       return (
         <View
           style={{
-            marginVertical: RESPONSIVE.pixelSizeVertical(10),
-            paddingHorizontal: RESPONSIVE.pixelSizeHorizontal(5),
+            marginHorizontal:
+              (SIZES.width - RESPONSIVE.pixelSizeHorizontal(350) - 40) / 2,
+            // paddingHorizontal: RESPONSIVE.pixelSizeHorizontal(5),
           }}
           key={trip.CandidateTripId}>
           <Trip
@@ -110,7 +113,7 @@ export default function Home(props) {
             pressTrip={trip => {
               viewOnMap(trip);
             }}
-            viewProfile={(id) => {
+            viewProfile={id => {
               props.navigation.navigate('Profile', {Id: id});
             }}
           />
@@ -351,7 +354,7 @@ export default function Home(props) {
     );
   }
 
-  function renderPairingTripList(){
+  function renderPairingTripList() {
     return (
       <View
         style={{
