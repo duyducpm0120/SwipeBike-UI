@@ -289,7 +289,7 @@ export default function WaitingTripsScreen(props) {
     });
   };
   function viewOnMap(trip) {
-    props.navigation.navigate('GoogleMapView', {tripData: trip, isViewed: true});
+    props.navigation.navigate('GoogleMapView', {tripData: trip});
   }
   function renderHeader() {
     return (

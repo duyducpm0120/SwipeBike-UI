@@ -146,7 +146,7 @@ export default function GoogleMapView(props) {
         dispatch(updateIsLoading(false));
       });
   }
-  const renderTrip = () =>{
+  const renderTrip = (trip) =>{
     if (tripData.TripType == TRIPTYPE.WAITING_TRIP_TYPE)
     return (
       <CandidateTrip
@@ -166,7 +166,7 @@ export default function GoogleMapView(props) {
             CreatorId: trip.CreatorId,
           });
         }}
-        isViewed={props.route.params.isViewed}
+        // isViewed={props.route.params.isViewed}
       />
     );
   else if (
@@ -188,7 +188,7 @@ export default function GoogleMapView(props) {
         pressTrip={() => {
           viewOnMap(tripData);
         }}
-        isViewed={props.route.params.isViewed}
+        // isViewed={props.route.params.isViewed}
       />
     );
   }
@@ -225,7 +225,7 @@ export default function GoogleMapView(props) {
       </View>
 
       {/* Trip Component */}
-     {renderTrip()}
+     {renderTrip(tripData)}
     </View>
   );
 
@@ -318,8 +318,8 @@ export default function GoogleMapView(props) {
         region={{
           latitude: currentLocation.latitude,
           longitude: currentLocation.longitude,
-          latitudeDelta: 0.015,
-          longitudeDelta: 0.0121,
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.1,
         }}
         showsUserLocation={true}
         followsUserLocation={true}

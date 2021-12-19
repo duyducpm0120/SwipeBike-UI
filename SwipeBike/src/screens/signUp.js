@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useRef} from 'react';
 import {
   View,
   Text,
@@ -23,6 +23,7 @@ export default function SignUp(props) {
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
+  const userEmailInputRef = useRef();
 
   //Snackbar field
   const [snackBarVisible, setSnackBarVisible] = React.useState(false);
@@ -35,15 +36,17 @@ export default function SignUp(props) {
     Uni.map(item => {
       return {
         label: item.UniEmailSuffix,
-        value: item.UniCode,
+        value: item.UniEmailSuffix,
       };
     }),
   );
   const [emailSuffixValue, setEmailSuffixValue] = useState(items[0].label);
+  const [emailPrefixValue, setUserPrefixValue] = useState('');
 
   function SignUp() {
+    setUserEmail(emailPrefixValue + emailSuffixValue);
     //validate inputs
-    if (!ValidateEmail(userEmail)) {
+    if (!ValidateEmail(userEmail)) { 
       console.log('invalid email');
       Alert.alert('Email không hợp lệ', '', [
         {text: 'OK', onPress: () => console.log('OK Pressed')},
@@ -148,6 +151,7 @@ export default function SignUp(props) {
                 tintColor: COLORS.lightGray1,
               }}></Image>
             <TextInput
+              ref={userEmailInputRef}
               placeholder="Email"
               style={{
                 ...FONTS.h3,
@@ -155,8 +159,11 @@ export default function SignUp(props) {
                 width: RESPONSIVE.pixelSizeHorizontal(110),
               }}
               onChangeText={email => {
-                setUserEmail(email + emailSuffixValue);
-              }}></TextInput>
+                setUserPrefixValue(email);
+                // console.log("email prefix",emailPrefixValue);
+                // console.log(emailPrefixValue + emailSuffixValue);
+              }}
+              ></TextInput>
           </View>
           <View style={{width: '60%'}}>
             <DropDownPicker
