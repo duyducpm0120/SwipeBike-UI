@@ -120,26 +120,29 @@ export default function Profile(props) {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Image
+          {/* <Image
             source={ICONS.work}
             style={{
               marginRight: RESPONSIVE.pixelSizeHorizontal(10),
               marginBottom: RESPONSIVE.pixelSizeVertical(10),
               tintColor: COLORS.darkgray,
-            }}></Image>
-          <Text style={{...FONTS.h3}}>{userProfile.UserUniversity}</Text>
+            }}></Image> */}
+          <Text style={{...FONTS.h3, textAlign:'center', width:'70%', fontWeight:'bold'}}>{userProfile.UserUniversity?.UniversityFullName}</Text>
         </View>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
+            marginTop:RESPONSIVE.pixelSizeVertical(10)
           }}>
           <Image
             source={ICONS.phone}
             style={{
               marginRight: RESPONSIVE.pixelSizeHorizontal(10),
               tintColor: COLORS.darkgray,
+              width:RESPONSIVE.fontPixel(25),
+              height:RESPONSIVE.fontPixel(25)
             }}></Image>
           <Text style={{...FONTS.h3}}>{userProfile.UserPhone}</Text>
         </View>
@@ -180,7 +183,7 @@ export default function Profile(props) {
     dispatch(updateIsLoading(true));
     getProfileById(props.route.params.Id, token)
       .then(res => {
-        //console.log("profile", res.data);
+        console.log("profile", res.data);
         setUserProfile(res.data.profile);
         dispatch(updateIsLoading(false));
       })

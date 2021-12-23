@@ -20,7 +20,6 @@ import DropDownPicker from 'react-native-dropdown-picker';
 export default function SignUp(props) {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
   const userEmailInputRef = useRef();
@@ -35,16 +34,20 @@ export default function SignUp(props) {
   const [items, setItems] = useState(
     Uni.map(item => {
       return {
-        label: item.UniEmailSuffix,
-        value: item.UniEmailSuffix,
+        label: item.UniversityEmailSuffix,
+        value: item.UniversityEmailSuffix,
       };
     }),
   );
   const [emailSuffixValue, setEmailSuffixValue] = useState(items[0].label);
   const [emailPrefixValue, setUserPrefixValue] = useState('');
 
+  function getUniId (){
+    return UniId = Uni.filter(uni => uni.UniversityEmailSuffix == emailSuffixValue)[0].UniversityId;
+  }
+
   function SignUp() {
-    setUserEmail(emailPrefixValue + emailSuffixValue);
+    const userEmail = emailPrefixValue + emailSuffixValue;
     //validate inputs
     if (!ValidateEmail(userEmail)) { 
       console.log('invalid email');
@@ -71,8 +74,7 @@ export default function SignUp(props) {
       return;
     }
     dispatch(updateIsLoading(true));
-    //signUp
-    signUpApi(userEmail, userPassword)
+    signUpApi(userEmail, userPassword,getUniId())
       .then(result => {
         console.log(result.data);
         dispatch(updateIsLoading(false));
@@ -82,6 +84,7 @@ export default function SignUp(props) {
         console.log(err);
         dispatch(updateIsLoading(false));
       });
+    console.log(userEmail,getUniId());
   }
   function ValidateEmail(email) {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
