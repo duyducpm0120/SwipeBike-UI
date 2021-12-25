@@ -24,6 +24,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import {updateSelectedTrip} from '../redux/slices/selectedTripSlice';
 import {getUserCandidateTrips, getTrips, cancelTrip} from '../api';
+import {Snackbar} from 'react-native-paper';
 
 export default function Home(props) {
   const dispatch = useDispatch();
@@ -41,13 +42,7 @@ export default function Home(props) {
     loadData();
   }, []);
 
-  function cancelPairingTrip(trip) {
-    cancelTrip(trip.TripId, token)
-      .then(res => {
-        console.log('success cancel Trip');
-      })
-      .catch(err => console.log('cancel trip err',err));
-  }
+
 
   function loadData() {
     dispatch(updateIsLoading(true));
@@ -142,6 +137,13 @@ export default function Home(props) {
     var userDobYear = parseInt(new Date(userProfile.UserDoB).getFullYear());
     var age = currentYear - userDobYear;
     return age.toString();
+  }
+  function cancelPairingTrip(trip) {
+    cancelTrip(trip.TripId, token)
+      .then(res => {
+        console.log('success cancel Trip');
+      })
+      .catch(err => console.log('cancel trip err',err));
   }
 
   function viewOnMap(trip) {
@@ -331,8 +333,8 @@ export default function Home(props) {
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <Image
                 source={ICONS.nothing}
-                style={{transform: [{scale: 0.5}]}}></Image>
-              <Text style={{...FONTS.h1, textAlign:'center'}}>Bạn không có chuyến đi đang chờ nào</Text>
+                style={{transform: [{scale: 0.5}], tintColor: COLORS.darkgray}}></Image>
+              <Text style={{...FONTS.h1, textAlign:'center'}}>Không có chuyến đi nào</Text>
             </View>
           )}
         </View>
@@ -379,7 +381,7 @@ export default function Home(props) {
             flexDirection: 'row',
             //marginBottom: RESPONSIVE.pixelSizeVertical(10),
           }}>
-          <Text style={{...FONTS.h2Bold}}>Đang ghép đôi</Text>
+          <Text style={{...FONTS.h2Bold}}>Ghép đôi</Text>
         </View>
         <View
           style={{
@@ -405,7 +407,7 @@ export default function Home(props) {
               <Image
                 source={ICONS.nothing}
                 style={{transform: [{scale: 0.5}],tintColor:COLORS.darkgray}}></Image>
-              <Text style={{...FONTS.h1, textAlign:'center'}}>Bạn không có chuyến đi đang ghép đôi nào</Text>
+              <Text style={{...FONTS.h1, textAlign:'center'}}>Không có chuyến đi nào</Text>
             </View>
           )}
         </View>

@@ -19,7 +19,7 @@ import {
   cancelTripRequest,
   acceptTripRequest,
   getTrips,
-  cancelTrip
+  cancelTrip,
 } from '../api';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
@@ -34,7 +34,7 @@ export default function PairingTripsScreen(props) {
   //Load user info from redux
   const userProfile = useSelector(state => state.userProfile.userProfile);
 
-  const [trips,setTrips] = useState([]);
+  const [trips, setTrips] = useState([]);
 
   //trip types
   const tripTypes = [
@@ -77,8 +77,10 @@ export default function PairingTripsScreen(props) {
     cancelTrip(trip.TripId, token)
       .then(res => {
         console.log('success cancel Trip');
+        setSnackBarTitle('Huỷ ghép đôi thành công');
+        onToggleSnackBar();
       })
-      .catch(err => console.log('cancel trip err',err));
+      .catch(err => console.log('cancel trip err', err));
   }
 
   function renderTrip(trip) {
@@ -100,14 +102,14 @@ export default function PairingTripsScreen(props) {
             pressTrip={() => {
               viewOnMap(trip);
             }}
-            viewProfile={(id) => {
+            viewProfile={id => {
               props.navigation.navigate('Profile', {Id: id});
             }}
             deleteTrip={() => {}}
           />
         </View>
       );
-      else if (trip.TripType == TRIPTYPE.PAIRING_TRIP_TYPE)
+    else if (trip.TripType == TRIPTYPE.PAIRING_TRIP_TYPE)
       return (
         <View
           style={{
@@ -123,14 +125,13 @@ export default function PairingTripsScreen(props) {
             viewProfile={id => {
               props.navigation.navigate('Profile', {Id: id});
             }}
-            cancelTrip={()=>{
+            cancelTrip={() => {
               cancelPairingTrip(trip);
             }}
           />
         </View>
       );
   }
-  
 
   const loadData = () => {
     dispatch(updateIsLoading(true));
@@ -216,8 +217,7 @@ export default function PairingTripsScreen(props) {
                 }}
                 onPress={() => {
                   setTripTypeControl(tripType.name);
-                  if (tripType.name == 'Hiện tại')
-                    setDisplayingTripList(trips);
+                  if (tripType.name == 'Hiện tại') setDisplayingTripList(trips);
                   else if (tripType.name == 'Lịch sử')
                     setDisplayingTripList(trips);
                 }}>
@@ -260,17 +260,32 @@ export default function PairingTripsScreen(props) {
           width: '100%',
           marginVertical: RESPONSIVE.pixelSizeVertical(10),
         }}>
-        <FlatList
-          //style={{marginVertical: 20}}
-          showsVerticalScrollIndicator={false}
-          data={displayingTripList}
-          renderItem={({item, index}) => renderTrip(item)}
-          keyExtractor={({item, index}) => {
-            return index;
-          }}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }></FlatList>
+        {displayingTripList.length > 0 ? (
+          <FlatList
+            //style={{marginVertical: 20}}
+            showsVerticalScrollIndicator={false}
+            data={displayingTripList}
+            renderItem={({item, index}) => renderTrip(item)}
+            keyExtractor={({item, index}) => {
+              return index;
+            }}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }></FlatList>
+        ) : (
+          <View
+            style={{ justifyContent: 'center', alignItems: 'center'}}>
+            <Image
+              source={ICONS.nothing}
+              style={{
+                transform: [{scale: 0.5}],
+                tintColor: COLORS.darkgray,
+              }}></Image>
+            <Text style={{...FONTS.h1, textAlign: 'center'}}>
+              Không có chuyến đi nào
+            </Text>
+          </View>
+        )}
       </View>
     );
   }

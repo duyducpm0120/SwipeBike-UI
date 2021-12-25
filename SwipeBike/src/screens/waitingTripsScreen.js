@@ -9,17 +9,15 @@ import {
   RefreshControl,
 } from 'react-native';
 import {FONTS, COLORS, RESPONSIVE, ICONS, STYLES} from '../constants';
-import {CandidateTrip, TripRequest, pairingTripDetail} from '../components';
+import {CandidateTrip, TripRequest} from '../components';
 
 import {
   getUserCandidateTrips,
-  getCandidateTripRecommendations,
   getUserPendingReceivedRequests,
   getUserPendingSentRequests,
   rejectTripRequest,
   cancelTripRequest,
   acceptTripRequest,
-  getTrips,
 } from '../api';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
@@ -167,14 +165,17 @@ export default function WaitingTripsScreen(props) {
             pressTrip={() => {
               viewOnMap(trip);
             }}
-            viewProfile={(id) => {
+            viewProfile={id => {
               props.navigation.navigate('Profile', {Id: id});
             }}
             deleteTrip={() => {}}
           />
         </View>
       );
-    else if (trip.TripType == TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE || trip.TripType == TRIPTYPE.SENT_REQUEST_TRIP_TYPE )
+    else if (
+      trip.TripType == TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE ||
+      trip.TripType == TRIPTYPE.SENT_REQUEST_TRIP_TYPE
+    )
       return (
         <View
           style={{
@@ -193,7 +194,7 @@ export default function WaitingTripsScreen(props) {
             rejectRequest={() => {
               reject(trip);
             }}
-            viewPassengerProfile={()=>{
+            viewPassengerProfile={() => {
               props.navigation.navigate('Profile', {Id: CreatorId});
             }}
             viewProfile={Id => {
@@ -288,7 +289,7 @@ export default function WaitingTripsScreen(props) {
             trip.TripType = TRIPTYPE.SENT_REQUEST_TRIP_TYPE;
             return trip;
           });
-          console.log("trips3", trips3);
+          console.log('trips3', trips3);
           setSentTripList(trips3);
           // console.log('Sent Request:', res3.data.requests);
         })
@@ -408,17 +409,28 @@ export default function WaitingTripsScreen(props) {
           width: '100%',
           marginVertical: RESPONSIVE.pixelSizeVertical(10),
         }}>
-        <FlatList
-          //style={{marginVertical: 20}}
-          showsVerticalScrollIndicator={false}
-          data={displayingTripList}
-          renderItem={({item, index}) => renderTrip(item)}
-          keyExtractor={({item, index}) => {
-            return index;
-          }}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }></FlatList>
+        {displayingTripList.length > 0 ? (
+          <FlatList
+            //style={{marginVertical: 20}}
+            showsVerticalScrollIndicator={false}
+            data={displayingTripList}
+            renderItem={({item, index}) => renderTrip(item)}
+            keyExtractor={({item, index}) => {
+              return index;
+            }}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }></FlatList>
+        ) : (
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <Image
+              source={ICONS.nothing}
+              style={{transform: [{scale: 0.5}], tintColor: COLORS.darkgray}}></Image>
+            <Text style={{...FONTS.h1, textAlign: 'center'}}>
+              Không có chuyến đi nào
+            </Text>
+          </View>
+        )}
       </View>
     );
   }
