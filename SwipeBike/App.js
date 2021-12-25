@@ -30,6 +30,7 @@ import {
   Profile,
   Loading,
   Notifications,
+  PairingTripsScreen
 } from './src/screens';
 import {STYLES} from './src/constants';
 import {Waiting} from './src/components';
@@ -108,6 +109,7 @@ const App = () => {
         <Stack.Screen name="RecommendTrip" component={RecommendTrip} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Notifications" component={Notifications} />
+        <Stack.Screen name="PairingTripsScreen" component={PairingTripsScreen} />
       </Stack.Navigator>
       <Loading></Loading>
     </NavigationContainer>

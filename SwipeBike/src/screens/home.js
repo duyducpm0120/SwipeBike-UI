@@ -66,7 +66,6 @@ export default function Home(props) {
         .catch(err => console.log('get user Candidatetrip err', err)),
       getTrips(token)
         .then(res => {
-          console.log('get user trips successfully');
           let trips2 = res.data.trips.map(trip => {
             trip.TripType = TRIPTYPE.PAIRING_TRIP_TYPE;
             return trip;
@@ -191,7 +190,7 @@ export default function Home(props) {
           }}
           onPress={() => {
             props.navigation.navigate('Profile', {
-              CreatorId: userProfile.UserId,
+              Id: userProfile.UserId,
             });
           }}>
           <RoundedImage
@@ -333,7 +332,7 @@ export default function Home(props) {
               <Image
                 source={ICONS.nothing}
                 style={{transform: [{scale: 0.5}]}}></Image>
-              <Text style={{...FONTS.h1}}>Bạn không có chuyến đi nào</Text>
+              <Text style={{...FONTS.h1, textAlign:'center'}}>Bạn không có chuyến đi đang chờ nào</Text>
             </View>
           )}
         </View>
@@ -390,7 +389,7 @@ export default function Home(props) {
             alignItems: 'center',
             width: SIZES.width - 40,
           }}>
-          {waitingTripList.length > 0 ? (
+          {paringTripList.length > 0 ? (
             <FlatList
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -405,8 +404,8 @@ export default function Home(props) {
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <Image
                 source={ICONS.nothing}
-                style={{transform: [{scale: 0.5}]}}></Image>
-              <Text style={{...FONTS.h1}}>Bạn không có chuyến đi nào</Text>
+                style={{transform: [{scale: 0.5}],tintColor:COLORS.darkgray}}></Image>
+              <Text style={{...FONTS.h1, textAlign:'center'}}>Bạn không có chuyến đi đang ghép đôi nào</Text>
             </View>
           )}
         </View>
@@ -430,7 +429,7 @@ export default function Home(props) {
               marginTop: 10,
               ...STYLES.shadow,
             }}
-            onPress={() => props.navigation.navigate('WaitingTripsScreen')}>
+            onPress={() => props.navigation.navigate('PairingTripsScreen')}>
             <Text style={FONTS.h3Bold}>Xem thêm</Text>
           </TouchableOpacity>
         </View>

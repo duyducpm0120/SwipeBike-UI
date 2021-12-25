@@ -12,6 +12,7 @@ import RecommendTrip from './recommendTrip';
 import Profile from './profile';
 import Loading from './loading';
 import Notifications from './notifications';
+import PairingTripsScreen from './pairingTripsScreen';
 
 export {
   Splash,
@@ -28,4 +29,5 @@ export {
   Profile,
   Loading,
   Notifications,
+  PairingTripsScreen
 };
