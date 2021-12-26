@@ -1,4 +1,4 @@
-import {signUpApi, loginApi} from './auth';
+import {signUpApi, loginApi, verifyEmail, resetPassword} from './auth';
 
 import {
   createCandidateTrip,
@@ -11,6 +11,7 @@ import {
   updateUserProfile,
   loadUserProfile,
   getProfileById,
+  getMyProfile
 } from './profile';
 import {sendFcmToken} from './FCM';
 import {getUserNotifications} from './notification';
@@ -30,6 +31,8 @@ export {
   sendFcmToken,
   signUpApi,
   loginApi,
+  verifyEmail,
+  resetPassword,
   createCandidateTrip,
   updateProfilePic,
   setupUserProfile,
@@ -45,5 +48,6 @@ export {
   rejectTripRequest,
   acceptTripRequest,
   getTrips,
-  cancelTrip
+  cancelTrip,
+  getMyProfile
 };

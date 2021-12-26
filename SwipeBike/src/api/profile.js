@@ -47,3 +47,13 @@ export const getProfileById = (id, token) => {
     },
   });
 };
+
+export const getMyProfile = token => {
+  return axios.get('http://10.0.2.2:3001/profile/view/', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+
