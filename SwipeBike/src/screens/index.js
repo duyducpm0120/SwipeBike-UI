@@ -29,5 +29,5 @@ export {
   Profile,
   Loading,
   Notifications,
-  PairingTripsScreen
+  PairingTripsScreen,
 };

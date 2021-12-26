@@ -17,19 +17,18 @@ import {
   STYLES,
 } from '../constants';
 import {BackgroundButton} from '../components';
-import {signUpApi, loginApi,sendFcmToken} from '../api';
+import {signUpApi, loginApi, sendFcmToken, verifyEmail} from '../api';
 import {
   saveTokenToLocalStorage,
   loadTokenFromLocalStorage,
   removeTokenFromLocalStorage,
 } from '../storage';
 
-//Redux
-import {useDispatch} from 'react-redux';
 import {updateToken} from '../redux/slices/loginTokenSlice';
 import {fetchProfile} from '../redux/slices/profileSlice';
 import {fetchLoginToken} from '../redux/slices/loginTokenSlice';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
+import {useSelector, useDispatch} from 'react-redux';
 
 export default function Login(props) {
   const dispatch = useDispatch();
@@ -38,8 +37,9 @@ export default function Login(props) {
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
 
+  const userProfile = useSelector(state => state.userProfile.userProfile);
+
   function login() {
-    
     //validate Inputs
     if (!ValidateEmail(userEmail)) {
       console.log('invalid email');
@@ -72,14 +72,41 @@ export default function Login(props) {
             await Promise.all([
               dispatch(fetchProfile(result.data.token)),
               dispatch(fetchLoginToken()),
-            ]).then(() => console.log('fetched profile and token to redux'));
+            ]).then(() => {
+              if (userProfile.IsVerified === true)
+                props.navigation.navigate('Home');
+              else {
+                Alert.alert(
+                  'Email chưa được xác thực',
+                  'Email của bạn hiện chưa được xác thực. Nhấn "OK" để nhận email xác thực',
+                  [
+                    {
+                      text: 'OK',
+                      onPress: () => {
+                        verifyEmail(userEmail, userPassword)
+                          .then(res =>
+                            console.log('verify email success', res.status),
+                          )
+                          .catch(err => console.log('verify email err', err));
+                      },
+                    },
+                    {
+                      text: 'Huỷ',
+                      onPress: () => {},
+                    },
+                  ],
+                );
+              }
+            });
             dispatch(updateIsLoading(false));
-            props.navigation.navigate('Home');
           });
         });
       })
       .catch(err => {
-        console.log(err);
+        console.log(JSON.stringify(err.response.data.error));
+        Alert.alert('Có lỗi',err.response.data.error.code, [
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ]);
         dispatch(updateIsLoading(false));
       });
   }

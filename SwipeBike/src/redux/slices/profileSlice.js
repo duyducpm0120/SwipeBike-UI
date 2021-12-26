@@ -1,10 +1,10 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import {loadUserProfile} from '../../api/profile';
+import {loadUserProfile, getMyProfile } from '../../api';
 
 export const fetchProfile = createAsyncThunk(
   'profile/fetchProfile',
   async token => {
-    const res = await loadUserProfile(token)
+    const res = await getMyProfile(token)
       .then(response => {
         console.log('profile first fetch', response.data);
         return response;

@@ -31,14 +31,14 @@ export default function ForgotPassword(props) {
       .then(res => {
         dispatch(updateIsLoading(false));
         Alert.alert('Hãy check email của bạn để đổi mật khẩu mới', '', [
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
+          {text: 'OK', onPress: () => props.navigation.goBack()},
         ]);
       })
       .catch(err => {
         console.log('err', err);
         dispatch(updateIsLoading(false));
         Alert.alert('Có lỗi xảy ra, vui lòng thử lại', '', [
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
+          {text: 'OK', onPress: () => props.navigation.goBack()},
         ]);
       });
   }

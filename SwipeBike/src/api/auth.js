@@ -21,7 +21,7 @@ export const resetPassword = email => {
 };
 
 export const verifyEmail = (email, password) => {
-  return axios.post('http://10.0.2.2:3001/auth/resetPassword', {
+  return axios.post('http://10.0.2.2:3001/auth/verifyEmail', {
     UserEmail: email,
     AccountPassword: password,
   });

@@ -30,7 +30,7 @@ import {
   Profile,
   Loading,
   Notifications,
-  PairingTripsScreen
+  PairingTripsScreen,
 } from './src/screens';
 import {STYLES} from './src/constants';
 import {Waiting} from './src/components';

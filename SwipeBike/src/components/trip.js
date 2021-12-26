@@ -153,7 +153,7 @@ export default function Trip(props) {
               ...FONTS.h3,
               marginLeft: 10,
             }}>
-            {getVietnameseTime(tripDetail.TripCreatedTime)}
+            {getVietnameseTime(tripDetail.TripStartTime)}
           </Text>
         </View>
         <View
@@ -178,7 +178,7 @@ export default function Trip(props) {
               ...FONTS.h3,
               marginLeft: 10,
             }}>
-            {getVietnameseDate(tripDetail.TripCreatedTime)}
+            {getVietnameseDate(tripDetail.TripStartTime)}
           </Text>
         </View>
 
