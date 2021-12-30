@@ -29,6 +29,7 @@ import {fetchProfile} from '../redux/slices/profileSlice';
 import {fetchLoginToken} from '../redux/slices/loginTokenSlice';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import {useSelector, useDispatch} from 'react-redux';
+import {getDefaultMiddleware} from '@reduxjs/toolkit';
 
 export default function Login(props) {
   const dispatch = useDispatch();
@@ -38,6 +39,31 @@ export default function Login(props) {
   const [userPassword, setUserPassword] = useState('');
 
   const userProfile = useSelector(state => state.userProfile.userProfile);
+  const userProfileStatus = useSelector(state => state.userProfile.status);
+
+  function verifyUser() {
+    if (userProfile.IsVerified === true) props.navigation.navigate('Home');
+    else {
+      Alert.alert(
+        'Email chưa được xác thực',
+        'Email của bạn hiện chưa được xác thực. Nhấn "OK" để nhận email xác thực',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              verifyEmail(userEmail, userPassword)
+                .then(res => console.log('verify email success', res.status))
+                .catch(err => console.log('verify email err', err));
+            },
+          },
+          {
+            text: 'Huỷ',
+            onPress: () => {},
+          },
+        ],
+      );
+    }
+  }
 
   function login() {
     //validate Inputs
@@ -62,49 +88,30 @@ export default function Login(props) {
     dispatch(updateIsLoading(true));
     //login
     loginApi(userEmail, userPassword)
-      .then(result => {
+      .then(async result => {
         //Register Device for FCM push notifications
         sendFcmToken(result.data.token);
         //console.log(result.data);
         //Saving token to localStorage
-        removeTokenFromLocalStorage().then(() => {
-          saveTokenToLocalStorage(result.data.token).then(async () => {
-            await Promise.all([
-              dispatch(fetchProfile(result.data.token)),
-              dispatch(fetchLoginToken()),
-            ]).then(() => {
-              if (userProfile.IsVerified === true)
-                props.navigation.navigate('Home');
-              else {
-                Alert.alert(
-                  'Email chưa được xác thực',
-                  'Email của bạn hiện chưa được xác thực. Nhấn "OK" để nhận email xác thực',
-                  [
-                    {
-                      text: 'OK',
-                      onPress: () => {
-                        verifyEmail(userEmail, userPassword)
-                          .then(res =>
-                            console.log('verify email success', res.status),
-                          )
-                          .catch(err => console.log('verify email err', err));
-                      },
-                    },
-                    {
-                      text: 'Huỷ',
-                      onPress: () => {},
-                    },
-                  ],
-                );
-              }
-            });
-            dispatch(updateIsLoading(false));
-          });
-        });
+        await removeTokenFromLocalStorage();
+        await saveTokenToLocalStorage(result.data.token);
+        dispatch(fetchProfile(result.data.token));
+        dispatch(fetchLoginToken());
+        dispatch(updateIsLoading(false));
+        // await removeTokenFromLocalStorage().then(() => {
+        //   saveTokenToLocalStorage(result.data.token)
+        //     .then(() => {
+        //       dispatch(fetchProfile(result.data.token));
+        //       dispatch(fetchLoginToken());
+        //       dispatch(updateIsLoading(false));
+        //     })
+        //     .finally(() => {});
+        // });
+        // verifyUser();
       })
       .catch(err => {
         console.log(JSON.stringify(err.response.data.error));
-        Alert.alert('Có lỗi',err.response.data.error.code, [
+        Alert.alert('Có lỗi', err.response.data.error.code, [
           {text: 'OK', onPress: () => console.log('OK Pressed')},
         ]);
         dispatch(updateIsLoading(false));
@@ -273,10 +280,9 @@ export default function Login(props) {
   }
 
   useEffect(() => {
-    // loadTokenFromLocalStorage().then(
-    //   props.navigation.navigate('UpdateProfile'),
-    // );
-  });
+    if(userProfileStatus==="succeeded")
+      verifyUser();
+  },[userProfileStatus]);
   return (
     <View style={STYLES.container}>
       {renderHeader()}

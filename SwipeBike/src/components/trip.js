@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {View, Text, Image, TouchableOpacity, Button} from 'react-native';
 import {FONTS, COLORS, RESPONSIVE, ICONS, IMAGES, STYLES} from '../constants';
 import {
   RoundedImage,
   getVietnameseDate,
   getVietnameseTime,
 } from '../components';
+import {Menu, Divider} from 'react-native-paper';
 
 export default function Trip(props) {
   const [tripDetail, setTripDetail] = useState({
@@ -41,6 +42,28 @@ export default function Trip(props) {
     TripStartTime: null,
     TripType: 4,
   });
+
+  const [visible, setVisible] = useState(false);
+  const [rating, setRating] = useState('Like');
+
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
+
+  const ratingIcon = (content, image) => {
+    //console.log("content",content);
+    //console.log("image",image);
+    return (
+      <Image
+        source={image}
+        style={{
+          tintColor: rating === content ? COLORS.primary : COLORS.darkgray,
+          width: RESPONSIVE.fontPixel(40),
+          height: RESPONSIVE.fontPixel(40)
+        }}></Image>
+    );
+  };
+
   useEffect(() => {
     setTripDetail(props.tripDetail); //The details of trip
   });
@@ -269,13 +292,64 @@ export default function Trip(props) {
             borderRadius: 5,
             marginVertical: 5,
           }}
-          onPress={()=>{
+          onPress={() => {
             props.cancelTrip();
           }}>
           <Text style={{...FONTS.h3Bold, color: COLORS.black}}>
             Hủy chuyến đi
           </Text>
         </TouchableOpacity>
+        <Menu
+          visible={visible}
+          onDismiss={closeMenu}
+          anchor={
+            <TouchableOpacity
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: RESPONSIVE.pixelSizeHorizontal(300),
+                height: RESPONSIVE.pixelSizeVertical(40),
+                backgroundColor: COLORS.primaryLighter1,
+                borderRadius: 5,
+                marginVertical: 5,
+              }}
+              onPress={openMenu}>
+              <Text style={{...FONTS.h3Bold, color: COLORS.primaryDarker1}}>
+                Đánh giá chuyến đi
+              </Text>
+            </TouchableOpacity>
+          }>
+          <Menu.Item
+            onPress={() => {
+              setRating('Like');
+            }}
+            title="Yêu thích"
+            icon={() => ratingIcon('Like', ICONS.heartBold)}
+            titleStyle={{
+              ...FONTS.h2,
+              color: rating === 'Like' ? COLORS.primaryDarker1 : COLORS.black,
+            }}
+          />
+          <Menu.Item
+            onPress={() => {
+              setRating('Unlike');
+            }}
+            title="Không tốt"
+            icon={() => ratingIcon('Unlike', ICONS.badBold)}
+            titleStyle={{
+              ...FONTS.h2,
+              color: rating === 'Unlike' ? COLORS.primaryDarker1 : COLORS.black,
+            }}
+          />
+          <Divider />
+          <Menu.Item
+            onPress={() => {}}
+            title="OK"
+            titleStyle={{...FONTS.h2Bold}}
+            style={{justifyContent: 'center', alignItems: 'center'}}
+            contentStyle={{justifyContent: 'center', alignItems: 'center'}}
+          />
+        </Menu>
       </View>
     );
   }
