@@ -23,7 +23,6 @@ export default function Notifications(props) {
   const onRefresh = useCallback(() => {
     reloadData();
   }, []);
-
   const reloadData = () => {
     dispatch(updateIsLoading(true));
     getUserNotifications(token)

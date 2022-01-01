@@ -17,17 +17,14 @@ export default function Profile(props) {
   const [rating, setRating] = useState([
     {
       name: 'Hoàn thành',
-      value: 120,
       imgUri: ICONS.finishBold,
     },
     {
       name: 'Yêu thích',
-      value: 40,
       imgUri: ICONS.heartBold,
     },
     {
       name: 'Không tốt',
-      value: 10,
       imgUri: ICONS.badBold,
     },
   ]);
@@ -103,7 +100,7 @@ export default function Profile(props) {
               userProfile.UserGender == 'male' ? ICONS.male : ICONS.female
             }
             style={{
-              transform:[{scale:0.5}],
+              transform: [{scale: 0.5}],
               tintColor: COLORS.white,
             }}></Image>
         </View>
@@ -127,22 +124,30 @@ export default function Profile(props) {
               marginBottom: RESPONSIVE.pixelSizeVertical(10),
               tintColor: COLORS.darkgray,
             }}></Image> */}
-          <Text style={{...FONTS.h3, textAlign:'center', width:'70%', fontWeight:'bold'}}>{userProfile.UserUniversity?.UniversityFullName}</Text>
+          <Text
+            style={{
+              ...FONTS.h3,
+              textAlign: 'center',
+              width: '70%',
+              fontWeight: 'bold',
+            }}>
+            {userProfile.UserUniversity?.UniversityFullName}
+          </Text>
         </View>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop:RESPONSIVE.pixelSizeVertical(10)
+            marginTop: RESPONSIVE.pixelSizeVertical(10),
           }}>
           <Image
             source={ICONS.phone}
             style={{
               marginRight: RESPONSIVE.pixelSizeHorizontal(10),
               tintColor: COLORS.darkgray,
-              width:RESPONSIVE.fontPixel(25),
-              height:RESPONSIVE.fontPixel(25)
+              width: RESPONSIVE.fontPixel(25),
+              height: RESPONSIVE.fontPixel(25),
             }}></Image>
           <Text style={{...FONTS.h3}}>{userProfile.UserPhone}</Text>
         </View>
@@ -160,21 +165,39 @@ export default function Profile(props) {
           justifyContent: 'space-around',
           marginVertical: RESPONSIVE.pixelSizeVertical(25),
         }}>
-        {rating.map(item => {
-          return (
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1,
-              }}>
-              <Image source={item.imgUri}></Image>
-              <Text style={{...FONTS.h2Bold}}>{item.value}</Text>
-              <Text style={{...FONTS.h3}}>{item.name}</Text>
-            </View>
-          );
-        })}
+        <View
+          style={{
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flex: 1,
+          }}>
+          <Image source={rating[0].imgUri}></Image>
+          <Text style={{...FONTS.h2Bold}}>{userProfile.TripCount}</Text>
+          <Text style={{...FONTS.h3}}>{rating[0].name}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flex: 1,
+          }}>
+          <Image source={rating[1].imgUri}></Image>
+          <Text style={{...FONTS.h2Bold}}>{userProfile.LikeCount}</Text>
+          <Text style={{...FONTS.h3}}>{rating[1].name}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flex: 1,
+          }}>
+          <Image source={rating[2].imgUri}></Image>
+          <Text style={{...FONTS.h2Bold}}>{userProfile.DisLikeCount}</Text>
+          <Text style={{...FONTS.h3}}>{rating[2].name}</Text>
+        </View>
       </View>
     );
   }
@@ -183,7 +206,7 @@ export default function Profile(props) {
     dispatch(updateIsLoading(true));
     getProfileById(props.route.params.Id, token)
       .then(res => {
-        console.log("profile", res.data);
+        console.log('profile', res.data.profile);
         setUserProfile(res.data.profile);
         dispatch(updateIsLoading(false));
       })
@@ -191,7 +214,7 @@ export default function Profile(props) {
         console.log('profile load err', err);
         dispatch(updateIsLoading(false));
       });
-      console.log("user Id", props.route.params.Id);
+    console.log('user Id', props.route.params.Id);
   }, []);
   return (
     <ScrollView contentContainerStyle={{...STYLES.container}}>
