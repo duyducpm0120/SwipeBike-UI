@@ -1,18 +1,28 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, Image, FlatList} from 'react-native';
+import React, {useEffect, useState, useCallback} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  FlatList,
+  RefreshControl,
+} from 'react-native';
 import {STYLES, FONTS, IMAGES, ICONS, COLORS, RESPONSIVE} from '../constants';
 import {Notification} from '../components';
 import {getUserNotifications} from '../api';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsNewNoti} from '../redux/slices/isNewNotiSlice';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
-import {ScrollView} from 'react-native-gesture-handler';
 
 export default function Notifications(props) {
   const dispatch = useDispatch();
   const token = useSelector(state => state.loginToken.token);
   const isNewNoti = useSelector(state => state.isNewNoti.value);
   const [notificationsList, setNotificationList] = useState([]);
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = useCallback(() => {
+    reloadData();
+  }, []);
 
   const reloadData = () => {
     dispatch(updateIsLoading(true));
@@ -76,8 +86,15 @@ export default function Notifications(props) {
             return index;
           }}
           style={{
+            paddingTop: 20,
+            paddingHorizontal: 20,
+            backgroundColor: COLORS.backGroundColor,
             width: '100%',
           }}
+          ListHeaderComponent={renderHeader()}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       </View>
     );
@@ -87,10 +104,5 @@ export default function Notifications(props) {
     reloadData();
   }, [isNewNoti]);
 
-  return (
-    <ScrollView contentContainerStyle={{...STYLES.scrollContainer}}>
-      {renderHeader()}
-      {renderNotifications()}
-    </ScrollView>
-  );
+  return renderNotifications();
 }

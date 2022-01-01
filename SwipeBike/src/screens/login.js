@@ -29,7 +29,6 @@ import {fetchProfile} from '../redux/slices/profileSlice';
 import {fetchLoginToken} from '../redux/slices/loginTokenSlice';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import {useSelector, useDispatch} from 'react-redux';
-import {getDefaultMiddleware} from '@reduxjs/toolkit';
 
 export default function Login(props) {
   const dispatch = useDispatch();
@@ -42,27 +41,29 @@ export default function Login(props) {
   const userProfileStatus = useSelector(state => state.userProfile.status);
 
   function verifyUser() {
-    if (userProfile.IsVerified === true) props.navigation.navigate('Home');
-    else {
-      Alert.alert(
-        'Email chưa được xác thực',
-        'Email của bạn hiện chưa được xác thực. Nhấn "OK" để nhận email xác thực',
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              verifyEmail(userEmail, userPassword)
-                .then(res => console.log('verify email success', res.status))
-                .catch(err => console.log('verify email err', err));
-            },
-          },
-          {
-            text: 'Huỷ',
-            onPress: () => {},
-          },
-        ],
-      );
-    }
+    props.navigation.navigate('Home');
+    
+    // if (userProfile.IsVerified === true) props.navigation.navigate('Home');
+    // else {
+    //   Alert.alert(
+    //     'Email chưa được xác thực',
+    //     'Email của bạn hiện chưa được xác thực. Nhấn "OK" để nhận email xác thực',
+    //     [
+    //       {
+    //         text: 'OK',
+    //         onPress: () => {
+    //           verifyEmail(userEmail, userPassword)
+    //             .then(res => console.log('verify email success', res.status))
+    //             .catch(err => console.log('verify email err', err));
+    //         },
+    //       },
+    //       {
+    //         text: 'Huỷ',
+    //         onPress: () => {},
+    //       },
+    //     ],
+    //   );
+    // }
   }
 
   function login() {

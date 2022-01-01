@@ -24,7 +24,6 @@ import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import {updateSelectedTrip} from '../redux/slices/selectedTripSlice';
 import {getUserCandidateTrips, getTrips, cancelTrip} from '../api';
-import {Snackbar} from 'react-native-paper';
 
 export default function Home(props) {
   const dispatch = useDispatch();
