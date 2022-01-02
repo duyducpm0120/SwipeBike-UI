@@ -17,47 +17,56 @@ import {
   STYLES,
 } from '../constants';
 import {BackgroundButton} from '../components';
-import {resetPassword} from '../api';
-import {useDispatch} from 'react-redux';
+import {resetPassword, updatePassword} from '../api';
+import {useDispatch, useSelector} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 
 export default function ChangePassword(props) {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState();
+  const userProfile = useSelector(state => state.userProfile.userProfile);
   const [showPassword, setShowPassword] = useState(false);
   const [lastPassword, setLastPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
-  function sendResetRequest() {
-    if (!ValidateEmail(email)) {
-      console.log('invalid email');
-      Alert.alert('Email không hợp lệ', '', [
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
-      ]);
+   //To check a password between 7 to 16 characters which contain only characters,
+  //numeric digits, underscore and first character must be a letter
+  function ValidatePassword(password) {
+    return true;
+    var passw = /^[A-Za-z]\w{7,14}$/;
+    if (password.match(passw)) {
+      //alert('Correct, try another...');
+      return true;
+    } else {
+      //alert('Wrong...!');
+      return false;
+    }
+  }
+
+  function changePassword () { 
+    if (!ValidatePassword(newPassword)) {
+      console.log('invalid password');
+      //Mật khẩu có 7 đến 16 ký tự chỉ chứa các ký tự, chữ số, dấu gạch dưới và ký tự đầu tiên phải là một chữ cái
+      Alert.alert(
+        'Mật khẩu mới không hợp lệ',
+        'Mật khẩu có 7 đến 16 ký tự chỉ chứa các ký tự, chữ số, dấu gạch dưới và ký tự đầu tiên phải là một chữ cái',
+        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+      );
       return;
     }
     dispatch(updateIsLoading(true));
-    resetPassword(email)
-      .then(res => {
-        dispatch(updateIsLoading(false));
-        Alert.alert('Hãy check email của bạn để đổi mật khẩu mới', '', [
-          {text: 'OK', onPress: () => props.navigation.goBack()},
-        ]);
-      })
-      .catch(err => {
-        console.log('err', err);
-        dispatch(updateIsLoading(false));
-        Alert.alert('Có lỗi xảy ra, vui lòng thử lại', '', [
-          {text: 'OK', onPress: () => props.navigation.goBack()},
-        ]);
-      });
-  }
-
-  function ValidateEmail(email) {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-      return true;
-    }
-    return false;
+    updatePassword(lastPassword,newPassword,userProfile.UserEmail).then(res => {
+      //console.log( "update password success",res);
+      Alert.alert('Cập nhật mật khẩu thành công', "Bạn đã cập nhật mật khẩu thành công", [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+      dispatch(updateIsLoading(false));
+    }).catch(err => {
+      //console.log("update password err", err);
+      Alert.alert('Có lỗi', err.response.data.error.code, [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+      dispatch(updateIsLoading(false));
+    })
   }
   function renderHeader() {
     return (
@@ -163,7 +172,7 @@ export default function ChangePassword(props) {
           marginTop: RESPONSIVE.pixelSizeVertical(630),
         }}
         onPress={() => {
-          sendResetRequest();
+          changePassword();
         }}>
         <BackgroundButton text="OK"></BackgroundButton>
       </TouchableOpacity>

@@ -27,4 +27,11 @@ export const verifyEmail = (email, password) => {
   });
 };
 
-export default {signUpApi, loginApi};
+export const updatePassword = (oldPassword, newPassword, userEmail) => {
+  return axios.post('http://10.0.2.2:3001/auth/changePassword', {
+    UserEmail: userEmail,
+    OldPassword: oldPassword,
+    NewPassword: newPassword,
+  });
+};
+

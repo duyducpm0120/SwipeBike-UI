@@ -1,4 +1,4 @@
-import {signUpApi, loginApi, verifyEmail, resetPassword} from './auth';
+import {signUpApi, loginApi, verifyEmail, resetPassword, updatePassword} from './auth';
 
 import {
   createCandidateTrip,
@@ -51,5 +51,6 @@ export {
   cancelTrip,
   getMyProfile,
   getMyCompleteTrips,
-  rateTrip
+  rateTrip,
+  updatePassword
 };
