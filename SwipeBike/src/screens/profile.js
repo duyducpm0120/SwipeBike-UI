@@ -1,10 +1,18 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, TouchableOpacity, ScrollView, Image} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+} from 'react-native';
 import {COLORS, FONTS, ICONS, STYLES, RESPONSIVE} from '../constants';
 import {BackgroundButton, Trip, RoundedImage} from '../components';
 import {useSelector, useDispatch} from 'react-redux';
 import {getProfileById} from '../api';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
+import Animated from 'react-native-reanimated';
+import BottomSheet from 'reanimated-bottom-sheet';
 
 export default function Profile(props) {
   const dispatch = useDispatch();
@@ -13,6 +21,10 @@ export default function Profile(props) {
 
   const ownerUserProfile = useSelector(state => state.userProfile.userProfile);
   const [userProfile, setUserProfile] = useState({});
+
+  //vars for altering bottomsheet
+  const bottomSheetRef = React.createRef(null);
+  const fall = new Animated.Value(1);
 
   const [rating, setRating] = useState([
     {
@@ -29,6 +41,82 @@ export default function Profile(props) {
     },
   ]);
 
+  //Create components inner bottomsheet
+  const renderInner = () => (
+    <View
+      style={{
+        backgroundColor: COLORS.backGroundColor,
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        paddingHorizontal: 10,
+      }}>
+      {/* //bar signal */}
+      <View
+        style={{
+          width: '100%',
+          height: 5,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginBottom: 10,
+        }}>
+        <View
+          style={{
+            width: 40,
+            height: '100%',
+            backgroundColor: COLORS.darkgray,
+            borderRadius: 100,
+          }}
+        />
+      </View>
+      <TouchableOpacity
+        style={{marginVertical: 10}}
+        onPress={() => {
+          props.navigation.navigate("ChangePassword")
+        }}>
+        <BackgroundButton text="Đổi mật khẩu" />
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{marginVertical: 10}}
+        onPress={() => {
+          props.navigation.navigate("Login")
+        }}>
+        <BackgroundButton text="Đăng xuất" />
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          marginVertical: 10,
+          borderRadius: 10,
+          backgroundColor: COLORS.darkgray,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: RESPONSIVE.pixelSizeHorizontal(315),
+          height: RESPONSIVE.pixelSizeVertical(60),
+        }}
+        onPress={() => {
+          bottomSheetRef.current.snapTo(1);
+        }}>
+        <Text style={FONTS.h2Bold}>Hủy</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const settingBottomSheet = () => {
+    return (
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={['40%', RESPONSIVE.pixelSizeVertical(-50)]}
+        renderContent={renderInner}
+        initialSnap={1}
+        callbackNode={fall}
+        enabledGestureInteraction={true}
+        borderRadius={10}
+      />
+    );
+  };
+
   function renderHeader() {
     if (props.route.params.Id == ownerUserProfile.UserId)
       return (
@@ -40,7 +128,9 @@ export default function Profile(props) {
             width: '100%',
             marginBottom: RESPONSIVE.pixelSizeVertical(50),
           }}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+              bottomSheetRef.current.snapTo(0);
+            }}>
             <Image source={ICONS.setting}></Image>
           </TouchableOpacity>
           <TouchableOpacity
@@ -116,22 +206,22 @@ export default function Profile(props) {
             flexDirection: 'row',
             justifyContent: 'flex-start',
             alignItems: 'center',
-            width:'100%'
+            width: '100%',
           }}>
           <Image
             source={ICONS.work}
             style={{
               marginRight: RESPONSIVE.pixelSizeHorizontal(10),
               marginBottom: RESPONSIVE.pixelSizeVertical(10),
-              width:RESPONSIVE.fontPixel(25),
-              height: RESPONSIVE.fontPixel(25), 
-              tintColor: COLORS.black
+              width: RESPONSIVE.fontPixel(25),
+              height: RESPONSIVE.fontPixel(25),
+              tintColor: COLORS.black,
             }}></Image>
           <Text
             style={{
               ...FONTS.h3,
               textAlign: 'left',
-              flex:1,
+              flex: 1,
               //fontWeight: 'bold',
             }}>
             {userProfile.UserUniversity?.UniversityFullName}
@@ -142,19 +232,20 @@ export default function Profile(props) {
             flexDirection: 'row',
             justifyContent: 'flex-start',
             alignItems: 'center',
-            width:'100%',
+            width: '100%',
             marginTop: RESPONSIVE.pixelSizeVertical(10),
           }}>
           <Image
             source={ICONS.phone}
             style={{
               marginRight: RESPONSIVE.pixelSizeHorizontal(10),
-              width:RESPONSIVE.fontPixel(25),
+              width: RESPONSIVE.fontPixel(25),
               height: RESPONSIVE.fontPixel(25),
-              tintColor: COLORS.black
+              tintColor: COLORS.black,
             }}></Image>
-          <Text style={{...FONTS.h3,textAlign: 'left',
-              flex:1,}}>{userProfile.UserPhone}</Text>
+          <Text style={{...FONTS.h3, textAlign: 'left', flex: 1}}>
+            {userProfile.UserPhone}
+          </Text>
         </View>
       </View>
     );
@@ -222,10 +313,16 @@ export default function Profile(props) {
     console.log('user Id', props.route.params.Id);
   }, []);
   return (
-    <ScrollView contentContainerStyle={{...STYLES.container}}>
-      {renderHeader()}
-      {renderProfile()}
-      {renderRating()}
-    </ScrollView>
+    <>
+      <Animated.ScrollView
+        contentContainerStyle={{...STYLES.container}}
+        style={{opacity: Animated.add(0.3, Animated.multiply(fall, 1.0))}}
+        >
+        {renderHeader()}
+        {renderProfile()}
+        {renderRating()}
+      </Animated.ScrollView>
+      {settingBottomSheet()}
+    </>
   );
 }

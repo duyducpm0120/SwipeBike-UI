@@ -13,6 +13,7 @@ import Profile from './profile';
 import Loading from './loading';
 import Notifications from './notifications';
 import PairingTripsScreen from './pairingTripsScreen';
+import ChangePassword from './changePassword';
 
 export {
   Splash,
@@ -30,4 +31,5 @@ export {
   Loading,
   Notifications,
   PairingTripsScreen,
+  ChangePassword
 };

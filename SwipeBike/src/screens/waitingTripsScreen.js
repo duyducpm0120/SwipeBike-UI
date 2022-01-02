@@ -426,9 +426,12 @@ export default function WaitingTripsScreen(props) {
             <Image
               source={ICONS.nothing}
               style={{transform: [{scale: 0.5}], tintColor: COLORS.darkgray}}></Image>
-            <Text style={{...FONTS.h1, textAlign: 'center'}}>
-              Không có chuyến đi nào
-            </Text>
+            <Text style={{...FONTS.h3Bold, textAlign: 'center'}}>
+                Không có chuyến đi nào
+              </Text>
+              <Text style={{...FONTS.h3, textAlign: 'center'}}>
+                Oops. Hiện tại bạn không có chuyến đi nào.
+              </Text>
           </View>
         )}
       </View>
