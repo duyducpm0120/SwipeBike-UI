@@ -1,4 +1,10 @@
-import {signUpApi, loginApi, verifyEmail, resetPassword, updatePassword} from './auth';
+import {
+  signUpApi,
+  loginApi,
+  verifyEmail,
+  resetPassword,
+  updatePassword,
+} from './auth';
 
 import {
   createCandidateTrip,
@@ -11,10 +17,15 @@ import {
   updateUserProfile,
   loadUserProfile,
   getProfileById,
-  getMyProfile
+  getMyProfile,
 } from './profile';
 import {sendFcmToken} from './FCM';
-import {getUserNotifications} from './notification';
+import {
+  getUserNotifications,
+  setNotificationAsRead,
+  setAllMyNotificationsAsRead,
+  hasNewNotifications
+} from './notification';
 import {
   sendTripRequest,
   getUserPendingReceivedRequests,
@@ -23,7 +34,7 @@ import {
   rejectTripRequest,
   acceptTripRequest,
 } from './TripRequest';
-import { getTrips,cancelTrip, getMyCompleteTrips, rateTrip } from './Trip';
+import {getTrips, cancelTrip, getMyCompleteTrips, rateTrip} from './Trip';
 import {getRoute} from './GoogleMapServices';
 export {
   getUserNotifications,
@@ -52,5 +63,8 @@ export {
   getMyProfile,
   getMyCompleteTrips,
   rateTrip,
-  updatePassword
+  updatePassword,
+  setNotificationAsRead,
+  setAllMyNotificationsAsRead,
+  hasNewNotifications
 };

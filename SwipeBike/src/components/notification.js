@@ -1,23 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {RoundedImage} from '.';
 import {COLORS, FONTS, IMAGES, RESPONSIVE, STYLES} from '../constants';
 import {getVietnameseDate} from '../components';
 
 export default function Notification(props) {
-  const notificationData = {
-    NotificationId: null,
-    NotificationTitle: null,
-    NotificationContent: null,
-    NotificationTargetId: null,
-    CreatorName: 'Duong Thanh Vuong',
-    CreatorImage: IMAGES.cuteDriver,
-  };
+  const [notificationData, setNotificationData] = useState(
+    props.notificationData,
+  );
 
   function renderImage() {
     return (
       <RoundedImage
-        image={{uri: props.notificationData.CreatorImage}}
+        image={{uri: notificationData.CreatorImage}}
         width={RESPONSIVE.fontPixel(60)}
         height={RESPONSIVE.fontPixel(60)}
       />
@@ -39,16 +34,16 @@ export default function Notification(props) {
           }}>
           <Text>
             <Text style={{...FONTS.h3Bold}}>
-              {props.notificationData.NotificationCreator.UserFullName}
+              {notificationData.NotificationCreator.UserFullName}
             </Text>
             <Text
               style={{
                 ...FONTS.h3,
               }}>
               {' '}
-              {props.notificationData.UserNotificationContent.length < 65
-                ? `${props.notificationData.UserNotificationContent}`
-                : `${props.notificationData.UserNotificationContent.substring(
+              {notificationData.UserNotificationContent.length < 65
+                ? `${notificationData.UserNotificationContent}`
+                : `${notificationData.UserNotificationContent.substring(
                     0,
                     62,
                   )}...`}
@@ -62,7 +57,7 @@ export default function Notification(props) {
               width: '100%',
             }}>
             <Text style={{...FONTS.h4}}>
-              {getVietnameseDate(props.notificationData.NotificationCreateTime)}
+              {getVietnameseDate(notificationData.NotificationCreateTime)}
             </Text>
           </View>
         </View>
@@ -71,14 +66,24 @@ export default function Notification(props) {
   }
 
   return (
-    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+    <View
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor:
+          notificationData.NotificationRead == true
+            ? COLORS.backGroundColor
+            : COLORS.lightGray0,
+        borderRadius: 8,
+        marginVertical: RESPONSIVE.fontPixel(5),
+      }}>
       <TouchableOpacity
         style={{
           flexDirection: 'row',
           justifyContent: 'flex-start',
           alignItems: 'center',
           padding: RESPONSIVE.pixelSizeVertical(10),
-          marginVertical: RESPONSIVE.pixelSizeVertical(10),
+          marginVertical: RESPONSIVE.pixelSizeVertical(5),
           width: '100%',
         }}
         onPress={() => {

@@ -13,8 +13,10 @@ import {
   cancelTripRequest,
   acceptTripRequest,
   getRoute,
+  cancelTrip
 } from '../api';
 import {updateSelectedTrip} from '../redux/slices/selectedTripSlice';
+import {Snackbar} from 'react-native-paper';
 
 export default function GoogleMapView(props) {
   const dispatch = useDispatch();
@@ -68,47 +70,28 @@ export default function GoogleMapView(props) {
   const bottomSheetRef = React.createRef(null);
   const fall = new Animated.Value(1);
 
-  function callRecommendTrips(trip) {
-    dispatch(updateIsLoading(true));
-    getCandidateTripRecommendations(trip.CandidateTripId, token).then(res => {
-      console.log(res.data);
-      props.navigation.navigate('RecommendTrip', {
-        //console.log("list to be params",res.data.recommendation );
-        recommendedTripList: res.data.recommendation,
-      });
-      dispatch(updateIsLoading(false));
-    });
-    //console.log('trip', trip);
-  }
+   //Snackbar field
+   const [snackBarVisible, setSnackBarVisible] = React.useState(false);
+   const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible);
+   const onDismissSnackBar = () => setSnackBarVisible(false);
+   const [snackbarTitle, setSnackBarTitle] = useState('');
 
-  function acceptRequest(trip) {
-    dispatch(updateIsLoading(true));
-    acceptTripRequest(token, trip.RequestId)
-      .then(res => {
-        console.log('accept successfully');
-        dispatch(updateIsLoading(false));
-      })
-      .catch(err => {
-        console.log('error', JSON.stringify(err));
-        console.log('my token to accept trip', token);
-
-        dispatch(updateIsLoading(false));
-      });
-  }
-
-  function cancelRequest(trip) {
-    dispatch(updateIsLoading(true));
-    cancelTripRequest(token, trip.RequestId)
-      .then(res => {
-        console.log('cancel successfully');
-        dispatch(updateIsLoading(false));
-      })
-      .catch(err => {
-        console.log('error', JSON.stringify(err));
-        console.log('my token to accept trip', token);
-
-        dispatch(updateIsLoading(false));
-      });
+  function renderSnackBar() {
+    return (
+      <Snackbar
+        visible={snackBarVisible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: 'OK',
+          onPress: () => {
+            // Do something
+            props.navigation.goBack();
+            onDismissSnackBar();
+          },
+        }}>
+        {snackbarTitle}
+      </Snackbar>
+    );
   }
   function callRecommendTrips(trip) {
     dispatch(updateIsLoading(true));
@@ -150,6 +133,64 @@ export default function GoogleMapView(props) {
         console.log('my token to accept trip', token);
 
         dispatch(updateIsLoading(false));
+      });
+  }
+  function callRecommendTrips(trip) {
+    dispatch(updateIsLoading(true));
+    getCandidateTripRecommendations(trip.CandidateTripId, token).then(res => {
+      console.log(res.data);
+      props.navigation.navigate('RecommendTrip', {
+        //console.log("list to be params",res.data.recommendation );
+        recommendedTripList: res.data.recommendation,
+      });
+      dispatch(updateIsLoading(false));
+    });
+    //console.log('trip', trip);
+  }
+
+  function acceptRequest(trip) {
+    dispatch(updateIsLoading(true));
+    acceptTripRequest(token, trip.RequestId)
+      .then(res => {
+        console.log('accept successfully');
+        dispatch(updateIsLoading(false));
+      })
+      .catch(err => {
+        console.log('error', JSON.stringify(err));
+        console.log('my token to accept trip', token);
+
+        dispatch(updateIsLoading(false));
+      });
+  }
+
+  function cancelRequest(trip) {
+    dispatch(updateIsLoading(true));
+    cancelTripRequest(token, trip.RequestId)
+      .then(res => {
+        //console.log('cancel successfully');
+        dispatch(updateIsLoading(false));
+        setSnackBarTitle('Từ chối ghép đôi thành công');
+        onToggleSnackBar();
+      })
+      .catch(err => {
+        //console.log('error', JSON.stringify(err));
+        //console.log('my token to accept trip', token);
+        setSnackBarTitle('Từ chối ghép đôi thành công');
+        onToggleSnackBar();
+        dispatch(updateIsLoading(false));
+      });
+  }
+  function cancelPairingTrip(trip) {
+    cancelTrip(trip.TripId, token)
+      .then(res => {
+        //console.log('success cancel Trip');
+        setSnackBarTitle('Huỷ ghép đôi thành công');
+        onToggleSnackBar();
+      })
+      .catch(err => {
+        console.log('cancel trip err', err);
+        setSnackBarTitle('Huỷ ghép đôi thành công');
+        onToggleSnackBar();
       });
   }
   const renderTrip = trip => {
@@ -181,7 +222,10 @@ export default function GoogleMapView(props) {
             props.navigation.navigate('Profile', {Id: Id});
           }}
           pressTrip={() => {
-            viewOnMap(tripData);
+            //viewOnMap(tripData);
+          }}
+          cancelTrip={() => {
+            cancelPairingTrip(trip);
           }}
           // isViewed={props.route.params.isViewed}
         />
@@ -423,6 +467,7 @@ export default function GoogleMapView(props) {
         enabledGestureInteraction={true}
         borderRadius={10}
       />
+      {renderSnackBar()}
     </View>
   );
 }

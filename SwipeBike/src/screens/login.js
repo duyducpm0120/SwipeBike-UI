@@ -29,6 +29,7 @@ import {fetchProfile} from '../redux/slices/profileSlice';
 import {fetchLoginToken} from '../redux/slices/loginTokenSlice';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import {useSelector, useDispatch} from 'react-redux';
+import { fetchHasNewNoti } from '../redux/slices/isNewNotiSlice';
 
 export default function Login(props) {
   const dispatch = useDispatch();
@@ -96,6 +97,7 @@ export default function Login(props) {
         await removeTokenFromLocalStorage();
         await saveTokenToLocalStorage(result.data.token);
         dispatch(fetchProfile(result.data.token));
+        dispatch(fetchHasNewNoti(result.data.token));
         dispatch(fetchLoginToken());
         dispatch(updateIsLoading(false));
       })

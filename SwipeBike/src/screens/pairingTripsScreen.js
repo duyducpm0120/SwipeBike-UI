@@ -7,16 +7,12 @@ import {
   ScrollView,
   FlatList,
   RefreshControl,
-  BackHandler
+  BackHandler,
 } from 'react-native';
 import {FONTS, COLORS, RESPONSIVE, ICONS, STYLES} from '../constants';
 import {CandidateTrip, Trip} from '../components';
 
-import {
-  getTrips,
-  cancelTrip,
-  getMyCompleteTrips
-} from '../api';
+import {getTrips, cancelTrip, getMyCompleteTrips} from '../api';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import {TRIPTYPE} from '../constants';
@@ -28,8 +24,6 @@ export default function PairingTripsScreen(props) {
   const token = useSelector(state => state.loginToken.token);
   //Load user info from redux
   const userProfile = useSelector(state => state.userProfile.userProfile);
-
-
 
   //trip types
   const tripTypes = [
@@ -48,6 +42,7 @@ export default function PairingTripsScreen(props) {
   const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible);
   const onDismissSnackBar = () => setSnackBarVisible(false);
   const [snackbarTitle, setSnackBarTitle] = useState('');
+
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = useCallback(() => {
     loadData();
@@ -73,40 +68,22 @@ export default function PairingTripsScreen(props) {
   function cancelPairingTrip(trip) {
     cancelTrip(trip.TripId, token)
       .then(res => {
-        console.log('success cancel Trip');
+        //console.log('success cancel Trip');
         setSnackBarTitle('Huỷ ghép đôi thành công');
         onToggleSnackBar();
       })
-      .catch(err => console.log('cancel trip err', err));
+      .catch(err => {
+        console.log('cancel trip err', err);
+        setSnackBarTitle('Huỷ ghép đôi thất bại');
+        onToggleSnackBar();
+      });
   }
 
   function renderTrip(trip) {
-    if (trip.TripType == TRIPTYPE.WAITING_TRIP_TYPE)
-      return (
-        <View
-          style={{
-            marginVertical: RESPONSIVE.pixelSizeVertical(10),
-            paddingHorizontal: RESPONSIVE.pixelSizeHorizontal(5),
-          }}
-          key={trip.CandidateTripId}>
-          <CandidateTrip
-            tripDetail={trip}
-            loadRecommendation={() => {
-              //call recommendation
-              callRecommendTrips(trip);
-              //console.log(trip);
-            }}
-            pressTrip={() => {
-              viewOnMap(trip);
-            }}
-            viewProfile={id => {
-              props.navigation.navigate('Profile', {Id: id});
-            }}
-            deleteTrip={() => {}}
-          />
-        </View>
-      );
-    else if (trip.TripType == TRIPTYPE.PAIRING_TRIP_TYPE || trip.TripType == TRIPTYPE.COMPLETE_TRIP_TYPE )
+  if (
+      trip.TripType == TRIPTYPE.PAIRING_TRIP_TYPE ||
+      trip.TripType == TRIPTYPE.COMPLETE_TRIP_TYPE
+    )
       return (
         <View
           style={{
@@ -144,16 +121,16 @@ export default function PairingTripsScreen(props) {
           setDisplayingTripList(trips);
         })
         .catch(err => console.log('err', err)),
-        getMyCompleteTrips(token)
+      getMyCompleteTrips(token)
         .then(res => {
           let trips1 = res.data.trips.map(trip => {
             trip.TripType = TRIPTYPE.COMPLETE_TRIP_TYPE;
             return trip;
           });
-          console.log("trips 1",trips1);
+          //console.log('trips 1', trips1);
           setCompleteTripList(trips1);
         })
-        .catch(err => console.log('err', err))
+        .catch(err => console.log('err', err)),
     ]).then(() => {
       dispatch(updateIsLoading(false));
     });
@@ -173,7 +150,11 @@ export default function PairingTripsScreen(props) {
         <TouchableOpacity onPress={() => props.navigation.goBack()}>
           <Image
             source={ICONS.leftArr1}
-            style={{tintColor: COLORS.black, width: RESPONSIVE.fontPixel(30), height: RESPONSIVE.fontPixel(30)}}
+            style={{
+              tintColor: COLORS.black,
+              width: RESPONSIVE.fontPixel(30),
+              height: RESPONSIVE.fontPixel(30),
+            }}
           />
         </TouchableOpacity>
         <Text style={{...FONTS.title}}>Ghép đôi</Text>
@@ -183,7 +164,11 @@ export default function PairingTripsScreen(props) {
           }}>
           <Image
             source={ICONS.refresh}
-            style={{tintColor: COLORS.black, width: RESPONSIVE.fontPixel(30), height: RESPONSIVE.fontPixel(30)}}
+            style={{
+              tintColor: COLORS.black,
+              width: RESPONSIVE.fontPixel(30),
+              height: RESPONSIVE.fontPixel(30),
+            }}
           />
         </TouchableOpacity>
       </View>
@@ -224,7 +209,8 @@ export default function PairingTripsScreen(props) {
                 }}
                 onPress={() => {
                   setTripTypeControl(tripType.name);
-                  if (tripType.name == 'Hiện tại') setDisplayingTripList(paringTripList);
+                  if (tripType.name == 'Hiện tại')
+                    setDisplayingTripList(paringTripList);
                   else if (tripType.name == 'Lịch sử')
                     setDisplayingTripList(completeTripList);
                 }}>
@@ -280,8 +266,7 @@ export default function PairingTripsScreen(props) {
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }></FlatList>
         ) : (
-          <View
-            style={{ justifyContent: 'center', alignItems: 'center'}}>
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
             <Image
               source={ICONS.nothing}
               style={{
@@ -289,11 +274,11 @@ export default function PairingTripsScreen(props) {
                 tintColor: COLORS.darkgray,
               }}></Image>
             <Text style={{...FONTS.h3Bold, textAlign: 'center'}}>
-                Không có chuyến đi nào
-              </Text>
-              <Text style={{...FONTS.h3, textAlign: 'center'}}>
-                Oops. Hiện tại bạn không có chuyến đi nào.
-              </Text>
+              Không có chuyến đi nào
+            </Text>
+            <Text style={{...FONTS.h3, textAlign: 'center'}}>
+              Oops. Hiện tại bạn không có chuyến đi nào.
+            </Text>
           </View>
         )}
       </View>

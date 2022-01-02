@@ -25,6 +25,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import {updateSelectedTrip} from '../redux/slices/selectedTripSlice';
 import {getUserCandidateTrips, getTrips, cancelTrip} from '../api';
+import {Snackbar} from 'react-native-paper';
 
 export default function Home(props) {
   const dispatch = useDispatch();
@@ -42,9 +43,14 @@ export default function Home(props) {
     loadData();
   }, []);
 
+  //Snackbar field
+  const [snackBarVisible, setSnackBarVisible] = React.useState(false);
+  const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible);
+  const onDismissSnackBar = () => setSnackBarVisible(false);
+  const [snackbarTitle, setSnackBarTitle] = useState('');
+
   function loadData() {
     dispatch(updateIsLoading(true));
-
     Promise.all([
       getUserCandidateTrips(userProfile.UserId, token)
         .then(res => {
@@ -65,10 +71,26 @@ export default function Home(props) {
           });
           setPairingTripList(trips2);
         })
-        .catch(err => console.log('get user trips err', err)),
+        .catch(err => console.log('get user trips err', err)), 
     ]).then(() => {
       dispatch(updateIsLoading(false));
     });
+  }
+  function renderSnackBar() {
+    return (
+      <Snackbar
+        visible={snackBarVisible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: 'OK',
+          onPress: () => {
+            // Do something
+            onDismissSnackBar();
+          },
+        }}>
+        {snackbarTitle}
+      </Snackbar>
+    );
   }
   function renderTrip(trip) {
     if (trip.TripType == TRIPTYPE.WAITING_TRIP_TYPE)
@@ -139,9 +161,15 @@ export default function Home(props) {
   function cancelPairingTrip(trip) {
     cancelTrip(trip.TripId, token)
       .then(res => {
-        console.log('success cancel Trip');
+        //console.log('success cancel Trip');
+        setSnackBarTitle('Huỷ ghép đôi thành công');
+        onToggleSnackBar();
       })
-      .catch(err => console.log('cancel trip err', err));
+      .catch(err => {
+        console.log('cancel trip err', err);
+        setSnackBarTitle('Huỷ ghép đôi thất bại');
+        onToggleSnackBar();
+      });
   }
 
   function viewOnMap(trip) {
@@ -355,7 +383,7 @@ export default function Home(props) {
             style={{
               width: RESPONSIVE.pixelSizeHorizontal(200),
               height: RESPONSIVE.pixelSizeVertical(50),
-              justifyContent: 'space-evenly',
+              justifyContent: 'center',
               alignItems: 'center',
               flexDirection: 'row',
               paddingHorizontal: RESPONSIVE.pixelSizeHorizontal(10),
@@ -436,7 +464,7 @@ export default function Home(props) {
             style={{
               width: RESPONSIVE.pixelSizeHorizontal(200),
               height: RESPONSIVE.pixelSizeVertical(50),
-              justifyContent: 'space-evenly',
+              justifyContent: 'center',
               alignItems: 'center',
               flexDirection: 'row',
               paddingHorizontal: RESPONSIVE.pixelSizeHorizontal(10),
@@ -491,7 +519,7 @@ export default function Home(props) {
         {renderCreateTrip()}
         {renderWaitingTripList()}
         {renderPairingTripList()}
-        {/* {renderRecommendedTrip()} */}
+        {renderSnackBar()}
       </ScrollView>
     </View>
   );

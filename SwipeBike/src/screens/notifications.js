@@ -6,11 +6,19 @@ import {
   Image,
   FlatList,
   RefreshControl,
-  BackHandler
+  BackHandler,
 } from 'react-native';
-import {STYLES, FONTS, IMAGES, ICONS, COLORS, RESPONSIVE} from '../constants';
+import {
+  STYLES,
+  FONTS,
+  IMAGES,
+  ICONS,
+  COLORS,
+  RESPONSIVE,
+  NOTIFICATIONTYPE,
+} from '../constants';
 import {Notification} from '../components';
-import {getUserNotifications} from '../api';
+import {getUserNotifications, setNotificationAsRead} from '../api';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsNewNoti} from '../redux/slices/isNewNotiSlice';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
@@ -28,8 +36,9 @@ export default function Notifications(props) {
     dispatch(updateIsLoading(true));
     getUserNotifications(token)
       .then(res => {
+        console.log('res', res.data.notifications);
+        setNotificationList([]);
         setNotificationList(res.data.notifications);
-        dispatch(updateIsNewNoti(false));
         dispatch(updateIsLoading(false));
       })
       .catch(err => console.log('noti list err', err));
@@ -47,14 +56,22 @@ export default function Notifications(props) {
         <TouchableOpacity onPress={() => props.navigation.goBack()}>
           <Image
             source={ICONS.leftArr1}
-            style={{tintColor: COLORS.black, width: 30, height: 30}}
+            style={{
+              tintColor: COLORS.black,
+              width: RESPONSIVE.fontPixel(30),
+              height: RESPONSIVE.fontPixel(30),
+            }}
           />
         </TouchableOpacity>
         <Text style={{...FONTS.title}}>Thông báo</Text>
         <TouchableOpacity onPress={reloadData}>
           <Image
             source={ICONS.refresh}
-            style={{tintColor: COLORS.black, width: 30, height: 30}}
+            style={{
+              tintColor: COLORS.black,
+              width: RESPONSIVE.fontPixel(30),
+              height: RESPONSIVE.fontPixel(30),
+            }}
           />
         </TouchableOpacity>
       </View>
@@ -76,9 +93,24 @@ export default function Notifications(props) {
             return (
               <Notification
                 notificationData={item}
-                notiClick={() =>
-                  props.navigation.navigate('WaitingTripsScreen')
-                }
+                notiClick={() => {
+                  if (
+                    item.NotificationTypeId ==
+                      NOTIFICATIONTYPE.TRIP_REQUEST_CREATED ||
+                    item.NotificationTypeId ==
+                      NOTIFICATIONTYPE.TRIP_REQUEST_REJECTED
+                  ) {
+                    props.navigation.navigate('WaitingTripsScreen');
+                    setNotificationAsRead(item.NotificationId, token)
+                      .then(res => console.log('set noti as read'))
+                      .catch(err => console.log('set noti as read err'));
+                  } else {
+                    props.navigation.navigate('PairingTripsScreen');
+                    setNotificationAsRead(item.NotificationId, token)
+                      .then(res => console.log('set noti as read'))
+                      .catch(err => console.log('set noti as read err'));
+                  }
+                }}
               />
             );
           }}

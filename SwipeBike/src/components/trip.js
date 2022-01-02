@@ -360,15 +360,16 @@ export default function Trip(props) {
             <Divider />
             <Menu.Item
               onPress={() => {
-                rateTrip(
-                  tripDetail.TripId,
-                  token,
-                  rating == 'Like' ? true : false,
-                )
-                  .then(res => {
-                    console.log('rating success');
-                  })
-                  .catch(err => console.log('rating err'));
+                if (rating != '')
+                  rateTrip(
+                    tripDetail.TripId,
+                    token,
+                    rating == 'Like' ? true : false,
+                  )
+                    .then(res => {
+                      console.log('rating success');
+                    })
+                    .catch(err => console.log('rating err'));
                 closeMenu();
               }}
               title="OK"
