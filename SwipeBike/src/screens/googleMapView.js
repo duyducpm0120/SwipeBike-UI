@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, Alert, PermissionsAndroid, Image} from 'react-native';
+import {View, StyleSheet, Alert, PermissionsAndroid, Image, BackHandler} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import Geolocation from 'react-native-geolocation-service';
 import {COLORS, RESPONSIVE, ICONS, TRIPTYPE} from '../constants';
@@ -167,10 +167,8 @@ export default function GoogleMapView(props) {
           pressTrip={() => {
             viewOnMap(tripData);
           }}
-          viewProfile={() => {
-            props.navigation.navigate('Profile', {
-              CreatorId: trip.CreatorId,
-            });
+          viewProfile={Id => {
+            props.navigation.navigate('Profile', {Id: Id});
           }}
           // isViewed={props.route.params.isViewed}
         />
@@ -179,8 +177,8 @@ export default function GoogleMapView(props) {
       return (
         <Trip
           tripDetail={tripData}
-          viewProfile={CreatorId => {
-            props.navigation.navigate('Profile', {CreatorId: CreatorId});
+          viewProfile={Id => {
+            props.navigation.navigate('Profile', {Id: Id});
           }}
           pressTrip={() => {
             viewOnMap(tripData);
@@ -201,8 +199,8 @@ export default function GoogleMapView(props) {
           cancelRequest={() => {
             cancelRequest(tripData);
           }}
-          viewProfile={CreatorId => {
-            props.navigation.navigate('Profile', {CreatorId: CreatorId});
+          viewProfile={Id => {
+            props.navigation.navigate('Profile', {Id: Id});
           }}
           pressTrip={() => {
             viewOnMap(tripData);
@@ -327,6 +325,19 @@ export default function GoogleMapView(props) {
 
   useEffect(() => {
     getDataRoute();
+  }, []);
+
+  useEffect(() => {
+    const backAction = () => {
+      props.navigation.goBack();
+      //BackHandler.exitApp();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
   }, []);
 
   return (

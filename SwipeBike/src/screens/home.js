@@ -457,11 +457,11 @@ export default function Home(props) {
     loadData();
   }, []);
 
-
   //Exit App after pressing BackButton
   useEffect(() => {
     const backAction = () => {
       //props.navigation.goBack();
+      BackHandler.exitApp();
       return true;
     };
     const backHandler = BackHandler.addEventListener(

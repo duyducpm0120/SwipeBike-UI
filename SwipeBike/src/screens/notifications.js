@@ -6,6 +6,7 @@ import {
   Image,
   FlatList,
   RefreshControl,
+  BackHandler
 } from 'react-native';
 import {STYLES, FONTS, IMAGES, ICONS, COLORS, RESPONSIVE} from '../constants';
 import {Notification} from '../components';
@@ -102,6 +103,18 @@ export default function Notifications(props) {
   useEffect(() => {
     reloadData();
   }, [isNewNoti]);
+  useEffect(() => {
+    const backAction = () => {
+      props.navigation.goBack();
+      //BackHandler.exitApp();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
 
   return renderNotifications();
 }

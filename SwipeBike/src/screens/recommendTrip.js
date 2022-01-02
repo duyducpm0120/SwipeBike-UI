@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
-  RefreshControl
+  RefreshControl,
+  BackHandler
   // Animated,
 } from 'react-native';
 import {FONTS, STYLES, RESPONSIVE, ICONS, COLORS, TRIPTYPE} from '../constants';
@@ -165,6 +166,18 @@ export default function RecommendTrip(props) {
   useEffect(()=>{
     loadData();
   },[]);
+  useEffect(() => {
+    const backAction = () => {
+      props.navigation.goBack();
+      //BackHandler.exitApp();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <View

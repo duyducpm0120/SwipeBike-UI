@@ -7,6 +7,7 @@ import {
   ScrollView,
   FlatList,
   RefreshControl,
+  BackHandler
 } from 'react-native';
 import {FONTS, COLORS, RESPONSIVE, ICONS, STYLES} from '../constants';
 import {CandidateTrip, Trip} from '../components';
@@ -172,7 +173,7 @@ export default function PairingTripsScreen(props) {
         <TouchableOpacity onPress={() => props.navigation.goBack()}>
           <Image
             source={ICONS.leftArr1}
-            style={{tintColor: COLORS.black, width: 30, height: 30}}
+            style={{tintColor: COLORS.black, width: RESPONSIVE.fontPixel(30), height: RESPONSIVE.fontPixel(30)}}
           />
         </TouchableOpacity>
         <Text style={{...FONTS.title}}>Ghép đôi</Text>
@@ -182,7 +183,7 @@ export default function PairingTripsScreen(props) {
           }}>
           <Image
             source={ICONS.refresh}
-            style={{tintColor: COLORS.black, width: 30, height: 30}}
+            style={{tintColor: COLORS.black, width: RESPONSIVE.fontPixel(30), height: RESPONSIVE.fontPixel(30)}}
           />
         </TouchableOpacity>
       </View>
@@ -230,8 +231,8 @@ export default function PairingTripsScreen(props) {
                 <Image
                   source={tripType.imgUrl}
                   style={{
-                    width: RESPONSIVE.widthPixel(24),
-                    height: RESPONSIVE.heightPixel(24),
+                    width: RESPONSIVE.fontPixel(24),
+                    height: RESPONSIVE.fontPixel(24),
                     marginRight: 10,
                     tintColor:
                       tripType.name == tripTypeControl
@@ -301,6 +302,18 @@ export default function PairingTripsScreen(props) {
 
   useEffect(() => {
     loadData();
+  }, []);
+  useEffect(() => {
+    const backAction = () => {
+      props.navigation.goBack();
+      //BackHandler.exitApp();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
   }, []);
 
   return (

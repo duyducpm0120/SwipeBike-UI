@@ -207,58 +207,6 @@ export default function WaitingTripsScreen(props) {
         </View>
       );
   }
-  function reloadCandidateTrips() {
-    dispatch(updateIsLoading(true));
-    getUserCandidateTrips(token)
-      .then(res2 => {
-        var trips2 = res2.data.requests.map(trip => {
-          trip.TripType = TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE;
-          return trip;
-        });
-        setWaitingTripList(trips2);
-        setDisplayingTripList(trips2);
-        dispatch(updateIsLoading(false));
-      })
-      .catch(err => {
-        console.log('get CandidateTrips err', err);
-        dispatch(updateIsLoading(false));
-      });
-  }
-  function reloadReceivedTripRequests() {
-    dispatch(updateIsLoading(true));
-    getUserPendingReceivedRequests(token)
-      .then(res2 => {
-        var trips2 = res2.data.requests.map(trip => {
-          trip.TripType = TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE;
-          return trip;
-        });
-        setReceivedTripList(trips2);
-        setDisplayingTripList(trips2);
-        dispatch(updateIsLoading(false));
-      })
-      .catch(err => {
-        console.log('Received request err', err);
-        dispatch(updateIsLoading(false));
-      });
-  }
-  function reloadSentTripRequests() {
-    dispatch(updateIsLoading(true));
-    getUserPendingSentRequests(token)
-      .then(res2 => {
-        var trips2 = res2.data.requests.map(trip => {
-          trip.TripType = TRIPTYPE.RECEIVED_REQUEST_TRIP_TYPE;
-          return trip;
-        });
-        setSentTripList(trips2);
-        setDisplayingTripList(trips2);
-        dispatch(updateIsLoading(false));
-      })
-      .catch(err => {
-        console.log('Sent request err', err);
-        dispatch(updateIsLoading(false));
-      });
-  }
-
   const loadData = () => {
     dispatch(updateIsLoading(true));
     setTripTypeControl('Chuyến đi của bạn');
@@ -313,7 +261,7 @@ export default function WaitingTripsScreen(props) {
         <TouchableOpacity onPress={() => props.navigation.goBack()}>
           <Image
             source={ICONS.leftArr1}
-            style={{tintColor: COLORS.black, width: 30, height: 30}}
+            style={{tintColor: COLORS.black, width: RESPONSIVE.fontPixel(30), height: RESPONSIVE.fontPixel(30)}}
           />
         </TouchableOpacity>
         <Text style={{...FONTS.title}}>Đang chờ</Text>
@@ -323,7 +271,7 @@ export default function WaitingTripsScreen(props) {
           }}>
           <Image
             source={ICONS.refresh}
-            style={{tintColor: COLORS.black, width: 30, height: 30}}
+            style={{tintColor: COLORS.black, width: RESPONSIVE.fontPixel(30), height: RESPONSIVE.fontPixel(30)}}
           />
         </TouchableOpacity>
       </View>
@@ -370,18 +318,18 @@ export default function WaitingTripsScreen(props) {
                     setDisplayingTripList(receivedTripList);
                   else setDisplayingTripList(sentTripList);
                 }}>
-                <Image
+                {/* <Image
                   source={tripType.imgUrl}
                   style={{
-                    width: RESPONSIVE.widthPixel(24),
-                    height: RESPONSIVE.heightPixel(24),
+                    width: RESPONSIVE.fontPixel(24),
+                    height: RESPONSIVE.fontPixel(24),
                     marginRight: 10,
                     tintColor:
                       tripType.name == tripTypeControl
                         ? COLORS.primaryDarker1
                         : COLORS.darkgray,
                   }}
-                />
+                /> */}
                 <Text
                   style={{
                     ...FONTS.h2Bold,

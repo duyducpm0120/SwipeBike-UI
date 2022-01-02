@@ -16,6 +16,8 @@ import axios from 'axios';
 import {LogBox} from 'react-native';
 LogBox.ignoreLogs(['Reanimated 2']);
 LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop.']);
+LogBox.ignoreLogs(['EventEmitter.removeListener']);
+
 import {
   Splash,
   SignUp,

@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  BackHandler
 } from 'react-native';
 import {COLORS, FONTS, ICONS, STYLES, RESPONSIVE} from '../constants';
 import {BackgroundButton, Trip, RoundedImage} from '../components';
@@ -312,6 +313,20 @@ export default function Profile(props) {
       });
     console.log('user Id', props.route.params.Id);
   }, []);
+  
+  useEffect(() => {
+    const backAction = () => {
+      props.navigation.goBack();
+      //BackHandler.exitApp();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
+
   return (
     <>
       <Animated.ScrollView

@@ -8,6 +8,7 @@ import {
   ScrollView,
   Animated,
   Alert,
+  BackHandler
 } from 'react-native';
 import {FONTS, SIZES, COLORS, RESPONSIVE, ICONS, STYLES} from '../constants';
 import {getVietnameseDate, getVietnameseTime} from '../components';
@@ -744,6 +745,18 @@ export default function CreateTrip(props) {
     getDataRoute();
   }, [fromLocation, toLocation]);
 
+  useEffect(() => {
+    const backAction = () => {
+      props.navigation.goBack();
+      //BackHandler.exitApp();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
   return (
     <View
       style={{
