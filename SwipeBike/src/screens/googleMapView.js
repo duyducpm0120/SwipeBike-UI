@@ -175,7 +175,7 @@ export default function GoogleMapView(props) {
           // isViewed={props.route.params.isViewed}
         />
       );
-    else if (tripData.TripType == TRIPTYPE.PAIRING_TRIP_TYPE)
+    else if (tripData.TripType == TRIPTYPE.PAIRING_TRIP_TYPE || tripData.TripType == TRIPTYPE.COMPLETE_TRIP_TYPE)
       return (
         <Trip
           tripDetail={tripData}

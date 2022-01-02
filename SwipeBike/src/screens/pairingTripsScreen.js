@@ -8,22 +8,16 @@ import {
   FlatList,
   RefreshControl,
 } from 'react-native';
-import {FONTS, COLORS, RESPONSIVE, ICONS, STYLES, SIZES} from '../constants';
-import {CandidateTrip, TripRequest, Trip} from '../components';
+import {FONTS, COLORS, RESPONSIVE, ICONS, STYLES} from '../constants';
+import {CandidateTrip, Trip} from '../components';
 
 import {
-  getUserCandidateTrips,
-  getUserPendingReceivedRequests,
-  getUserPendingSentRequests,
-  rejectTripRequest,
-  cancelTripRequest,
-  acceptTripRequest,
   getTrips,
   cancelTrip,
+  getMyCompleteTrips
 } from '../api';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
-import {updateSelectedTrip} from '../redux/slices/selectedTripSlice';
 import {TRIPTYPE} from '../constants';
 import {Snackbar} from 'react-native-paper';
 
@@ -34,7 +28,7 @@ export default function PairingTripsScreen(props) {
   //Load user info from redux
   const userProfile = useSelector(state => state.userProfile.userProfile);
 
-  const [trips, setTrips] = useState([]);
+
 
   //trip types
   const tripTypes = [
@@ -43,8 +37,10 @@ export default function PairingTripsScreen(props) {
   ];
   //var for controlling trip type displaying
   const [tripTypeControl, setTripTypeControl] = useState();
+  const [paringTripList, setPairingTripList] = useState([]);
+  const [completeTripList, setCompleteTripList] = useState([]);
   //var for controlling displaying trip List
-  const [displayingTripList, setDisplayingTripList] = useState(trips);
+  const [displayingTripList, setDisplayingTripList] = useState(paringTripList);
 
   //Snackbar field
   const [snackBarVisible, setSnackBarVisible] = React.useState(false);
@@ -109,7 +105,7 @@ export default function PairingTripsScreen(props) {
           />
         </View>
       );
-    else if (trip.TripType == TRIPTYPE.PAIRING_TRIP_TYPE)
+    else if (trip.TripType == TRIPTYPE.PAIRING_TRIP_TYPE || trip.TripType == TRIPTYPE.COMPLETE_TRIP_TYPE )
       return (
         <View
           style={{
@@ -143,10 +139,20 @@ export default function PairingTripsScreen(props) {
             trip.TripType = TRIPTYPE.PAIRING_TRIP_TYPE;
             return trip;
           });
-          setTrips(trips);
+          setPairingTripList(trips);
           setDisplayingTripList(trips);
         })
         .catch(err => console.log('err', err)),
+        getMyCompleteTrips(token)
+        .then(res => {
+          let trips1 = res.data.trips.map(trip => {
+            trip.TripType = TRIPTYPE.COMPLETE_TRIP_TYPE;
+            return trip;
+          });
+          console.log("trips 1",trips1);
+          setCompleteTripList(trips1);
+        })
+        .catch(err => console.log('err', err))
     ]).then(() => {
       dispatch(updateIsLoading(false));
     });
@@ -217,9 +223,9 @@ export default function PairingTripsScreen(props) {
                 }}
                 onPress={() => {
                   setTripTypeControl(tripType.name);
-                  if (tripType.name == 'Hiện tại') setDisplayingTripList(trips);
+                  if (tripType.name == 'Hiện tại') setDisplayingTripList(paringTripList);
                   else if (tripType.name == 'Lịch sử')
-                    setDisplayingTripList(trips);
+                    setDisplayingTripList(completeTripList);
                 }}>
                 <Image
                   source={tripType.imgUrl}

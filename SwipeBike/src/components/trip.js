@@ -7,48 +7,51 @@ import {
   getVietnameseTime,
 } from '../components';
 import {Menu, Divider} from 'react-native-paper';
+import {TRIPTYPE} from '../constants';
+import {rateTrip} from '../api';
+import {useSelector} from 'react-redux';
 
 export default function Trip(props) {
   const [tripDetail, setTripDetail] = useState({
-    CreatorBike: true,
-    DriverFromAddress: 'KTX Khu B, ĐHQG',
-    DriverFromLat: 10.8836012,
-    DriverFromLong: 106.7815141,
-    DriverToAddress:
-      'Khoa Y - Đại Học Quốc Gia Thành Phố Hồ Chí Minh (cơ sở mới)',
-    DriverToLat: 10.8883056,
-    DriverToLong: 106.7982174,
-    FromRequest: 50,
-    PassengerFromAddress: 'KTX khu A Mở Rộng ĐHQG TP Hồ Chí Minh',
-    PassengerFromLat: 10.8816537,
-    PassengerFromLong: 106.8088752,
-    PassengerToAddress: 'Đại học Khoa học Xã hội và Nhân văn - ĐHQG TP.HCM',
-    PassengerToLat: 10.8722574,
-    PassengerToLong: 106.8020436,
-    TripCreatedTime: '2021-12-16T14:29:04.526Z',
+    CreatorBike: null,
+    DriverFromAddress: null,
+    DriverFromLat: null,
+    DriverFromLong: null,
+    DriverToAddress: null,
+    DriverToLat: null,
+    DriverToLong: null,
+    FromRequest: null,
+    PassengerFromAddress: null,
+    PassengerFromLat: null,
+    PassengerFromLong: null,
+    PassengerToAddress: null,
+    PassengerToLat: null,
+    PassengerToLong: null,
+    TripCreatedTime: null,
     TripDriver: {
-      UserFullName: 'Nancy',
-      UserProfilePic:
-        'https://storage.googleapis.com/swipebike-38736.appspot.com/user_5_pic_2021-12-03T07:13:00.038Z',
+      UserFullName: null,
+      UserProfilePic: null,
     },
-    TripDriverId: 5,
-    TripId: 1,
+    TripDriverId: null,
+    TripId: null,
     TripPassenger: {
-      UserFullName: 'Jason Statham',
-      UserProfilePic:
-        'https://storage.googleapis.com/swipebike-38736.appspot.com/user_6_pic_2021-11-29T08:06:32.935Z',
+      UserFullName: null,
+      UserProfilePic: null,
     },
-    TripPassengerId: 6,
+    TripPassengerId: null,
     TripStartTime: null,
-    TripType: 4,
+    TripType: null,
   });
 
   const [visible, setVisible] = useState(false);
-  const [rating, setRating] = useState('Like');
+  const [rating, setRating] = useState();
 
   const openMenu = () => setVisible(true);
 
   const closeMenu = () => setVisible(false);
+
+  //Local token
+  const token = useSelector(state => state.loginToken.token);
 
   const ratingIcon = (content, image) => {
     //console.log("content",content);
@@ -59,7 +62,7 @@ export default function Trip(props) {
         style={{
           tintColor: rating === content ? COLORS.primary : COLORS.darkgray,
           width: RESPONSIVE.fontPixel(40),
-          height: RESPONSIVE.fontPixel(40)
+          height: RESPONSIVE.fontPixel(40),
         }}></Image>
     );
   };
@@ -274,84 +277,108 @@ export default function Trip(props) {
   }
 
   function renderButton() {
-    return (
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          marginTop: RESPONSIVE.pixelSizeVertical(10),
-        }}>
-        <TouchableOpacity
+    if (tripDetail.TripType == TRIPTYPE.PAIRING_TRIP_TYPE)
+      return (
+        <View
           style={{
             justifyContent: 'center',
             alignItems: 'center',
-            width: RESPONSIVE.pixelSizeHorizontal(300),
-            height: RESPONSIVE.pixelSizeVertical(40),
-            backgroundColor: COLORS.lightGray0,
-            borderRadius: 5,
-            marginVertical: 5,
-          }}
-          onPress={() => {
-            props.cancelTrip();
+            width: '100%',
+            marginTop: RESPONSIVE.pixelSizeVertical(10),
           }}>
-          <Text style={{...FONTS.h3Bold, color: COLORS.black}}>
-            Hủy chuyến đi
-          </Text>
-        </TouchableOpacity>
-        <Menu
-          visible={visible}
-          onDismiss={closeMenu}
-          anchor={
-            <TouchableOpacity
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: RESPONSIVE.pixelSizeHorizontal(300),
-                height: RESPONSIVE.pixelSizeVertical(40),
-                backgroundColor: COLORS.primaryLighter1,
-                borderRadius: 5,
-                marginVertical: 5,
+          <TouchableOpacity
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: RESPONSIVE.pixelSizeHorizontal(300),
+              height: RESPONSIVE.pixelSizeVertical(40),
+              backgroundColor: COLORS.lightGray0,
+              borderRadius: 5,
+              marginVertical: 5,
+            }}
+            onPress={() => {
+              props.cancelTrip();
+            }}>
+            <Text style={{...FONTS.h3Bold, color: COLORS.black}}>
+              Hủy chuyến đi
+            </Text>
+          </TouchableOpacity>
+        </View>
+      );
+    else
+      return (
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            marginTop: RESPONSIVE.pixelSizeVertical(10),
+          }}>
+          <Menu
+            visible={visible}
+            onDismiss={closeMenu}
+            anchor={
+              <TouchableOpacity
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: RESPONSIVE.pixelSizeHorizontal(300),
+                  height: RESPONSIVE.pixelSizeVertical(40),
+                  backgroundColor: COLORS.primaryLighter1,
+                  borderRadius: 5,
+                  marginVertical: 5,
+                }}
+                onPress={openMenu}>
+                <Text style={{...FONTS.h3Bold, color: COLORS.primaryDarker1}}>
+                  Đánh giá chuyến đi
+                </Text>
+              </TouchableOpacity>
+            }>
+            <Menu.Item
+              onPress={() => {
+                setRating('Like');
               }}
-              onPress={openMenu}>
-              <Text style={{...FONTS.h3Bold, color: COLORS.primaryDarker1}}>
-                Đánh giá chuyến đi
-              </Text>
-            </TouchableOpacity>
-          }>
-          <Menu.Item
-            onPress={() => {
-              setRating('Like');
-            }}
-            title="Yêu thích"
-            icon={() => ratingIcon('Like', ICONS.heartBold)}
-            titleStyle={{
-              ...FONTS.h2,
-              color: rating === 'Like' ? COLORS.primaryDarker1 : COLORS.black,
-            }}
-          />
-          <Menu.Item
-            onPress={() => {
-              setRating('Unlike');
-            }}
-            title="Không tốt"
-            icon={() => ratingIcon('Unlike', ICONS.badBold)}
-            titleStyle={{
-              ...FONTS.h2,
-              color: rating === 'Unlike' ? COLORS.primaryDarker1 : COLORS.black,
-            }}
-          />
-          <Divider />
-          <Menu.Item
-            onPress={() => {}}
-            title="OK"
-            titleStyle={{...FONTS.h2Bold}}
-            style={{justifyContent: 'center', alignItems: 'center'}}
-            contentStyle={{justifyContent: 'center', alignItems: 'center'}}
-          />
-        </Menu>
-      </View>
-    );
+              title="Yêu thích"
+              icon={() => ratingIcon('Like', ICONS.heartBold)}
+              titleStyle={{
+                ...FONTS.h2,
+                color: rating === 'Like' ? COLORS.primaryDarker1 : COLORS.black,
+              }}
+            />
+            <Menu.Item
+              onPress={() => {
+                setRating('Unlike');
+              }}
+              title="Không tốt"
+              icon={() => ratingIcon('Unlike', ICONS.badBold)}
+              titleStyle={{
+                ...FONTS.h2,
+                color:
+                  rating === 'Unlike' ? COLORS.primaryDarker1 : COLORS.black,
+              }}
+            />
+            <Divider />
+            <Menu.Item
+              onPress={() => {
+                rateTrip(
+                  tripDetail.TripId,
+                  token,
+                  rating == 'Like' ? true : false,
+                )
+                  .then(res => {
+                    console.log('rating success');
+                  })
+                  .catch(err => console.log('rating err'));
+                closeMenu();
+              }}
+              title="OK"
+              titleStyle={{...FONTS.h2Bold}}
+              style={{justifyContent: 'center', alignItems: 'center'}}
+              contentStyle={{justifyContent: 'center', alignItems: 'center'}}
+            />
+          </Menu>
+        </View>
+      );
   }
   return (
     <TouchableOpacity

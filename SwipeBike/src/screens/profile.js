@@ -114,22 +114,25 @@ export default function Profile(props) {
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             alignItems: 'center',
+            width:'100%'
           }}>
-          {/* <Image
+          <Image
             source={ICONS.work}
             style={{
               marginRight: RESPONSIVE.pixelSizeHorizontal(10),
               marginBottom: RESPONSIVE.pixelSizeVertical(10),
-              tintColor: COLORS.darkgray,
-            }}></Image> */}
+              width:RESPONSIVE.fontPixel(25),
+              height: RESPONSIVE.fontPixel(25), 
+              tintColor: COLORS.black
+            }}></Image>
           <Text
             style={{
               ...FONTS.h3,
-              textAlign: 'center',
-              width: '70%',
-              fontWeight: 'bold',
+              textAlign: 'left',
+              flex:1,
+              //fontWeight: 'bold',
             }}>
             {userProfile.UserUniversity?.UniversityFullName}
           </Text>
@@ -137,19 +140,21 @@ export default function Profile(props) {
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             alignItems: 'center',
+            width:'100%',
             marginTop: RESPONSIVE.pixelSizeVertical(10),
           }}>
           <Image
             source={ICONS.phone}
             style={{
               marginRight: RESPONSIVE.pixelSizeHorizontal(10),
-              tintColor: COLORS.darkgray,
-              width: RESPONSIVE.fontPixel(25),
+              width:RESPONSIVE.fontPixel(25),
               height: RESPONSIVE.fontPixel(25),
+              tintColor: COLORS.black
             }}></Image>
-          <Text style={{...FONTS.h3}}>{userProfile.UserPhone}</Text>
+          <Text style={{...FONTS.h3,textAlign: 'left',
+              flex:1,}}>{userProfile.UserPhone}</Text>
         </View>
       </View>
     );
