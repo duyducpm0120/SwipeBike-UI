@@ -92,23 +92,12 @@ export default function Login(props) {
       .then(async result => {
         //Register Device for FCM push notifications
         sendFcmToken(result.data.token);
-        //console.log(result.data);
-        //Saving token to localStorage
+        
         await removeTokenFromLocalStorage();
         await saveTokenToLocalStorage(result.data.token);
         dispatch(fetchProfile(result.data.token));
         dispatch(fetchLoginToken());
         dispatch(updateIsLoading(false));
-        // await removeTokenFromLocalStorage().then(() => {
-        //   saveTokenToLocalStorage(result.data.token)
-        //     .then(() => {
-        //       dispatch(fetchProfile(result.data.token));
-        //       dispatch(fetchLoginToken());
-        //       dispatch(updateIsLoading(false));
-        //     })
-        //     .finally(() => {});
-        // });
-        // verifyUser();
       })
       .catch(err => {
         console.log(JSON.stringify(err.response.data.error));

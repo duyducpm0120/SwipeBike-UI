@@ -7,6 +7,7 @@ import {
   ScrollView,
   FlatList,
   RefreshControl,
+  BackHandler
 } from 'react-native';
 import {
   FONTS,
@@ -456,6 +457,19 @@ export default function Home(props) {
     loadData();
   }, []);
 
+
+  //Exit App after pressing BackButton
+  useEffect(() => {
+    const backAction = () => {
+      //props.navigation.goBack();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
   return (
     <View
       style={{
