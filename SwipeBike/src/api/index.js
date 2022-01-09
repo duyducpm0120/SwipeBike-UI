@@ -36,6 +36,7 @@ import {
 } from './TripRequest';
 import {getTrips, cancelTrip, getMyCompleteTrips, rateTrip} from './Trip';
 import {getRoute} from './GoogleMapServices';
+import {reportUser} from './report'
 export {
   getUserNotifications,
   sendTripRequest,
@@ -66,5 +67,6 @@ export {
   updatePassword,
   setNotificationAsRead,
   setAllMyNotificationsAsRead,
-  hasNewNotifications
+  hasNewNotifications,
+  reportUser
 };

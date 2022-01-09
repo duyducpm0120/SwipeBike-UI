@@ -53,6 +53,7 @@ export default function WaitingTripsScreen(props) {
   const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible);
   const onDismissSnackBar = () => setSnackBarVisible(false);
   const [snackbarTitle, setSnackBarTitle] = useState('');
+  
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = useCallback(() => {
     loadData();

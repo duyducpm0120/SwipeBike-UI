@@ -5,15 +5,23 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
-  BackHandler
+  BackHandler,
+  Modal,
+  Pressable,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
-import {COLORS, FONTS, ICONS, STYLES, RESPONSIVE} from '../constants';
+import {COLORS, FONTS, ICONS, STYLES, RESPONSIVE, SIZES} from '../constants';
 import {BackgroundButton, Trip, RoundedImage} from '../components';
 import {useSelector, useDispatch} from 'react-redux';
 import {getProfileById} from '../api';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
+import {Button, Title} from 'react-native-paper';
+import {RadioButton, Snackbar} from 'react-native-paper';
+import {reportUser} from '../api';
 
 export default function Profile(props) {
   const dispatch = useDispatch();
@@ -26,6 +34,7 @@ export default function Profile(props) {
   //vars for altering bottomsheet
   const bottomSheetRef = React.createRef(null);
   const fall = new Animated.Value(1);
+  const [reportTitle, setReportTitle] = useState('Quấy rối');
 
   const [rating, setRating] = useState([
     {
@@ -41,6 +50,125 @@ export default function Profile(props) {
       imgUri: ICONS.badBold,
     },
   ]);
+
+  const [reportModalVisible, setReportModalVisible] = useState(false);
+  const [reportDescription, setReportDescription] = useState();
+
+  const titles = ['Quấy rối', 'Bạo lực', 'Giả mạo', 'Khác...'];
+
+  //Snackbar field
+  const [snackBarVisible, setSnackBarVisible] = React.useState(false);
+  const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible);
+  const onDismissSnackBar = () => setSnackBarVisible(false);
+  const [snackbarTitle, setSnackBarTitle] = useState('');
+
+  const reportModal = () => {
+    return (
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={reportModalVisible}
+        onRequestClose={() => {
+          //Alert.alert('Modal has been closed.');
+          setReportModalVisible(!reportModalVisible);
+        }}>
+        <KeyboardAvoidingView
+          style={{
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'transparent',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          behavior={Platform.OS == 'android' ? 'height' : 'padding'}>
+          <View
+            style={{
+              borderRadius: 16,
+              backgroundColor: 'white',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              padding: 16,
+            }}>
+            <Text style={{...FONTS.h2Bold}}>Tố cáo người dùng này</Text>
+            <RadioButton.Group
+              onValueChange={value => setReportTitle(value)}
+              value={reportTitle}>
+              {titles.map(title => {
+                return (
+                  <RadioButton.Item
+                    label={title}
+                    labelStyle={{
+                      ...FONTS.h3Bold,
+                    }}
+                    value={title}
+                    color={COLORS.primary}
+                    uncheckedColor={COLORS.darkgray}
+                    style={{
+                      width: RESPONSIVE.fontPixel(350),
+                      fontSize: SIZES.h3,
+                      paddingHorizontal: 0,
+                      marginHorizontal: 0,
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      paddingVertical: RESPONSIVE.fontPixel(5),
+                    }}
+                  />
+                );
+              })}
+            </RadioButton.Group>
+            <TextInput
+              placeholder="Thêm thông tin"
+              style={{
+                ...FONTS.h3,
+                width: RESPONSIVE.pixelSizeHorizontal(350),
+                borderRadius: 16,
+                borderWidth: 2,
+                borderColor: COLORS.primary,
+                marginVertical: RESPONSIVE.fontPixel(10),
+                textAlignVertical: 'top',
+              }}
+              onChangeText={reportDescription =>
+                setReportDescription(reportDescription)
+              }
+              numberOfLines={5}></TextInput>
+            <TouchableOpacity
+              style={{marginVertical: 10}}
+              onPress={() => {
+                report();
+              }}>
+              <BackgroundButton
+                text="OK"
+                style={{
+                  borderRadius: 10,
+                  backgroundColor: COLORS.primary,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: RESPONSIVE.pixelSizeHorizontal(350),
+                  height: RESPONSIVE.pixelSizeVertical(50),
+                }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setReportModalVisible(false);
+              }}>
+              <BackgroundButton
+                text="Huỷ"
+                style={{
+                  borderRadius: 10,
+                  backgroundColor: COLORS.darkgray,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: RESPONSIVE.pixelSizeHorizontal(350),
+                  height: RESPONSIVE.pixelSizeVertical(50),
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+    );
+  };
 
   //Create components inner bottomsheet
   const renderInner = () => (
@@ -75,14 +203,14 @@ export default function Profile(props) {
       <TouchableOpacity
         style={{marginVertical: 10}}
         onPress={() => {
-          props.navigation.navigate("ChangePassword")
+          props.navigation.navigate('ChangePassword');
         }}>
         <BackgroundButton text="Đổi mật khẩu" />
       </TouchableOpacity>
       <TouchableOpacity
         style={{marginVertical: 10}}
         onPress={() => {
-          props.navigation.navigate("Login")
+          props.navigation.navigate('Login');
         }}>
         <BackgroundButton text="Đăng xuất" />
       </TouchableOpacity>
@@ -118,6 +246,47 @@ export default function Profile(props) {
     );
   };
 
+  function report() {
+    dispatch(updateIsLoading(true));
+    reportUser(userProfile.UserId, token, reportTitle, reportDescription)
+      .then(res => {
+        setSnackBarTitle('Tố cáo người dùng thành công');
+        onToggleSnackBar();
+        setReportModalVisible(false);
+        dispatch(updateIsLoading(false));
+      })
+      .catch(err => {
+        console.log('report user err', err);
+        setSnackBarTitle('Tố cáo thất bại');
+        onToggleSnackBar();
+        setReportModalVisible(false);
+        dispatch(updateIsLoading(false));
+      });
+  }
+
+  function ageOfUser() {
+    var currentYear = parseInt(new Date().getFullYear());
+    var userDobYear = parseInt(new Date(userProfile.UserDoB).getFullYear());
+    var age = currentYear - userDobYear;
+    return age.toString();
+  }
+
+  function renderSnackBar() {
+    return (
+      <Snackbar
+        visible={snackBarVisible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: 'OK',
+          onPress: () => {
+            // Do something
+            onDismissSnackBar();
+          },
+        }}>
+        {snackbarTitle}
+      </Snackbar>
+    );
+  }
   function renderHeader() {
     if (props.route.params.Id == ownerUserProfile.UserId)
       return (
@@ -129,7 +298,8 @@ export default function Profile(props) {
             width: '100%',
             marginBottom: RESPONSIVE.pixelSizeVertical(50),
           }}>
-          <TouchableOpacity onPress={() => {
+          <TouchableOpacity
+            onPress={() => {
               bottomSheetRef.current.snapTo(0);
             }}>
             <Image source={ICONS.setting}></Image>
@@ -145,18 +315,22 @@ export default function Profile(props) {
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
             width: '100%',
             marginBottom: RESPONSIVE.pixelSizeVertical(50),
-          }}></View>
+          }}>
+          <TouchableOpacity onPress={() => setReportModalVisible(true)}>
+            <Image
+              source={ICONS.report}
+              style={{
+                width: RESPONSIVE.fontPixel(30),
+                height: RESPONSIVE.fontPixel(30),
+                tintColor: COLORS.black,
+              }}></Image>
+          </TouchableOpacity>
+        </View>
       );
-  }
-  function ageOfUser() {
-    var currentYear = parseInt(new Date().getFullYear());
-    var userDobYear = parseInt(new Date(userProfile.UserDoB).getFullYear());
-    var age = currentYear - userDobYear;
-    return age.toString();
   }
 
   function renderProfile() {
@@ -313,7 +487,7 @@ export default function Profile(props) {
       });
     console.log('user Id', props.route.params.Id);
   }, []);
-  
+
   useEffect(() => {
     const backAction = () => {
       props.navigation.goBack();
@@ -331,11 +505,12 @@ export default function Profile(props) {
     <>
       <Animated.ScrollView
         contentContainerStyle={{...STYLES.container}}
-        style={{opacity: Animated.add(0.3, Animated.multiply(fall, 1.0))}}
-        >
+        style={{opacity: Animated.add(0.3, Animated.multiply(fall, 1.0))}}>
         {renderHeader()}
         {renderProfile()}
         {renderRating()}
+        {reportModal()}
+        {renderSnackBar()}
       </Animated.ScrollView>
       {settingBottomSheet()}
     </>
