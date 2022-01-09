@@ -45,6 +45,7 @@ export const heartBold = require('../assets/icons/Bold/heart.png');
 export const finishBold = require('../assets/icons/Bold/finish.png');
 export const nothing = require('../assets/icons/Light/nothing.png');
 export const report = require('../assets/icons/Light/report.png');
+export const selectAll = require('../assets/icons/Light/selectAll.png');
 
 export default {
   cameraBold,
@@ -95,5 +96,6 @@ export default {
   heartBold,
   finishBold,
   nothing,
-  report
+  report,
+  selectAll
 };

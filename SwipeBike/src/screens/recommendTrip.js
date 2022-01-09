@@ -101,7 +101,7 @@ export default function RecommendTrip(props) {
         <TouchableOpacity onPress={() => props.navigation.goBack()}>
           <Image
             source={ICONS.leftArr1}
-            style={{tintColor: COLORS.black, width: 30, height: 30}}
+            style={{tintColor: COLORS.black, width: RESPONSIVE.fontPixel(30), height: RESPONSIVE.fontPixel(30)}}
           />
         </TouchableOpacity>
         <Text style={{...FONTS.title}}>Gợi ý cho bạn</Text>
@@ -110,7 +110,7 @@ export default function RecommendTrip(props) {
         }}>
           <Image
             source={ICONS.refresh}
-            style={{tintColor: COLORS.black, width: 30, height: 30}}
+            style={{tintColor: COLORS.black, width: RESPONSIVE.fontPixel(30), height: RESPONSIVE.fontPixel(30)}}
           />
         </TouchableOpacity>
       </View>

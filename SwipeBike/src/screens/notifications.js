@@ -18,10 +18,14 @@ import {
   NOTIFICATIONTYPE,
 } from '../constants';
 import {Notification} from '../components';
-import {getUserNotifications, setNotificationAsRead} from '../api';
+import {
+  getUserNotifications,
+  setNotificationAsRead,
+  setAllMyNotificationsAsRead,
+} from '../api';
 import {useSelector, useDispatch} from 'react-redux';
-import {updateIsNewNoti} from '../redux/slices/isNewNotiSlice';
 import {updateIsLoading} from '../redux/slices/isLoadingSlice';
+import {fetchHasNewNoti} from "../redux/slices/isNewNotiSlice";
 
 export default function Notifications(props) {
   const dispatch = useDispatch();
@@ -44,6 +48,19 @@ export default function Notifications(props) {
       .catch(err => console.log('noti list err', err));
   };
 
+  function markAllNotiAsRead() {
+    dispatch(updateIsLoading(true));
+    setAllMyNotificationsAsRead(token)
+      .then(res => {
+        console.log('set all success');
+        dispatch(fetchHasNewNoti(token));
+        reloadData();
+      })
+      .catch(err => {
+        console.log('set all err', err);
+      });
+  }
+
   function renderHeader() {
     return (
       <View
@@ -64,9 +81,9 @@ export default function Notifications(props) {
           />
         </TouchableOpacity>
         <Text style={{...FONTS.title}}>Thông báo</Text>
-        <TouchableOpacity onPress={reloadData}>
+        <TouchableOpacity onPress={()=> markAllNotiAsRead()}>
           <Image
-            source={ICONS.refresh}
+            source={ICONS.selectAll}
             style={{
               tintColor: COLORS.black,
               width: RESPONSIVE.fontPixel(30),
